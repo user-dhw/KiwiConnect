@@ -52,6 +52,22 @@ const defaultItems = [
 const carouselItems = ref([...defaultItems])
 const isLoading = ref(false)
 
+const apiBaseUrl = import.meta.env.VITE_API_URL || ''
+
+const normalizeImageUrl = value => {
+	if (!value) return value
+	if (value.startsWith('http://127.0.0.1:3000')) {
+		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
+	}
+	if (value.startsWith('http://localhost:3000')) {
+		return value.replace('http://localhost:3000', apiBaseUrl)
+	}
+	if (value.startsWith('/uplodes/')) {
+		return `${apiBaseUrl}${value}`
+	}
+	return value
+}
+
 const normalizeCarouselItems = rows => {
 	if (!Array.isArray(rows)) return []
 
@@ -59,7 +75,7 @@ const normalizeCarouselItems = rows => {
 		.map((row, idx) => ({
 			id: row.carousel_id || idx,
 			title: row.carousel_title || 'Information Exchange Platform',
-			image: row.carousel_img || livingRoomImage,
+			image: normalizeImageUrl(row.carousel_img) || livingRoomImage,
 			url: row.carousel_url || '#',
 		}))
 		.filter(item => item.image)
