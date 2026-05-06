@@ -53,11 +53,11 @@
 										>
 											<img
 												v-if="unread === 0"
-												style="height: 20px"
-												:src="avatar"
-												class="avatar touxiang avatar-60 photo"
+												:src="displayAvatar"
+												class="avatar touxiang avatar-60 photo header-avatar"
 												height="20"
 												width="20"
+												@error="handleAvatarError"
 											/>
 											<el-badge
 												v-else
@@ -65,11 +65,11 @@
 												class="item"
 											>
 												<img
-													style="height: 20px"
-													:src="avatar"
-													class="avatar touxiang avatar-60 photo"
+													:src="displayAvatar"
+													class="avatar touxiang avatar-60 photo header-avatar"
 													height="20"
 													width="20"
+													@error="handleAvatarError"
 												/>
 											</el-badge>
 											{{ nickname }}
@@ -186,6 +186,26 @@ const search = ref('')
 const avatar = computed(() => store.state.user.userinfo?.avatar || '')
 const nickname = computed(() => store.state.user.userinfo?.nickname || '')
 const unread = computed(() => store.state.user.unread || 0)
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+const defaultAvatar = `${apiBaseUrl}/uplodes/avatar.jpg`
+
+const normalizeAvatar = value => {
+	if (!value || typeof value !== 'string') return ''
+	if (value.startsWith('http://127.0.0.1:3000')) {
+		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
+	}
+	if (value.startsWith('http://localhost:3000')) {
+		return value.replace('http://localhost:3000', apiBaseUrl)
+	}
+	if (/^https?:\/\//i.test(value)) return value
+	if (value.startsWith('/api/')) return value
+	if (value.startsWith('/uplodes/')) return `${apiBaseUrl}${value}`
+	return `${apiBaseUrl}/uplodes/${value.replace(/^\/+/, '')}`
+}
+
+const displayAvatar = computed(
+	() => normalizeAvatar(avatar.value) || defaultAvatar,
+)
 
 // Methods
 const changeHref = sortnum => {
@@ -208,6 +228,10 @@ const logout = () => {
 
 const closein = () => {
 	store.dispatch('user/close', true)
+}
+
+const handleAvatarError = event => {
+	event.target.src = defaultAvatar
 }
 
 const onSubmit = () => {
@@ -357,6 +381,12 @@ onMounted(() => {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
+}
+
+.header-avatar {
+	border-radius: 50%;
+	object-fit: cover;
+	display: inline-block;
 }
 
 @media (max-width: 768px) {
