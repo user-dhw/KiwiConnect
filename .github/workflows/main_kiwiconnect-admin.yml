@@ -47,10 +47,10 @@ jobs:
 
         steps:
             - name: Download artifact from build job
-                uses: actions/download-artifact@v4
-                with:
-                    name: node-app
-                    path: dist
+              uses: actions/download-artifact@v4
+              with:
+                  name: node-app
+                  path: dist
 
             - name: Login to Azure
               uses: azure/login@v2
@@ -59,10 +59,10 @@ jobs:
                   tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_28CB4A6316694734A5973D84A108F8A1 }}
                   subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_E37C869AF5D8489F9FF6816F4A422314 }}
 
-            - name: Deploy to Azure Web App
-              id: deploy-to-webapp
-              uses: azure/webapps-deploy@v3
-              with:
-                  app-name: kiwiconnect-admin
-                  slot-name: Production
-                    package: dist
+                        - name: Deploy to Azure Web App
+                            id: deploy-to-webapp
+                            uses: azure/webapps-deploy@v3
+                            with:
+                                    app-name: kiwiconnect-admin
+                                    slot-name: Production
+                                    package: dist
