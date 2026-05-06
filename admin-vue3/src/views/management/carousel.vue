@@ -17,8 +17,7 @@
           @click="add"
         />
         <span style="margin-left: 50px; color: red">
-          Tip: Press Enter after editing to save. If image upload finishes and the corresponding
-          title is filled, create or update will run automatically.
+          Tip: Fill in the title and click Save to create or update.
         </span>
       </div>
       <div v-for="(item, id) in carouselList" :key="id" class="main" style="position: relative">
@@ -39,9 +38,10 @@
             </el-upload>
           </el-form-item>
           <el-form-item label="Title">
-            <el-input v-model="item.carousel_title" @keyup.enter="changecarousel(id)" />
+            <el-input v-model="item.carousel_title" />
           </el-form-item>
         </el-form>
+        <el-button type="success" class="save" circle @click="changecarousel(id)">Save</el-button>
         <el-button type="danger" :icon="Delete" class="del" circle @click="del(id)" />
       </div>
     </el-main>
@@ -150,9 +150,6 @@
     if (!item) return
 
     item.carousel_img = res?.url || ''
-    if (item.carousel_title !== '') {
-      changecarousel(id)
-    }
   }
 
   const deletecarouse = async id => {
@@ -234,6 +231,11 @@
     position: absolute;
 
     right: 100px;
+    top: 100px;
+  }
+  .save {
+    position: absolute;
+    right: 150px;
     top: 100px;
   }
 </style>
