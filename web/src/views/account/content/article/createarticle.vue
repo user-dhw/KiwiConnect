@@ -1,41 +1,36 @@
 <template>
 	<div class="edit-page">
-		<h2>{{ isEdit ? 'Edit Article / News' : 'Create Article / News' }}</h2>
-		<el-form :model="article" label-width="130px">
-			<el-form-item label="Title">
-				<el-input v-model="article.article_title" />
-			</el-form-item>
-			<el-form-item label="Introduction">
-				<el-input
-					v-model="article.article_introduction"
-					type="textarea"
-					:rows="3"
-				/>
-			</el-form-item>
-			<el-form-item label="Category">
-				<el-radio-group v-model="article.article_lable">
-					<el-radio
-						v-for="item in labels"
-						:key="item"
-						:value="item"
-						>{{ item }}</el-radio
-					>
-				</el-radio-group>
-			</el-form-item>
-			<el-form-item label="Content">
-				<el-input
-					v-model="article.article_content"
-					type="textarea"
-					:rows="14"
-				/>
-			</el-form-item>
-			<el-form-item>
-				<el-button type="primary" @click="submit">Save</el-button>
-				<el-button @click="router.push('/admin/articlelist')"
-					>Cancel</el-button
-				>
-			</el-form-item>
-		</el-form>
+		<div class="page-heading">
+			<h1 class="page-title">{{ isEdit ? 'Edit Article / News' : 'Create Article / News' }}</h1>
+			<p class="page-subtitle">Write a campus update, article, or announcement with cleaner editing flow.</p>
+		</div>
+
+		<section class="admin-form-card">
+			<el-form :model="article" label-width="130px" class="admin-form">
+				<el-form-item label="Title">
+					<el-input v-model="article.article_title" />
+				</el-form-item>
+				<el-form-item label="Introduction">
+					<el-input v-model="article.article_introduction" type="textarea" :rows="3" />
+				</el-form-item>
+				<el-form-item label="Category">
+					<el-radio-group v-model="article.article_lable">
+						<el-radio v-for="item in labels" :key="item" :value="item">
+							{{ item }}
+						</el-radio>
+					</el-radio-group>
+				</el-form-item>
+				<el-form-item label="Content">
+					<el-input v-model="article.article_content" type="textarea" :rows="14" />
+				</el-form-item>
+				<el-form-item>
+					<div class="inline-actions">
+						<el-button type="primary" @click="submit">Save</el-button>
+						<el-button @click="router.push('/admin/articlelist')">Cancel</el-button>
+					</div>
+				</el-form-item>
+			</el-form>
+		</section>
 	</div>
 </template>
 
@@ -65,11 +60,7 @@ const article = ref({
 })
 
 const submit = async () => {
-	if (
-		!article.value.article_title ||
-		!article.value.article_lable ||
-		!article.value.article_content
-	) {
+	if (!article.value.article_title || !article.value.article_lable || !article.value.article_content) {
 		ElMessage.error('Title, category, and content are required')
 		return
 	}

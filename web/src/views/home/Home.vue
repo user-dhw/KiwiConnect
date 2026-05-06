@@ -10,30 +10,19 @@
 					<Carousel />
 				</div>
 
-				<!-- Content Grid - 2 columns -->
+				<!-- Content Grid -->
 				<div class="row">
-					<!-- Left Column -->
-					<div class="span6 content-col">
-						<!-- Help Center -->
-						<div class="content-card">
-							<Help />
-						</div>
-						<!-- Old Stuff -->
-						<div class="content-card">
-							<OldStuff />
-						</div>
+					<div class="content-card">
+						<Help />
 					</div>
-
-					<!-- Right Column -->
-					<div class="span6 content-col">
-						<!-- News -->
-						<div class="content-card">
-							<News />
-						</div>
-						<!-- Activity -->
-						<div class="content-card">
-							<Activity />
-						</div>
+					<div class="content-card">
+						<News />
+					</div>
+					<div class="content-card">
+						<OldStuff />
+					</div>
+					<div class="content-card">
+						<Activity />
 					</div>
 				</div>
 			</div>
@@ -52,55 +41,51 @@ import OldStuff from '@/components/oldstuff.vue'
 
 <style scoped>
 .home {
-	padding: 20px 0;
+	padding: 28px 0 36px;
 }
 
 .page-container {
-	background: #f5f7fa;
-	padding: 20px 0;
+	background:
+		radial-gradient(circle at top left, rgba(109, 200, 170, 0.12), transparent 26%),
+		linear-gradient(180deg, #eef5f2 0%, #f7faf8 38%, #eef4f1 100%);
+	padding: 24px 0 40px;
 }
 
 .container {
 	max-width: 1200px;
 	margin: 0 auto;
-	padding: 0 20px;
+	padding: 0 24px;
 }
 
 .row {
-	display: flex;
-	gap: 20px;
-}
-
-.span8 {
-	flex: 0 0 66.66%;
-}
-
-.span4 {
-	flex: 0 0 33.34%;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	grid-auto-rows: 1fr;
+	gap: 24px;
+	align-items: stretch;
 }
 
 .carousel-section {
 	margin-bottom: 30px;
-	border-radius: 4px;
+	border-radius: 28px;
 	overflow: hidden;
-}
-
-.content-col {
-	display: flex;
-	flex-direction: column;
-	gap: 20px;
+	box-shadow: 0 22px 60px rgba(21, 64, 54, 0.16);
 }
 
 .content-card {
-	background: #fff;
-	border-radius: 4px;
-	padding: 20px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+	background: rgba(255, 255, 255, 0.84);
+	border-radius: 24px;
+	padding: 22px;
+	border: 1px solid rgba(110, 148, 134, 0.14);
+	box-shadow: 0 18px 38px rgba(23, 68, 58, 0.08);
+	backdrop-filter: blur(10px);
 	transition: box-shadow 0.3s ease;
+	min-height: 100%;
+	height: 100%;
 }
 
 .content-card:hover {
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+	box-shadow: 0 22px 44px rgba(23, 68, 58, 0.12);
 }
 
 .widget {
@@ -113,19 +98,13 @@ import OldStuff from '@/components/oldstuff.vue'
 
 @media (max-width: 768px) {
 	.row {
-		flex-direction: column;
-	}
-
-	.span6 {
-		flex: 0 0 100% !important;
-	}
-
-	.content-col {
-		gap: 15px;
+		grid-template-columns: 1fr;
+		gap: 16px;
 	}
 
 	.content-card {
-		padding: 15px;
+		padding: 18px;
+		border-radius: 20px;
 	}
 }
 </style>

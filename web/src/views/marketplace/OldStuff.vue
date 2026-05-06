@@ -4,16 +4,20 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="row content-grid">
-					<div class="span8 page-content">
-						<div class="page-header">
-							<h1>
+				<div class="page-shell">
+					<div class="page-main">
+						<div class="page-heading">
+							<h1 class="page-title">
 								Marketplace
-								<small v-if="subtitle">{{ subtitle }}</small>
+								<span v-if="subtitle" class="page-highlight">/ {{ subtitle }}</span>
 							</h1>
+							<p class="page-subtitle">
+								Trade pre-loved campus essentials with softer spacing, clearer
+								pricing, and a smoother mobile layout.
+							</p>
 						</div>
 
-						<div class="filter-section">
+						<div class="filter-bar">
 							<span class="filter-label">Category:</span>
 							<el-tag
 								:type="!query.lable ? 'primary' : 'info'"
@@ -27,12 +31,8 @@
 							<el-tag
 								v-for="label in labels"
 								:key="label"
-								:type="
-									query.lable === label ? 'primary' : 'info'
-								"
-								:effect="
-									query.lable === label ? 'dark' : 'plain'
-								"
+								:type="query.lable === label ? 'primary' : 'info'"
+								:effect="query.lable === label ? 'dark' : 'plain'"
 								@click="changeLabel(label)"
 								class="filter-tag"
 								size="large"
@@ -41,7 +41,7 @@
 							</el-tag>
 						</div>
 
-						<section class="widget">
+						<section class="section-card widget">
 							<div class="items-grid" v-if="itemList.length">
 								<router-link
 									v-for="item in itemList"
@@ -52,31 +52,20 @@
 									<el-card class="item-card" shadow="hover">
 										<div class="item-image-wrapper">
 											<el-image
-												:src="
-													normalizeImageUrl(
-														item.oldstuff_img,
-													)
-												"
+												:src="normalizeImageUrl(item.oldstuff_img)"
 												fit="cover"
 												class="item-image"
 											>
 												<template #error>
 													<div class="image-error">
-														<el-icon
-															><Picture
-														/></el-icon>
+														<el-icon><Picture /></el-icon>
 													</div>
 												</template>
 											</el-image>
 										</div>
 										<div class="item-content">
-											<div class="item-price">
-												¥{{ item.oldstuff_price }}
-											</div>
-											<div
-												class="item-name"
-												:title="item.oldstuff_name"
-											>
+											<div class="item-price">¥{{ item.oldstuff_price }}</div>
+											<div class="item-name" :title="item.oldstuff_name">
 												{{ item.oldstuff_name }}
 											</div>
 										</div>
@@ -97,7 +86,7 @@
 						/>
 					</div>
 
-					<aside class="span4 page-sidebar">
+					<aside class="page-aside panel-stack">
 						<Carousel />
 						<ActivityWidget />
 						<NewsWidget />
@@ -181,64 +170,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.oldstuff-page {
-	min-height: 200px;
-}
-
-.page-container {
-	padding: 20px 0;
-}
-
-.container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 20px;
-}
-
-.content-grid {
-	display: flex;
-	gap: 24px;
-}
-
-.page-content {
-	flex: 1;
-	min-width: 0;
-}
-
-.page-sidebar {
-	width: 340px;
-}
-
-.page-header h1 {
-	margin: 0 0 14px;
-	font-size: 28px;
-}
-
-.page-header small {
-	margin-left: 8px;
-	font-size: 16px;
-	color: #409eff;
-	font-weight: normal;
-}
-
-.filter-section {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin-bottom: 20px;
-	padding: 16px;
-	background: #f5f7fa;
-	border-radius: 8px;
-}
-
-.filter-label {
-	font-size: 14px;
-	font-weight: 600;
-	color: #606266;
-	margin-right: 4px;
-}
-
 .filter-tag {
 	cursor: pointer;
 	transition: all 0.3s ease;
@@ -250,50 +181,12 @@ onMounted(async () => {
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.widget {
-	background: #fff;
-	border: 1px solid #eef2f6;
-	border-radius: 10px;
-	padding: 16px;
-	min-height: 400px;
-}
-
-.items-grid {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-	gap: 16px;
-}
-
-.item-link {
-	text-decoration: none;
-	color: inherit;
-}
-
-.item-card {
-	height: 100%;
-	transition: transform 0.3s ease;
-	cursor: pointer;
-}
-
-.item-card:hover {
-	transform: translateY(-4px);
-}
-
 .item-card :deep(.el-card__body) {
 	padding: 0;
 }
 
 .item-image-wrapper {
-	width: 100%;
 	height: 200px;
-	overflow: hidden;
-	border-radius: 4px 4px 0 0;
-}
-
-.item-image {
-	width: 100%;
-	height: 100%;
-	display: block;
 }
 
 .image-error {
@@ -306,21 +199,7 @@ onMounted(async () => {
 	font-size: 48px;
 }
 
-.item-content {
-	padding: 12px;
-}
-
-.item-price {
-	font-size: 20px;
-	font-weight: 600;
-	color: #f56c6c;
-	margin-bottom: 8px;
-}
-
 .item-name {
-	font-size: 14px;
-	color: #303133;
-	line-height: 1.5;
 	overflow: hidden;
 	text-overflow: ellipsis;
 	display: -webkit-box;
@@ -336,22 +215,7 @@ onMounted(async () => {
 	justify-content: center;
 }
 
-@media (max-width: 992px) {
-	.content-grid {
-		flex-direction: column;
-	}
-
-	.page-sidebar {
-		width: 100%;
-	}
-}
-
 @media (max-width: 768px) {
-	.items-grid {
-		grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-		gap: 12px;
-	}
-
 	.item-image-wrapper {
 		height: 160px;
 	}

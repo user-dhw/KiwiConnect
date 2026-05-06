@@ -59,7 +59,7 @@ import { getWebOldStuffList } from '@/api/content'
 const pagelistquery = ref({
 	lable: '',
 	total: 0,
-	pagesize: 6,
+	pagesize: 2,
 	page: 1,
 })
 

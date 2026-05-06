@@ -1,35 +1,29 @@
 <template>
-	<div class="activitycontent">
+	<div class="activity-detail-page">
 		<div v-title data-title="Activity Details"></div>
 
 		<div class="page-container">
 			<div class="container">
-				<div class="row">
-					<div class="span8 page-content">
-						<el-page-header
-							@back="goBack"
-							content="Activity Details"
-						/>
-						<article
-							class="type-post format-standard hentry clearfix"
-						>
-							<h3>{{ content.activity_title }}</h3>
-							<div>
-								<div class="show_unit fl ativity">
-									<a class="iconfont ic">&#xe622;</a>
-									<a class="tagname">Activity Name:</a>
-									{{ content.activity_title }}
+				<div class="page-shell detail-shell">
+					<div class="page-main">
+						<div class="detail-back">
+							<el-page-header @back="goBack" content="Activity Details" />
+						</div>
+
+						<article class="content-article detail-article">
+							<h1 class="post-title">{{ content.activity_title }}</h1>
+
+							<div class="detail-facts">
+								<div class="detail-fact">
+									<div class="detail-fact-icon">#</div>
+									<div class="detail-fact-copy">
+										<span class="detail-fact-label">Activity Name</span>
+										<span class="detail-fact-value">{{ content.activity_title || '-' }}</span>
+									</div>
 								</div>
 
-								<el-popover
-									placement="left"
-									:width="400"
-									trigger="hover"
-								>
-									<li
-										class="comment even thread-odd thread-alt depth-1"
-										id="li-comment-4"
-									>
+								<el-popover placement="left" :width="400" trigger="hover">
+									<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4">
 										<article id="comment-4">
 											<img
 												:src="content.avatar"
@@ -39,127 +33,92 @@
 											/>
 
 											<div class="comment-meta">
-												<h5 class="author">
-													{{ content.nickname }}
-												</h5>
-												<p
-													class="date"
-													v-if="
-														Number(
-															content.realstate,
-														) === 3
-													"
-												>
+												<h5 class="author">{{ content.nickname }}</h5>
+												<p class="date" v-if="Number(content.realstate) === 3">
 													Verified User
 												</p>
-												<p class="date" v-else>
-													Unverified User
-												</p>
+												<p class="date" v-else>Unverified User</p>
 											</div>
 										</article>
 									</li>
 
-									<div class="xinxi">
-										<p style="color: #000">Account:</p>
-										<p>{{ content.username }}</p>
-									</div>
-									<div class="xinxi">
-										<p style="color: #000">Email:</p>
-										<p>{{ content.mail }}</p>
-									</div>
-									<div class="xinxi">
-										<p style="color: #000">Bio:</p>
-										<p>{{ content.synopsis }}</p>
-									</div>
+									<div class="profile-detail"><strong>Account:</strong> {{ content.username }}</div>
+									<div class="profile-detail"><strong>Email:</strong> {{ content.mail }}</div>
+									<div class="profile-detail"><strong>Bio:</strong> {{ content.synopsis }}</div>
 
-									<el-button
-										@click="reportUser(content.username)"
-										style="margin: 10px 150px"
-										type="danger"
-										plain
-									>
+									<el-button @click="reportUser(content.username)" type="danger" plain>
 										Report
 									</el-button>
 
 									<template #reference>
-										<div class="show_unit fl ativity">
-											<a class="iconfont ic">&#xe66a;</a>
-											<a class="tagname">Organizer:</a>
-											{{ content.nickname }}
+										<div class="detail-fact detail-fact-clickable">
+											<div class="detail-fact-icon">@</div>
+											<div class="detail-fact-copy">
+												<span class="detail-fact-label">Organizer</span>
+												<span class="detail-fact-value">{{ content.nickname || '-' }}</span>
+											</div>
 										</div>
 									</template>
 								</el-popover>
 
-								<div class="show_unit fl ativity">
-									<a class="iconfont ic">&#xe62a;</a>
-									<a class="tagname">Activity Time:</a>
-									{{
-										formatDateTime(
-											content.activity_statetime,
-										)
-									}}
-									-
-									{{
-										formatDateTime(content.activity_endtime)
-									}}
+								<div class="detail-fact">
+									<div class="detail-fact-icon">T</div>
+									<div class="detail-fact-copy">
+										<span class="detail-fact-label">Activity Time</span>
+										<span class="detail-fact-value">
+											{{ formatDateTime(content.activity_statetime) }} -
+											{{ formatDateTime(content.activity_endtime) }}
+										</span>
+									</div>
 								</div>
-								<div class="show_unit fl ativity">
-									<a class="iconfont ic">&#xe62a;</a>
-									<a class="tagname">Participants:</a>
-									{{ content.activity_num }}
+
+								<div class="detail-fact">
+									<div class="detail-fact-icon">P</div>
+									<div class="detail-fact-copy">
+										<span class="detail-fact-label">Participants</span>
+										<span class="detail-fact-value">{{ content.activity_num || '-' }}</span>
+									</div>
 								</div>
-								<div class="show_unit fl ativity">
-									<a class="iconfont ic">&#xe62a;</a>
-									<a class="tagname">Location:</a>
-									{{ content.activity_locale }}
+
+								<div class="detail-fact">
+									<div class="detail-fact-icon">L</div>
+									<div class="detail-fact-copy">
+										<span class="detail-fact-label">Location</span>
+										<span class="detail-fact-value">{{ content.activity_locale || '-' }}</span>
+									</div>
 								</div>
-								<div style="clear: both"></div>
 							</div>
 
-							<h3>Activity Description</h3>
-							<blockquote
-								v-html="content.activity_content"
-							></blockquote>
+							<div class="detail-actions">
+								<el-button
+									type="primary"
+									@click="joinActivity"
+									:loading="isJoining"
+									:disabled="!isUserVerified"
+									:title="
+										isUserVerified
+											? ''
+											: 'You must verify your account before joining activities'
+									"
+								>
+									Join Activity
+								</el-button>
+								<p v-if="!isUserVerified" class="detail-note">
+									You must verify your account before joining activities.
+								</p>
+							</div>
+
+							<h3 class="detail-section-title">Activity Description</h3>
+							<blockquote v-html="content.activity_content"></blockquote>
 						</article>
 
-						<el-button
-							type="primary"
-							@click="joinActivity"
-							:loading="isJoining"
-							:disabled="!isUserVerified"
-							style="width: 80px; margin: 0 auto; display: block"
-							:title="
-								isUserVerified
-									? ''
-									: 'You must verify your account before joining activities'
-							"
-						>
-							Join
-						</el-button>
-						<p
-							v-if="!isUserVerified"
-							style="
-								color: #ff6b6b;
-								font-size: 12px;
-								margin-top: 8px;
-								text-align: center;
-							"
-						>
-							You must verify your account before joining
-							activities
-						</p>
-
-						<div class="block">
-							<h3>Announcements</h3>
+						<section class="section-card timeline-card">
+							<h3 class="detail-section-title">Announcements</h3>
 							<el-timeline>
 								<el-timeline-item
 									v-for="(item, id) in announcementList"
 									:key="item.announcement_id || id"
-									:timestamp="
-										formatDateTime(
-											item.announcement_createtime,
-										)
-									"
+									:timestamp="formatDateTime(item.announcement_createtime)"
 									placement="top"
 								>
 									<el-card>
@@ -168,12 +127,12 @@
 									</el-card>
 								</el-timeline-item>
 							</el-timeline>
-						</div>
+						</section>
 
 						<Comment />
 					</div>
 
-					<aside class="span4 page-sidebar">
+					<aside class="page-aside panel-stack">
 						<Carousel />
 						<Activity />
 					</aside>
@@ -227,9 +186,7 @@ const goBack = () => {
 
 const reportUser = username => {
 	const currentUrl =
-		typeof window !== 'undefined'
-			? encodeURIComponent(window.location.href)
-			: ''
+		typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : ''
 	router.push({
 		path: '/report',
 		query: {
@@ -298,9 +255,7 @@ const joinActivity = async () => {
 			return
 		}
 
-		ElMessage.error(
-			res.state?.msg || 'You have already joined this activity',
-		)
+		ElMessage.error(res.state?.msg || 'You have already joined this activity')
 	} catch {
 		ElMessage.error('Failed to join this activity')
 	} finally {
@@ -326,12 +281,22 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.activitycontent {
-	min-height: 200px;
+.detail-fact-clickable {
+	cursor: pointer;
 }
 
-.tagname {
-	margin-right: 16px;
-	font-size: 18px;
+.detail-section-title {
+	margin: 22px 0 12px;
+	font-size: 1.18rem;
+	font-weight: 800;
+}
+
+.timeline-card {
+	margin-top: 24px;
+}
+
+.profile-detail {
+	margin-bottom: 10px;
+	color: #252b37;
 }
 </style>

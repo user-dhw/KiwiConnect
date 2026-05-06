@@ -2,7 +2,14 @@
 	<div class="support-page">
 		<div v-title data-title="Information Platform | Feedback"></div>
 		<el-card class="support-card" shadow="hover">
-			<el-page-header @back="goBack" content="Feedback" />
+			<div class="page-heading">
+				<h1 class="page-title">Feedback</h1>
+				<p class="page-subtitle">
+					Share ideas, report UX friction, or suggest improvements for the student
+					community platform.
+				</p>
+			</div>
+			<el-page-header @back="goBack" content="Back" />
 			<el-divider />
 
 			<el-form
@@ -27,11 +34,7 @@
 					/>
 				</el-form-item>
 				<el-form-item>
-					<el-button
-						type="primary"
-						:loading="isSubmitting"
-						@click="handleSubmit"
-					>
+					<el-button type="primary" :loading="isSubmitting" @click="handleSubmit">
 						Submit
 					</el-button>
 					<el-button @click="resetForm">Cancel</el-button>
@@ -105,9 +108,7 @@ const handleSubmit = async () => {
 			fankui_content: form.fankui_content.trim(),
 		})
 		if (res.state?.type !== 'SUCCESS') {
-			ElMessage.error(
-				res.state?.msg || 'You have to login to submit feedback',
-			)
+			ElMessage.error(res.state?.msg || 'You have to login to submit feedback')
 			openLoginDialog()
 			return
 		}
@@ -122,19 +123,3 @@ const handleSubmit = async () => {
 	}
 }
 </script>
-
-<style scoped>
-.support-page {
-	padding: 20px;
-}
-
-.support-card {
-	max-width: 880px;
-	margin: 0 auto;
-}
-
-.section {
-	max-width: 700px;
-	margin: 0 auto;
-}
-</style>

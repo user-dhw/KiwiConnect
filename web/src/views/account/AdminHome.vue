@@ -1,46 +1,59 @@
 <template>
 	<div class="admin-home">
-		<div class="summary-card">
-			<div class="user-head">
-				<img
-					:src="avatarUrl"
-					@error="handleAvatarError"
-					class="avatar"
-					alt="avatar"
-				/>
-				<div>
-					<h3>{{ form.nickname || 'Nickname not set' }}</h3>
-					<p>
-						{{
-							Number(form.realstate) === 3
-								? 'Verified User'
-								: 'Unverified User'
-						}}
-					</p>
-				</div>
-			</div>
-			<div class="base-info">
-				<p><span>Real Name: </span>{{ form.realname || '-' }}</p>
-				<p><span>Nick Name: </span>{{ form.nickname || '-' }}</p>
-				<p><span>Email: </span>{{ form.mail || '-' }}</p>
-				<p><span>Phone: </span>{{ form.phone || '-' }}</p>
-				<p><span>Bio: </span>{{ form.synopsis || '-' }}</p>
-			</div>
-			<el-button
-				type="primary"
-				plain
-				@click="router.push('/admin/myself')"
-				>Edit Profile</el-button
-			>
+		<div class="page-heading">
+			<h1 class="page-title">Dashboard</h1>
+			<p class="page-subtitle">
+				A quick overview of your profile and content activity across KiwiConnect
+				Waikato.
+			</p>
 		</div>
 
-		<div class="chart-card">
-			<chart
-				style="width: 100%; height: 320px"
-				:option="chartOptions"
-				autoresize
-			/>
+		<div class="overview-grid">
+			<section class="summary-card">
+				<div class="user-head">
+					<img :src="avatarUrl" @error="handleAvatarError" class="avatar" alt="avatar" />
+					<div>
+						<h3>{{ form.nickname || 'Nickname not set' }}</h3>
+						<p>
+							{{ Number(form.realstate) === 3 ? 'Verified User' : 'Unverified User' }}
+						</p>
+					</div>
+				</div>
+				<div class="base-info">
+					<p><span>Real Name:</span> {{ form.realname || '-' }}</p>
+					<p><span>Nick Name:</span> {{ form.nickname || '-' }}</p>
+					<p><span>Email:</span> {{ form.mail || '-' }}</p>
+					<p><span>Phone:</span> {{ form.phone || '-' }}</p>
+					<p><span>Bio:</span> {{ form.synopsis || '-' }}</p>
+				</div>
+				<el-button type="primary" @click="router.push('/admin/myself')">
+					Edit Profile
+				</el-button>
+			</section>
+
+			<section class="stats-grid">
+				<div class="metric-card">
+					<span class="metric-label">Q&A</span>
+					<strong>{{ countData.help }}</strong>
+				</div>
+				<div class="metric-card">
+					<span class="metric-label">Activities</span>
+					<strong>{{ countData.activity }}</strong>
+				</div>
+				<div class="metric-card">
+					<span class="metric-label">Articles</span>
+					<strong>{{ countData.article }}</strong>
+				</div>
+				<div class="metric-card">
+					<span class="metric-label">Marketplace</span>
+					<strong>{{ countData.oldstuff }}</strong>
+				</div>
+			</section>
 		</div>
+
+		<section class="chart-card">
+			<chart style="width: 100%; height: 320px" :option="chartOptions" autoresize />
+		</section>
 	</div>
 </template>
 
@@ -89,12 +102,10 @@ const handleAvatarError = event => {
 }
 
 const chartOptions = computed(() => ({
-	color: ['#4c8ef7'],
+	color: ['#2663eb'],
 	tooltip: {
 		trigger: 'axis',
-		axisPointer: {
-			type: 'shadow',
-		},
+		axisPointer: { type: 'shadow' },
 	},
 	grid: {
 		left: '3%',
@@ -114,13 +125,11 @@ const chartOptions = computed(() => ({
 		{
 			name: 'Published Count',
 			type: 'bar',
-			barWidth: '60%',
-			data: [
-				countData.help,
-				countData.activity,
-				countData.article,
-				countData.oldstuff,
-			],
+			barWidth: '56%',
+			itemStyle: {
+				borderRadius: [10, 10, 0, 0],
+			},
+			data: [countData.help, countData.activity, countData.article, countData.oldstuff],
 		},
 	],
 }))
@@ -148,39 +157,67 @@ onMounted(() => {
 
 <style scoped>
 .admin-home {
-	display: flex;
-	gap: 20px;
-	flex-wrap: wrap;
+	display: grid;
+	gap: 24px;
+}
+
+.overview-grid {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 24px;
 }
 
 .summary-card,
-.chart-card {
-	background: #fff;
-	border: 1px solid #e7ebf0;
-	border-radius: 8px;
-	padding: 20px;
+.chart-card,
+.metric-card {
+	background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	border-radius: 24px;
+	box-shadow: 0 14px 34px rgba(38, 99, 235, 0.07);
 }
 
 .summary-card {
-	width: 320px;
-	flex: 0 0 320px;
+	padding: 24px;
 }
 
 .chart-card {
-	flex: 1;
-	min-width: 420px;
+	padding: 18px 22px;
+}
+
+.stats-grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 16px;
+}
+
+.metric-card {
+	padding: 20px;
+}
+
+.metric-label {
+	display: block;
+	color: #667085;
+	font-weight: 700;
+	margin-bottom: 12px;
+}
+
+.metric-card strong {
+	font-size: 2rem;
+	line-height: 1;
+	letter-spacing: -0.04em;
 }
 
 .user-head {
 	display: flex;
 	align-items: center;
-	gap: 12px;
-	margin-bottom: 16px;
+	gap: 14px;
+	margin-bottom: 18px;
 }
 
 .user-head h3 {
 	margin: 0;
-	font-size: 18px;
+	font-size: 1.1rem;
+	font-weight: 800;
 }
 
 .user-head p {
@@ -189,10 +226,11 @@ onMounted(() => {
 }
 
 .avatar {
-	width: 60px;
-	height: 60px;
+	width: 64px;
+	height: 64px;
 	border-radius: 50%;
 	object-fit: cover;
+	border: 3px solid #edf3ff;
 }
 
 .base-info {
@@ -201,17 +239,18 @@ onMounted(() => {
 	color: #2f3944;
 }
 
+.base-info p {
+	margin: 0;
+}
+
 .base-info span {
-	font-weight: 600;
+	font-weight: 700;
 	color: #0f1723;
 }
 
-@media (max-width: 960px) {
-	.summary-card,
-	.chart-card {
-		width: 100%;
-		min-width: 0;
-		flex: 1 1 100%;
+@media (min-width: 980px) {
+	.overview-grid {
+		grid-template-columns: 340px minmax(0, 1fr);
 	}
 }
 </style>

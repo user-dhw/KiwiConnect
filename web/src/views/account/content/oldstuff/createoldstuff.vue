@@ -1,83 +1,73 @@
 <template>
 	<div class="edit-page">
-		<h2>{{ isEdit ? 'Edit Listing' : 'Create Listing' }}</h2>
-		<el-tabs type="border-card">
+		<div class="page-heading">
+			<h1 class="page-title">{{ isEdit ? 'Edit Listing' : 'Create Listing' }}</h1>
+			<p class="page-subtitle">Publish a second-hand item with image, pricing, and description.</p>
+		</div>
+
+		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="Listing Details">
-				<el-form :model="form" label-width="130px">
-					<el-form-item label="Item Image">
-						<div class="image-preview-wrap">
-							<el-image
-								v-if="previewItemImg"
-								:src="previewItemImg"
-								:preview-src-list="[previewItemImg]"
-								fit="cover"
-								class="image-preview"
-							/>
-							<div v-else class="image-placeholder">
-								No image uploaded
+				<section class="admin-form-card">
+					<el-form :model="form" label-width="130px" class="admin-form">
+						<el-form-item label="Item Image">
+							<div class="image-preview-wrap">
+								<el-image
+									v-if="previewItemImg"
+									:src="previewItemImg"
+									:preview-src-list="[previewItemImg]"
+									fit="cover"
+									class="image-preview"
+								/>
+								<div v-else class="image-placeholder">No image uploaded</div>
 							</div>
-						</div>
-					</el-form-item>
-					<el-form-item label="Or Upload Image">
-						<el-upload
-							:auto-upload="false"
-							:accept="IMAGE_UPLOAD_ACCEPT"
-							:before-upload="beforeImageUpload"
-							:show-file-list="false"
-							:on-change="handleUploadChange"
-						>
-							<el-button>Upload</el-button>
-						</el-upload>
-					</el-form-item>
-					<el-form-item label="Item Name">
-						<el-input v-model="form.oldstuff_name" />
-					</el-form-item>
-					<el-form-item label="Price">
-						<el-input v-model="form.oldstuff_price" />
-					</el-form-item>
-					<el-form-item label="Category">
-						<el-radio-group v-model="form.oldstuff_lable">
-							<el-radio
-								v-for="item in labels"
-								:key="item"
-								:value="item"
-								>{{ item }}</el-radio
+						</el-form-item>
+						<el-form-item label="Or Upload Image">
+							<el-upload
+								:auto-upload="false"
+								:accept="IMAGE_UPLOAD_ACCEPT"
+								:before-upload="beforeImageUpload"
+								:show-file-list="false"
+								:on-change="handleUploadChange"
 							>
-						</el-radio-group>
-					</el-form-item>
-					<el-form-item label="Description">
-						<el-input
-							v-model="form.oldstuff_content"
-							type="textarea"
-							:rows="10"
-						/>
-					</el-form-item>
-					<el-form-item>
-						<el-button type="primary" @click="submit"
-							>Save</el-button
-						>
-						<el-button
-							@click="router.push('/admin/createoldstufflist')"
-							>Cancel</el-button
-						>
-					</el-form-item>
-				</el-form>
+								<el-button>Upload</el-button>
+							</el-upload>
+						</el-form-item>
+						<el-form-item label="Item Name">
+							<el-input v-model="form.oldstuff_name" />
+						</el-form-item>
+						<el-form-item label="Price">
+							<el-input v-model="form.oldstuff_price" />
+						</el-form-item>
+						<el-form-item label="Category">
+							<el-radio-group v-model="form.oldstuff_lable">
+								<el-radio v-for="item in labels" :key="item" :value="item">
+									{{ item }}
+								</el-radio>
+							</el-radio-group>
+						</el-form-item>
+						<el-form-item label="Description">
+							<el-input v-model="form.oldstuff_content" type="textarea" :rows="10" />
+						</el-form-item>
+						<el-form-item>
+							<div class="inline-actions">
+								<el-button type="primary" @click="submit">Save</el-button>
+								<el-button @click="router.push('/admin/createoldstufflist')">Cancel</el-button>
+							</div>
+						</el-form-item>
+					</el-form>
+				</section>
 			</el-tab-pane>
 
 			<el-tab-pane label="Purchase Interests" v-if="isEdit">
-				<el-table :data="joinTableData" border style="width: 100%">
-					<el-table-column label="Created At" width="180">
-						<template #default="scope">{{
-							formatDate(scope.row.joins_createtime)
-						}}</template>
-					</el-table-column>
-					<el-table-column
-						prop="describe"
-						label="Contact Info"
-						min-width="240"
-					/>
-					<el-table-column prop="name" label="Offer" width="180" />
-				</el-table>
+				<section class="admin-panel admin-table">
+					<el-table :data="joinTableData" border style="width: 100%">
+						<el-table-column label="Created At" width="180">
+							<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
+						</el-table-column>
+						<el-table-column prop="describe" label="Contact Info" min-width="240" />
+						<el-table-column prop="name" label="Offer" width="180" />
+					</el-table>
+				</section>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -125,9 +115,7 @@ const normalizeImageUrl = value => {
 	return `/api/${src}`
 }
 
-const previewItemImg = computed(() =>
-	normalizeImageUrl(form.value.oldstuff_img),
-)
+const previewItemImg = computed(() => normalizeImageUrl(form.value.oldstuff_img))
 
 const formatDate = value => moment(value).format('YYYY-MM-DD HH:mm')
 
@@ -153,11 +141,7 @@ const handleUploadChange = async uploadFileItem => {
 }
 
 const submit = async () => {
-	if (
-		!form.value.oldstuff_name ||
-		!form.value.oldstuff_price ||
-		!form.value.oldstuff_lable
-	) {
+	if (!form.value.oldstuff_name || !form.value.oldstuff_price || !form.value.oldstuff_lable) {
 		ElMessage.error('Name, price, and category are required')
 		return
 	}
@@ -204,12 +188,13 @@ onMounted(() => {
 	loadJoins()
 })
 </script>
+
 <style scoped>
 .image-preview-wrap {
 	width: 220px;
 	height: 140px;
 	border: 1px dashed #dcdfe6;
-	border-radius: 8px;
+	border-radius: 16px;
 	overflow: hidden;
 	background: #fafafa;
 }

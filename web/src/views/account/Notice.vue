@@ -1,81 +1,83 @@
 <template>
 	<div class="notice-page">
-		<h3>Unread Messages: {{ unread }}/{{ total }}</h3>
-		<div class="toolbar">
-			<el-button
-				type="primary"
-				plain
-				size="small"
-				v-if="unread > 0"
-				@click="updateNotice('changeall', 'a')"
-			>
-				Mark All as Read
-			</el-button>
-			<el-button
-				type="danger"
-				plain
-				size="small"
-				v-if="total > 0"
-				@click="updateNotice('deleteall', 'a')"
-			>
-				Delete All
-			</el-button>
+		<div class="page-heading">
+			<h1 class="page-title">Notifications</h1>
+			<p class="page-subtitle">
+				Review updates from comments, replies, and content interactions across the
+				platform.
+			</p>
 		</div>
 
-		<el-divider />
-
-		<div v-if="total === 0" class="empty-wrap">
-			<img
-				src="@/assets/images/noinfo.png"
-				alt="No notifications"
-				class="empty-image"
-			/>
-			<div class="empty-text">No notifications yet</div>
-		</div>
-
-		<div v-else>
-			<div
-				class="notice-item"
-				v-for="notice in notices"
-				:key="notice.notice_id"
-			>
-				<div
-					class="notice-row"
-					:class="{
-						clickable: hasNoticeTarget(notice),
-						unread: String(notice.state) === '0',
-					}"
-					role="button"
-					tabindex="0"
-					@click="openNotice(notice)"
-					@keydown.enter.prevent="openNotice(notice)"
-					@keydown.space.prevent="openNotice(notice)"
-				>
-					<span
-						class="state-dot"
-						:class="`state-${notice.state}`"
-					></span>
-					<span>{{ formatDate(notice.createtime) }}</span>
-					<span>{{ notice.nickname }}</span>
-					<span>{{ notice.action }}</span>
-					<span>
-						From {{ formatPlatform(notice.router) }}
-						<span class="notice-link">
-							{{ notice.content_name }}
-						</span>
-					</span>
-					<el-button
-						text
-						type="danger"
-						@click.stop
-						@click="updateNotice('delete', notice.notice_id)"
-					>
-						Delete
-					</el-button>
-				</div>
-				<el-divider />
+		<section class="notice-summary">
+			<div class="notice-metric">
+				<span class="notice-metric-label">Unread</span>
+				<strong>{{ unread }}</strong>
 			</div>
-		</div>
+			<div class="notice-metric">
+				<span class="notice-metric-label">Total</span>
+				<strong>{{ total }}</strong>
+			</div>
+			<div class="toolbar">
+				<el-button
+					type="primary"
+					plain
+					size="small"
+					v-if="unread > 0"
+					@click="updateNotice('changeall', 'a')"
+				>
+					Mark All as Read
+				</el-button>
+				<el-button
+					type="danger"
+					plain
+					size="small"
+					v-if="total > 0"
+					@click="updateNotice('deleteall', 'a')"
+				>
+					Delete All
+				</el-button>
+			</div>
+		</section>
+
+		<section class="notice-panel">
+			<div v-if="total === 0" class="empty-wrap">
+				<img
+					src="@/assets/images/noinfo.png"
+					alt="No notifications"
+					class="empty-image"
+				/>
+				<div class="empty-text">No notifications yet</div>
+			</div>
+
+			<div v-else class="notice-list">
+				<div class="notice-item" v-for="notice in notices" :key="notice.notice_id">
+					<div
+						class="notice-row"
+						:class="{
+							clickable: hasNoticeTarget(notice),
+							unread: String(notice.state) === '0',
+						}"
+						role="button"
+						tabindex="0"
+						@click="openNotice(notice)"
+						@keydown.enter.prevent="openNotice(notice)"
+						@keydown.space.prevent="openNotice(notice)"
+					>
+						<span class="state-dot" :class="`state-${notice.state}`"></span>
+						<span>{{ formatDate(notice.createtime) }}</span>
+						<span>{{ notice.nickname }}</span>
+						<span>{{ notice.action }}</span>
+						<span>
+							From {{ formatPlatform(notice.router) }}
+							<span class="notice-link">{{ notice.content_name }}</span>
+						</span>
+						<el-button text type="danger" @click.stop @click="updateNotice('delete', notice.notice_id)">
+							Delete
+						</el-button>
+					</div>
+				</div>
+			</div>
+		</section>
 	</div>
 </template>
 
@@ -146,7 +148,6 @@ const updateNotice = async (change, noticeId) => {
 }
 
 const markAsRead = noticeId => {
-	// Fire and forget so link navigation is not blocked by the API request.
 	changeNotice('change', noticeId).then(res => {
 		if (res.state?.type === 'SUCCESS') {
 			loadNotices()
@@ -170,16 +171,53 @@ onMounted(() => {
 
 <style scoped>
 .notice-page {
-	width: 100%;
+	display: grid;
+	gap: 22px;
+}
+
+.notice-summary,
+.notice-panel {
+	background: linear-gradient(180deg, #ffffff 0%, #fbfcff 100%);
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	border-radius: 24px;
+	box-shadow: 0 14px 34px rgba(38, 99, 235, 0.07);
+}
+
+.notice-summary {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(140px, auto));
+	align-items: center;
+	gap: 16px;
+	padding: 20px 22px;
+}
+
+.notice-metric-label {
+	display: block;
+	margin-bottom: 8px;
+	color: #667085;
+	font-weight: 700;
+}
+
+.notice-metric strong {
+	font-size: 1.8rem;
+	letter-spacing: -0.04em;
 }
 
 .toolbar {
-	margin: 12px 0;
-	position: relative;
-	min-height: 30px;
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: flex-end;
 	gap: 8px;
+	margin-left: auto;
+}
+
+.notice-panel {
+	padding: 18px;
+}
+
+.notice-list {
+	display: grid;
+	gap: 12px;
 }
 
 .notice-item {
@@ -193,7 +231,8 @@ onMounted(() => {
 
 .empty-image {
 	max-width: 100%;
-	width: 420px;
+	width: 360px;
+	margin: 0 auto;
 }
 
 .empty-text {
@@ -206,11 +245,14 @@ onMounted(() => {
 	align-items: center;
 	gap: 14px;
 	flex-wrap: wrap;
-	padding: 8px 10px;
-	border-radius: 8px;
+	padding: 14px 16px;
+	border-radius: 18px;
+	border: 1px solid rgba(38, 99, 235, 0.08);
+	background: #fff;
 	transition:
 		background-color 0.18s ease,
-		color 0.18s ease;
+		color 0.18s ease,
+		transform 0.18s ease;
 }
 
 .notice-row.clickable {
@@ -219,6 +261,7 @@ onMounted(() => {
 
 .notice-row.clickable:hover {
 	background: #f3f7ff;
+	transform: translateY(-1px);
 }
 
 .notice-row.clickable:active {

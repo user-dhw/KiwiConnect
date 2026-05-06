@@ -99,26 +99,39 @@ onMounted(() => {
 	position: relative;
 	width: 100%;
 	height: 250px;
+	overflow: hidden;
 }
 
 .carouselimg {
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	transform: scale(1.01);
 }
 
 .carousel-title {
 	position: absolute;
-	left: 0;
-	bottom: 4px;
-	width: 100%;
-	height: 30px;
-	background-color: aliceblue;
-	font-size: 18px;
-	opacity: 0.45;
+	left: 20px;
+	right: 20px;
+	bottom: 18px;
+	padding: 16px 18px;
+	border-radius: 18px;
+	background: linear-gradient(135deg, rgba(10, 35, 31, 0.72), rgba(33, 85, 73, 0.48));
+	backdrop-filter: blur(10px);
+	font-size: 22px;
 	font-weight: 700;
-	color: #111;
-	line-height: 30px;
-	padding-left: 8px;
+	color: #fff;
+	line-height: 1.3;
+	box-shadow: 0 12px 30px rgba(0, 0, 0, 0.18);
+}
+
+@media (max-width: 768px) {
+	.carousel-title {
+		left: 14px;
+		right: 14px;
+		bottom: 14px;
+		padding: 12px 14px;
+		font-size: 18px;
+	}
 }
 </style>

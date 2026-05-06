@@ -218,28 +218,28 @@ const handleClose = () => {
 }
 
 :deep(.el-input__wrapper) {
-	border-radius: 4px;
+	border-radius: 12px;
 	background: #fff;
-	box-shadow: inset 0 0 0 1px #d7dce2;
-	min-height: 42px;
+	box-shadow: inset 0 0 0 1px #dcdfe6;
+	min-height: 46px;
 	transition: box-shadow 0.2s ease;
 }
 
 :deep(.el-input__wrapper:hover) {
-	box-shadow: inset 0 0 0 1px #bcc4cd;
+	box-shadow: inset 0 0 0 1px #c0c4cc;
 }
 
 :deep(.el-input__wrapper.is-focus) {
 	background: #ffffff;
 	box-shadow:
-		inset 0 0 0 1px #395996,
-		0 0 0 3px rgba(57, 89, 150, 0.12);
+		inset 0 0 0 1px #2663eb,
+		0 0 0 3px rgba(38, 99, 235, 0.18);
 }
 
 :deep(.el-input__inner) {
 	font-size: 14px;
 	line-height: 1.5;
-	color: #3b4348;
+	color: #303133;
 	font-weight: 500;
 	height: auto;
 }
@@ -251,13 +251,13 @@ const handleClose = () => {
 
 :deep(.el-input__prefix) {
 	font-size: 16px;
-	color: #8a949d;
+	color: #909399;
 	display: flex;
 	align-items: center;
 }
 
 :deep(.el-input__wrapper.is-focus .el-input__prefix) {
-	color: #395996;
+	color: #2663eb;
 }
 
 :deep(.el-input__suffix) {
@@ -269,15 +269,15 @@ const handleClose = () => {
 
 .auth-submit {
 	width: 100%;
-	height: 42px;
+	height: 46px;
 	margin-top: 12px;
-	border-radius: 4px;
+	border-radius: 12px;
 	font-size: 15px;
 	font-weight: 700;
 	letter-spacing: 0.5px;
-	background: linear-gradient(to bottom, #3f4b55, #353d44);
-	border: 1px solid #2f363c;
-	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+	background: linear-gradient(135deg, #5f8fff, #2663eb);
+	border: 1px solid #2663eb;
+	box-shadow: 0 12px 24px rgba(38, 99, 235, 0.22);
 	transition: all 0.2s ease;
 	position: relative;
 	overflow: hidden;
@@ -289,8 +289,8 @@ const handleClose = () => {
 
 :deep(.auth-submit.el-button:hover) {
 	transform: translateY(-1px);
-	background: linear-gradient(to bottom, #4a5c70, #395996);
-	border-color: #334f85;
+	background: linear-gradient(135deg, #729cff, #2663eb);
+	border-color: #2663eb;
 }
 
 :deep(.auth-submit.el-button:active) {
@@ -301,19 +301,19 @@ const handleClose = () => {
 	text-align: center;
 	margin-top: 20px;
 	padding-top: 12px;
-	border-top: 1px solid #e8edf2;
+	border-top: 1px solid #ebeef5;
 }
 
 :deep(.auth-switch-row .el-link) {
 	font-size: 14px;
 	font-weight: 600;
-	color: #395996;
+	color: #2663eb;
 	text-decoration: none;
 	transition: all 0.2s;
 }
 
 :deep(.auth-switch-row .el-link:hover) {
-	color: #2f4e86;
+	color: #1d4fc2;
 }
 
 :deep(.auth-dialog) {
@@ -321,16 +321,17 @@ const handleClose = () => {
 }
 
 :deep(.auth-dialog .el-dialog__header) {
-	padding: 20px 24px;
+	padding: 22px 24px 18px;
 	margin: 0;
-	border-bottom: 1px solid #2f363c;
-	background: #3b4348;
+	border-bottom: 1px solid #ebeef5;
+	background:
+		linear-gradient(180deg, #f8fbff 0%, #f2f8ff 100%);
 }
 
 :deep(.auth-dialog .el-dialog__title) {
 	font-size: 20px;
 	font-weight: 700;
-	color: #ffffff;
+	color: #303133;
 }
 
 :deep(.auth-dialog .el-dialog__headerbtn) {
@@ -342,21 +343,23 @@ const handleClose = () => {
 }
 
 :deep(.auth-dialog .el-dialog__close) {
-	color: #c6d0da;
+	color: #909399;
 }
 
 :deep(.auth-dialog .el-dialog__headerbtn:hover .el-dialog__close) {
-	color: #ffffff;
+	color: #409eff;
 }
 
 :deep(.auth-dialog .el-dialog__body) {
-	padding: 22px 24px 24px;
+	padding: 24px;
+	background: #ffffff;
 }
 
 :deep(.auth-dialog .el-dialog) {
-	border-radius: 6px;
+	border-radius: 20px;
 	overflow: hidden;
-	box-shadow: 0 16px 28px rgba(0, 0, 0, 0.25);
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	box-shadow: 0 24px 60px rgba(38, 99, 235, 0.18);
 	animation: auth-dialog-enter 0.25s ease-out;
 }
 
@@ -372,6 +375,6 @@ const handleClose = () => {
 }
 
 :deep(.el-overlay) {
-	background-color: rgba(31, 38, 44, 0.55);
+	background-color: rgba(17, 25, 40, 0.45);
 }
 </style>

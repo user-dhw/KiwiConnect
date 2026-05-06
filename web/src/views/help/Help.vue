@@ -4,28 +4,24 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="row content-grid">
-					<div class="span8 page-content">
-						<div class="page-header">
-							<h1>
+				<div class="page-shell">
+					<div class="page-main">
+						<div class="page-heading">
+							<h1 class="page-title">
 								Q&A Center
-								<small v-if="subtitle">{{ subtitle }}</small>
+								<span v-if="subtitle" class="page-highlight">/ {{ subtitle }}</span>
 							</h1>
+							<p class="page-subtitle">
+								Browse student questions, practical answers, and helpful community
+								tips for daily campus life.
+							</p>
 						</div>
 
-						<div class="filter-section">
+						<div class="filter-bar">
 							<span class="filter-label">Category:</span>
 							<el-tag
-								:type="
-									!query.lable && !query.tag
-										? 'primary'
-										: 'info'
-								"
-								:effect="
-									!query.lable && !query.tag
-										? 'dark'
-										: 'plain'
-								"
+								:type="!query.lable && !query.tag ? 'primary' : 'info'"
+								:effect="!query.lable && !query.tag ? 'dark' : 'plain'"
 								@click="changeLabel('')"
 								class="filter-tag"
 								size="large"
@@ -35,12 +31,8 @@
 							<el-tag
 								v-for="label in labels"
 								:key="label"
-								:type="
-									query.lable === label ? 'primary' : 'info'
-								"
-								:effect="
-									query.lable === label ? 'dark' : 'plain'
-								"
+								:type="query.lable === label ? 'primary' : 'info'"
+								:effect="query.lable === label ? 'dark' : 'plain'"
 								@click="changeLabel(label)"
 								class="filter-tag"
 								size="large"
@@ -60,31 +52,23 @@
 							</el-tag>
 						</div>
 
-						<section class="widget">
+						<section class="section-card widget">
 							<ul class="articles" v-if="helpList.length">
 								<li
-									class="article-entry standard"
 									v-for="item in helpList"
 									:key="item.help_id"
+									class="article-entry standard"
 								>
 									<h4>
-										<router-link
-											:to="`/helpcontent/${item.help_id}`"
-										>
+										<router-link :to="`/helpcontent/${item.help_id}`">
 											{{ item.help_title }}
 										</router-link>
 									</h4>
 									<span class="article-meta">
-										<span>{{
-											formatDate(item.createtime)
-										}}</span>
-										<span class="meta-gap"
-											>Author: {{ item.nickname }}</span
-										>
+										<span>{{ formatDate(item.createtime) }}</span>
+										<span class="meta-gap">Author: {{ item.nickname }}</span>
 									</span>
-									<span class="like-count"
-										>Views: {{ item.help_read_num }}</span
-									>
+									<span class="like-count">Views: {{ item.help_read_num }}</span>
 								</li>
 							</ul>
 
@@ -101,7 +85,7 @@
 						/>
 					</div>
 
-					<aside class="span4 page-sidebar">
+					<aside class="page-aside panel-stack">
 						<Carousel />
 						<OldStuffWidget />
 					</aside>
@@ -204,64 +188,6 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.help-page {
-	min-height: 200px;
-}
-
-.page-container {
-	padding: 20px 0;
-}
-
-.container {
-	max-width: 1200px;
-	margin: 0 auto;
-	padding: 0 20px;
-}
-
-.content-grid {
-	display: flex;
-	gap: 24px;
-}
-
-.page-content {
-	flex: 1;
-	min-width: 0;
-}
-
-.page-sidebar {
-	width: 340px;
-}
-
-.page-header h1 {
-	margin: 0 0 14px;
-	font-size: 28px;
-}
-
-.page-header small {
-	margin-left: 8px;
-	font-size: 16px;
-	color: #409eff;
-	font-weight: normal;
-}
-
-.filter-section {
-	display: flex;
-	align-items: center;
-	flex-wrap: wrap;
-	gap: 10px;
-	margin-bottom: 20px;
-	padding: 16px;
-	background: #f5f7fa;
-	border-radius: 8px;
-}
-
-.filter-label {
-	font-size: 14px;
-	font-weight: 600;
-	color: #606266;
-	margin-right: 4px;
-}
-
 .filter-tag {
 	cursor: pointer;
 	transition: all 0.3s ease;
@@ -273,33 +199,6 @@ onMounted(async () => {
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
-.widget {
-	background: #fff;
-	border: 1px solid #eef2f6;
-	border-radius: 10px;
-	padding: 16px;
-}
-
-.articles {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-.article-entry {
-	padding: 14px 0;
-	border-bottom: 1px solid #eef2f6;
-}
-
-.article-entry:last-child {
-	border-bottom: none;
-}
-
-.article-entry h4 {
-	margin: 0 0 8px;
-	font-size: 18px;
-}
-
 .article-entry a {
 	color: #1f2d3d;
 	text-decoration: none;
@@ -309,19 +208,12 @@ onMounted(async () => {
 	color: #1989fa;
 }
 
-.article-meta {
-	color: #6b7785;
-	font-size: 13px;
-	display: inline-flex;
-	align-items: center;
-}
-
 .meta-gap {
 	margin-left: 24px;
 }
 
 .like-count {
-	float: right;
+	display: inline-flex;
 	font-size: 13px;
 	color: #6b7785;
 }
@@ -330,15 +222,5 @@ onMounted(async () => {
 	margin-top: 18px;
 	display: flex;
 	justify-content: center;
-}
-
-@media (max-width: 992px) {
-	.content-grid {
-		flex-direction: column;
-	}
-
-	.page-sidebar {
-		width: 100%;
-	}
 }
 </style>

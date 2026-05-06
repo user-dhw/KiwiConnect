@@ -1,53 +1,29 @@
 <template>
-	<div class="help">
+	<div class="oldstuff-detail-page">
 		<div class="page-container">
 			<div class="container">
-				<div class="row">
-					<div class="span8 page-content">
-						<el-page-header @back="goBack" content="Item Details" />
+				<div class="page-shell detail-shell">
+					<div class="page-main">
+						<div class="detail-back">
+							<el-page-header @back="goBack" content="Item Details" />
+						</div>
 
-						<article
-							class="type-post format-standard hentry clearfix"
-						>
-							<div class="oldstuff-detail-layout">
-								<div class="oldstuffcontent">
-									<img
-										:src="content.oldstuff_img"
-										alt="Item photo"
-									/>
+						<article class="content-article detail-article">
+							<div class="detail-grid">
+								<div class="detail-media-card">
+									<img :src="content.oldstuff_img" alt="Item photo" />
 								</div>
 
-								<div class="oldstuffcontent">
-									<h3>{{ content.oldstuff_name }}</h3>
+								<div class="detail-info-card">
+									<h1 class="post-title">{{ content.oldstuff_name }}</h1>
+									<div class="detail-price">¥{{ content.oldstuff_price }}</div>
+									<p class="detail-original-price">
+										Original price: {{ content.oldstuff_price }}
+									</p>
 
-									<div class="prize_bar">
-										<div class="show_prize fl">
-											￥<em>{{
-												content.oldstuff_price
-											}}</em>
-										</div>
-										<div style="margin-top: 10px">
-											Original price:
-											{{ content.oldstuff_price }}
-										</div>
-										<div
-											style="
-												margin-top: 10px;
-												font-size: 10px;
-											"
-										>
-											Seller info ———————————————
-										</div>
-
-										<el-popover
-											placement="left"
-											:width="400"
-											trigger="hover"
-										>
-											<li
-												class="comment even thread-odd thread-alt depth-1"
-												id="li-comment-4"
-											>
+									<div class="detail-facts">
+										<el-popover placement="left" :width="400" trigger="hover">
+											<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4">
 												<article id="comment-4">
 													<img
 														:src="content.avatar"
@@ -56,159 +32,95 @@
 														width="60"
 													/>
 													<div class="comment-meta">
-														<h5 class="author">
-															{{
-																content.nickname
-															}}
-														</h5>
-														<p
-															class="date"
-															v-if="
-																Number(
-																	content.realstate,
-																) === 3
-															"
-														>
+														<h5 class="author">{{ content.nickname }}</h5>
+														<p class="date" v-if="Number(content.realstate) === 3">
 															Verified User
 														</p>
-														<p class="date" v-else>
-															Unverified User
-														</p>
+														<p class="date" v-else>Unverified User</p>
 													</div>
 												</article>
 											</li>
 
-											<div class="xinxi">
-												<p style="color: #000">
-													Account:
-												</p>
-												<p>{{ content.username }}</p>
-											</div>
-											<div class="xinxi">
-												<p style="color: #000">
-													Email:
-												</p>
-												<p>{{ content.mail }}</p>
-											</div>
-											<div class="xinxi">
-												<p style="color: #000">Bio:</p>
-												<p>{{ content.synopsis }}</p>
-											</div>
+											<div class="profile-detail"><strong>Account:</strong> {{ content.username }}</div>
+											<div class="profile-detail"><strong>Email:</strong> {{ content.mail }}</div>
+											<div class="profile-detail"><strong>Bio:</strong> {{ content.synopsis }}</div>
 
-											<el-button
-												@click="
-													reportUser(content.username)
-												"
-												style="margin: 10px 150px"
-												type="danger"
-												plain
-											>
+											<el-button @click="reportUser(content.username)" type="danger" plain>
 												Report
 											</el-button>
 
 											<template #reference>
-												<div class="show_unit fl">
-													<a class="iconfont ic"
-														>&#xe622;</a
-													>
-													{{ content.nickname }}
+												<div class="detail-fact detail-fact-clickable">
+													<div class="detail-fact-icon">@</div>
+													<div class="detail-fact-copy">
+														<span class="detail-fact-label">Seller</span>
+														<span class="detail-fact-value">{{ content.nickname || '-' }}</span>
+													</div>
 												</div>
 											</template>
 										</el-popover>
 
-										<div class="show_unit fl">
-											<a class="iconfont ic">&#xe62a;</a>
-											{{ content.phone }}
+										<div class="detail-fact">
+											<div class="detail-fact-icon">P</div>
+											<div class="detail-fact-copy">
+												<span class="detail-fact-label">Phone</span>
+												<span class="detail-fact-value">{{ content.phone || '-' }}</span>
+											</div>
 										</div>
 									</div>
 
-									<el-button
-										type="primary"
-										@click="
-											isUserVerified
-												? (dialogFormVisible = true)
-												: ElMessage.warning(
-														'You must verify your account to express interest',
-													)
-										"
-										:disabled="!isUserVerified"
-									>
-										{{
-											isUserVerified
-												? 'Interested in buying'
-												: 'Verify Account to Buy'
-										}}
-									</el-button>
-									<p
-										v-if="!isUserVerified"
-										style="
-											color: #ff6b6b;
-											font-size: 12px;
-											margin-top: 8px;
-										"
-									>
-										You must verify your account before
-										expressing purchase interest
-									</p>
+									<div class="detail-actions">
+										<el-button
+											type="primary"
+											@click="
+												isUserVerified
+													? (dialogFormVisible = true)
+													: ElMessage.warning(
+															'You must verify your account to express interest',
+														)
+											"
+											:disabled="!isUserVerified"
+										>
+											{{ isUserVerified ? 'Interested in buying' : 'Verify Account to Buy' }}
+										</el-button>
+										<p v-if="!isUserVerified" class="detail-note">
+											You must verify your account before expressing purchase
+											interest.
+										</p>
+									</div>
 
 									<el-dialog
 										v-model="dialogFormVisible"
 										title="Purchase Intent"
-										width="30%"
+										width="min(92vw, 520px)"
 									>
-										<el-form
-											:model="intentForm"
-											size="default"
-										>
+										<el-form :model="intentForm" size="default">
 											<el-form-item label="Contact info">
-												<el-input
-													autocomplete="off"
-													v-model="
-														intentForm.describe
-													"
-												/>
+												<el-input autocomplete="off" v-model="intentForm.describe" />
 											</el-form-item>
-											<el-form-item
-												label="Intended price"
-											>
-												<el-input
-													autocomplete="off"
-													v-model="intentForm.name"
-												/>
+											<el-form-item label="Intended price">
+												<el-input autocomplete="off" v-model="intentForm.name" />
 											</el-form-item>
 										</el-form>
 
 										<template #footer>
-											<el-button
-												@click="
-													dialogFormVisible = false
-												"
-												>Cancel</el-button
-											>
-											<el-button
-												type="primary"
-												:loading="isJoining"
-												@click="submitJoin"
-											>
+											<el-button @click="dialogFormVisible = false">Cancel</el-button>
+											<el-button type="primary" :loading="isJoining" @click="submitJoin">
 												Confirm
 											</el-button>
 										</template>
 									</el-dialog>
 								</div>
-
-								<div style="clear: both"></div>
 							</div>
 
-							<h3>Item Description</h3>
-							<blockquote
-								v-html="content.oldstuff_content"
-							></blockquote>
+							<h3 class="detail-section-title">Item Description</h3>
+							<blockquote v-html="content.oldstuff_content"></blockquote>
 						</article>
 
 						<Comment />
 					</div>
 
-					<aside class="span4 page-sidebar">
+					<aside class="page-aside panel-stack">
 						<Carousel />
 						<OldStuffHot />
 					</aside>
@@ -261,9 +173,7 @@ const goBack = () => {
 
 const reportUser = username => {
 	const currentUrl =
-		typeof window !== 'undefined'
-			? encodeURIComponent(window.location.href)
-			: ''
+		typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : ''
 	router.push({
 		path: '/report',
 		query: {
@@ -315,9 +225,7 @@ const loadOldStuffContent = async id => {
 
 const submitJoin = async () => {
 	if (!isUserVerified.value) {
-		ElMessage.error(
-			'You must verify your account to express purchase interest',
-		)
+		ElMessage.error('You must verify your account to express purchase interest')
 		return
 	}
 
@@ -347,8 +255,7 @@ const submitJoin = async () => {
 		}
 
 		ElMessage.error(
-			res.state?.msg ||
-				'You have already submitted an intent for this item',
+			res.state?.msg || 'You have already submitted an intent for this item',
 		)
 	} catch {
 		ElMessage.error('Failed to submit purchase intent')
@@ -369,57 +276,30 @@ watch(
 </script>
 
 <style scoped>
-.help {
-	min-height: 200px;
+.detail-price {
+	margin-top: 6px;
+	font-size: clamp(1.7rem, 3vw, 2.2rem);
+	font-weight: 800;
+	color: #d93b52;
 }
 
-.label {
-	margin-left: 15px;
+.detail-original-price {
+	margin: 8px 0 0;
+	color: #7d8799;
 }
 
-.oldstuff-detail-layout {
-	display: grid;
-	grid-template-columns: minmax(320px, 1.1fr) minmax(320px, 1fr);
-	gap: 20px;
-	align-items: start;
+.detail-fact-clickable {
+	cursor: pointer;
 }
 
-.oldstuffcontent {
-	width: 100%;
-	min-height: 200px;
-	padding: 0;
+.detail-section-title {
+	margin: 22px 0 12px;
+	font-size: 1.18rem;
+	font-weight: 800;
 }
 
-.oldstuffcontent img {
-	max-width: 100%;
-	max-height: 420px;
-	width: 100%;
-	object-fit: contain;
-	display: block;
-}
-
-.show_prize {
-	font-size: 20px;
-	color: #ff3e3e;
-	padding-left: 20px;
-}
-
-.show_unit {
+.profile-detail {
 	margin-bottom: 10px;
-	height: 50px;
-	line-height: 50px;
-}
-
-.ic {
-	color: #409eff;
-	margin-right: 30px;
-	font-size: 30px;
-}
-
-@media (max-width: 900px) {
-	.oldstuff-detail-layout {
-		grid-template-columns: 1fr;
-		gap: 12px;
-	}
+	color: #252b37;
 }
 </style>

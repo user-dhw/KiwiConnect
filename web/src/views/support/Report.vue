@@ -2,7 +2,14 @@
 	<div class="support-page">
 		<div v-title data-title="Information Platform | Report Violation"></div>
 		<el-card class="support-card" shadow="hover">
-			<el-page-header @back="goBack" content="Report Violation" />
+			<div class="page-heading">
+				<h1 class="page-title">Report Violation</h1>
+				<p class="page-subtitle">
+					Submit moderation reports with screenshots and contextual links so the
+					platform team can review issues faster.
+				</p>
+			</div>
+			<el-page-header @back="goBack" content="Back" />
 			<el-divider />
 
 			<el-alert
@@ -12,13 +19,9 @@
 				:closable="false"
 				class="prefill-alert"
 			>
-				<template #title> Auto-filled from violation link </template>
-				<div v-if="form.jubao_user">
-					Reported account: {{ form.jubao_user }}
-				</div>
-				<div v-if="form.jubao_url">
-					Violation URL: {{ form.jubao_url }}
-				</div>
+				<template #title>Auto-filled from violation link</template>
+				<div v-if="form.jubao_user">Reported account: {{ form.jubao_user }}</div>
+				<div v-if="form.jubao_url">Violation URL: {{ form.jubao_url }}</div>
 			</el-alert>
 
 			<el-form
@@ -53,16 +56,8 @@
 						<el-icon><Plus /></el-icon>
 					</el-upload>
 
-					<el-dialog
-						v-model="previewVisible"
-						title="Preview"
-						width="680px"
-					>
-						<img
-							:src="previewImage"
-							alt="Report screenshot"
-							class="preview-image"
-						/>
+					<el-dialog v-model="previewVisible" title="Preview" width="680px">
+						<img :src="previewImage" alt="Report screenshot" class="preview-image" />
 					</el-dialog>
 				</el-form-item>
 
@@ -76,11 +71,7 @@
 				</el-form-item>
 
 				<el-form-item>
-					<el-button
-						type="primary"
-						:loading="isSubmitting"
-						@click="handleSubmit"
-					>
+					<el-button type="primary" :loading="isSubmitting" @click="handleSubmit">
 						Submit
 					</el-button>
 					<el-button @click="resetForm">Cancel</el-button>
@@ -130,9 +121,7 @@ const form = reactive({
 	jubao_url: '',
 })
 
-const hasPrefilledContext = computed(() =>
-	Boolean(form.jubao_user || form.jubao_url),
-)
+const hasPrefilledContext = computed(() => Boolean(form.jubao_user || form.jubao_url))
 
 const goBack = () => {
 	router.back()
@@ -238,28 +227,3 @@ onMounted(() => {
 	setRouteDefaults()
 })
 </script>
-
-<style scoped>
-.support-page {
-	padding: 20px;
-}
-
-.support-card {
-	max-width: 980px;
-	margin: 0 auto;
-}
-
-.section {
-	max-width: 760px;
-	margin: 0 auto;
-}
-
-.prefill-alert {
-	margin-bottom: 16px;
-}
-
-.preview-image {
-	width: 100%;
-	display: block;
-}
-</style>

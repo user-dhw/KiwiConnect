@@ -1,9 +1,15 @@
 <template>
 	<div class="myself">
-		<h2>Profile Editor</h2>
-		<el-tabs type="border-card">
+		<div class="page-heading">
+			<h1 class="page-title">Profile Editor</h1>
+			<p class="page-subtitle">
+				Update your public profile and complete student verification in one place.
+			</p>
+		</div>
+
+		<el-tabs type="border-card" class="profile-tabs">
 			<el-tab-pane label="Profile Information">
-				<el-form :model="form" label-width="120px">
+				<el-form :model="form" label-width="120px" class="profile-form">
 					<el-form-item label="Avatar">
 						<el-upload
 							:action="uploadAction"
@@ -14,14 +20,8 @@
 							:on-success="uploadAvatarSuccess"
 							class="avatar-uploader"
 						>
-							<img
-								v-if="form.avatar"
-								:src="form.avatar"
-								class="avatar-preview"
-							/>
-							<el-icon v-else class="avatar-uploader-icon"
-								><Plus
-							/></el-icon>
+							<img v-if="form.avatar" :src="form.avatar" class="avatar-preview" />
+							<el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
 						</el-upload>
 					</el-form-item>
 					<el-form-item label="Nickname">
@@ -34,73 +34,58 @@
 						<el-input v-model="form.phone" />
 					</el-form-item>
 					<el-form-item label="Bio">
-						<el-input
-							v-model="form.synopsis"
-							type="textarea"
-							:rows="4"
-						/>
+						<el-input v-model="form.synopsis" type="textarea" :rows="4" />
 					</el-form-item>
 					<el-form-item>
-						<el-button
-							type="primary"
-							:loading="savingUser"
-							@click="submitUserInfo"
-							>Save</el-button
-						>
+						<el-button type="primary" :loading="savingUser" @click="submitUserInfo">
+							Save
+						</el-button>
 					</el-form-item>
 				</el-form>
 			</el-tab-pane>
 
 			<el-tab-pane label="Identity Verification">
-				<el-steps :active="Number(form.realstate)" align-center>
-					<el-step title="Submit Information" />
-					<el-step title="Under Review" />
-					<el-step title="Verified" />
-				</el-steps>
+				<div class="verification-panel">
+					<el-steps :active="Number(form.realstate)" align-center>
+						<el-step title="Submit Information" />
+						<el-step title="Under Review" />
+						<el-step title="Verified" />
+					</el-steps>
 
-				<el-form
-					:model="student"
-					label-width="120px"
-					style="margin-top: 20px"
-				>
-					<el-form-item label="Full Name">
-						<el-input
-							v-model="student.realname"
-							:disabled="studentLocked"
-						/>
-					</el-form-item>
-					<el-form-item label="Student ID">
-						<el-input
-							v-model="student.studentid"
-							:disabled="studentLocked"
-						/>
-					</el-form-item>
-					<el-form-item label="Student Card">
-						<el-upload
-							:action="uploadAction"
-							:accept="IMAGE_UPLOAD_ACCEPT"
-							:before-upload="beforeImageUpload"
-							:headers="uploadHeaders"
-							list-type="picture-card"
-							:file-list="student.studentcard"
-							:on-success="uploadStudentCardSuccess"
-							:on-remove="removeStudentCard"
-							:disabled="studentLocked"
-						>
-							<el-icon><Plus /></el-icon>
-						</el-upload>
-					</el-form-item>
-					<el-form-item>
-						<el-button
-							type="primary"
-							:disabled="studentLocked"
-							:loading="savingStudent"
-							@click="submitStudentInfo"
-						>
-							Submit Verification
-						</el-button>
-					</el-form-item>
-				</el-form>
+					<el-form :model="student" label-width="120px" class="profile-form">
+						<el-form-item label="Full Name">
+							<el-input v-model="student.realname" :disabled="studentLocked" />
+						</el-form-item>
+						<el-form-item label="Student ID">
+							<el-input v-model="student.studentid" :disabled="studentLocked" />
+						</el-form-item>
+						<el-form-item label="Student Card">
+							<el-upload
+								:action="uploadAction"
+								:accept="IMAGE_UPLOAD_ACCEPT"
+								:before-upload="beforeImageUpload"
+								:headers="uploadHeaders"
+								list-type="picture-card"
+								:file-list="student.studentcard"
+								:on-success="uploadStudentCardSuccess"
+								:on-remove="removeStudentCard"
+								:disabled="studentLocked"
+							>
+								<el-icon><Plus /></el-icon>
+							</el-upload>
+						</el-form-item>
+						<el-form-item>
+							<el-button
+								type="primary"
+								:disabled="studentLocked"
+								:loading="savingStudent"
+								@click="submitStudentInfo"
+							>
+								Submit Verification
+							</el-button>
+						</el-form-item>
+					</el-form>
+				</div>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -144,7 +129,6 @@ const studentLocked = computed(
 )
 
 const uploadAction = `${import.meta.env.VITE_API_URL || '/api'}/uplod`
-
 const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
 
 const normalizeFileUrl = value => {
@@ -163,8 +147,7 @@ const normalizeFileUrl = value => {
 
 const uploadHeaders = computed(() => {
 	const token =
-		store.state.user?.token ||
-		window.localStorage.getItem('luffy_jwt_token')
+		store.state.user?.token || window.localStorage.getItem('luffy_jwt_token')
 	return token ? { Authorization: `Bearer ${token}` } : {}
 })
 
@@ -299,19 +282,33 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.myself h2 {
-	margin: 0 0 16px;
+.profile-tabs {
+	border-radius: 24px;
+	overflow: hidden;
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	box-shadow: 0 14px 34px rgba(38, 99, 235, 0.07);
+}
+
+.profile-form {
+	max-width: 760px;
+	padding-top: 12px;
+}
+
+.verification-panel {
+	display: grid;
+	gap: 24px;
 }
 
 .avatar-uploader :deep(.el-upload) {
-	border: 1px dashed #d9d9d9;
-	border-radius: 6px;
+	border: 1px dashed #cddaf8;
+	border-radius: 20px;
 	cursor: pointer;
 	overflow: hidden;
+	background: #f8faff;
 }
 
 .avatar-uploader :deep(.el-upload:hover) {
-	border-color: #409eff;
+	border-color: #2663eb;
 }
 
 .avatar-uploader-icon {

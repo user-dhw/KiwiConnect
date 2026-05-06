@@ -1,56 +1,47 @@
 <template>
 	<div class="index">
-		<!-- Start of Header -->
 		<div class="header-wrapper">
-			<header>
-				<div class="container">
-					<div class="logo-container">
-						<!-- Website Logo -->
-						<span style="font-size: 35px; color: white"
-							>KiwiConnect</span
-						>
-						<span class="tag-line">Waikato</span>
-					</div>
-					<!-- Start of Main Navigation -->
-					<nav class="main-nav">
+			<header class="site-header">
+				<div class="container site-header-shell">
+					<router-link to="/" class="logo-container" aria-label="KiwiConnect Waikato home">
+						<div class="brand-mark">KC</div>
+						<div class="brand-copy">
+							<span class="brand-title">KiwiConnect</span>
+							<span class="tag-line">Waikato student community platform</span>
+						</div>
+					</router-link>
+					<button
+						class="mobile-menu-button"
+						type="button"
+						:aria-expanded="mobileMenuOpen ? 'true' : 'false'"
+						aria-controls="site-nav-panel"
+						aria-label="Toggle navigation menu"
+						@click="toggleMobileMenu"
+					>
+						<span></span>
+						<span></span>
+						<span></span>
+					</button>
+					<nav
+						id="site-nav-panel"
+						:class="['main-nav', { open: mobileMenuOpen }]"
+						aria-label="Main navigation"
+					>
 						<div class="menu-top-menu-container">
-							<ul id="menu-top-menu" class="clearfix">
-								<li>
-									<router-link to="/">Home</router-link>
+							<ul id="menu-top-menu" class="menu-list">
+								<li v-for="item in navItems" :key="item.to">
+									<router-link :to="item.to" @click="closeMobileMenu">
+										{{ item.label }}
+									</router-link>
 								</li>
-								<li>
-									<router-link to="/help">Q&A</router-link>
-								</li>
-								<li>
-									<router-link to="/activity"
-										>Events</router-link
-									>
-								</li>
-								<li>
-									<router-link to="/oldstuff"
-										>Marketplace</router-link
-									>
-								</li>
-								<li>
-									<router-link to="/news"
-										>Articles/News</router-link
-									>
-								</li>
-
 								<li v-if="avatar === ''" class="auth-link">
-									<a @click="closein" style="cursor: pointer"
-										>Sign In / Register</a
-									>
+									<button type="button" class="nav-cta" @click="closein">
+										Sign In / Register
+									</button>
 								</li>
 								<li v-else class="user-menu-item">
 									<el-dropdown>
-										<a
-											class="user-menu-trigger"
-											style="
-												color: #c1cad1;
-												cursor: pointer;
-											"
-										>
+										<button type="button" class="user-menu-trigger">
 											<img
 												v-if="unread === 0"
 												:src="displayAvatar"
@@ -68,40 +59,25 @@
 													@error="handleAvatarError"
 												/>
 											</el-badge>
-											{{ nickname }}
-										</a>
+											<span>{{ nickname }}</span>
+										</button>
 										<template #dropdown>
 											<el-dropdown-menu>
 												<el-dropdown-item>
-													<router-link to="/admin"
-														>Profile</router-link
-													>
+													<router-link to="/admin">Profile</router-link>
 												</el-dropdown-item>
 												<el-dropdown-item>
-													<router-link
-														to="/admin/notice"
-													>
-														<span
-															v-if="unread === 0"
-															>Notifications</span
-														>
-														<el-badge
-															v-else
-															:value="unread"
-															class="item"
-														>
-															<span
-																>Notifications</span
-															>
+													<router-link to="/admin/notice">
+														<span v-if="unread === 0">Notifications</span>
+														<el-badge v-else :value="unread" class="item">
+															<span>Notifications</span>
 														</el-badge>
 													</router-link>
 												</el-dropdown-item>
 												<el-dropdown-item>
-													<a
-														@click="logout"
-														style="cursor: pointer"
-														>Sign Out</a
-													>
+													<button type="button" class="dropdown-action" @click="logout">
+														Sign Out
+													</button>
 												</el-dropdown-item>
 											</el-dropdown-menu>
 										</template>
@@ -109,32 +85,19 @@
 								</li>
 							</ul>
 						</div>
-						<select
-							v-model="selected"
-							@change="changeHref(parseInt(selected))"
-							class="responsive-nav"
-						>
-							<option value="1">Home</option>
-							<option value="2">Q&A</option>
-							<option value="3">Events</option>
-							<option value="5">Marketplace</option>
-						</select>
 					</nav>
-					<!-- End of Main Navigation -->
 				</div>
 			</header>
 		</div>
-		<!-- End of Header -->
-		<!-- Start of Search Wrapper -->
 		<div class="search-area-wrapper">
 			<div class="search-area container">
-				<h3 class="search-header">information exchange</h3>
-				<p class="search-tag-line" style="margin-top: 50px">
-					Information sharing and communication platform Makes
-					information transfer easier
+				<div class="hero-badge">Campus hub for students, clubs and everyday life</div>
+				<h3 class="search-header">A softer, smarter community space for KiwiConnect Waikato</h3>
+				<p class="search-tag-line">
+					Find answers, discover events, share updates, and trade second-hand
+					items in one modern student-friendly platform.
 				</p>
-
-				<form class="search-form clearfix" @submit.prevent="onSubmit">
+				<form class="search-form" @submit.prevent="onSubmit">
 					<input
 						class="search-term required"
 						type="text"
@@ -149,23 +112,24 @@
 					/>
 					<div id="search-error-container"></div>
 				</form>
+				<div class="hero-topics">
+					<span class="hero-topic">Questions & Answers</span>
+					<span class="hero-topic">Campus Events</span>
+					<span class="hero-topic">Marketplace</span>
+					<span class="hero-topic">News & Articles</span>
+				</div>
 			</div>
 		</div>
-		<!-- End of Search Wrapper -->
 		<router-view />
-		<!-- start of foot -->
 		<foot />
-		<!-- end of foot -->
-		<!-- Modal component -->
-		<!-- Sign in/Register modal -->
 		<LoginRegisterModal />
 	</div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useStore } from 'vuex'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import foot from '@/components/foot.vue'
 import LoginRegisterModal from '@/components/auth/LoginRegisterModal.vue'
@@ -173,12 +137,19 @@ import { getNotice } from '@/api/auth'
 
 const store = useStore()
 const router = useRouter()
+const route = useRoute()
 
-// Data
-const selected = ref(1)
 const search = ref('')
+const mobileMenuOpen = ref(false)
 
-// Computed properties
+const navItems = [
+	{ label: 'Home', to: '/' },
+	{ label: 'Q&A', to: '/help' },
+	{ label: 'Events', to: '/activity' },
+	{ label: 'Marketplace', to: '/oldstuff' },
+	{ label: 'Articles/News', to: '/news' },
+]
+
 const avatar = computed(() => store.state.user.userinfo?.avatar || '')
 const nickname = computed(() => store.state.user.userinfo?.nickname || '')
 const unread = computed(() => store.state.user.unread || 0)
@@ -203,26 +174,22 @@ const displayAvatar = computed(
 	() => normalizeAvatar(avatar.value) || defaultAvatar,
 )
 
-// Methods
-const changeHref = sortnum => {
-	const routes = {
-		1: '/',
-		2: '/help',
-		3: '/activity',
-		5: '/oldstuff',
-	}
+const toggleMobileMenu = () => {
+	mobileMenuOpen.value = !mobileMenuOpen.value
+}
 
-	if (routes[sortnum]) {
-		router.push({ path: routes[sortnum] })
-	}
+const closeMobileMenu = () => {
+	mobileMenuOpen.value = false
 }
 
 const logout = () => {
 	store.dispatch('user/deleteuserinfo')
+	closeMobileMenu()
 	ElMessage.success('Signed out successfully')
 }
 
 const closein = () => {
+	closeMobileMenu()
 	store.dispatch('user/close', true)
 }
 
@@ -243,6 +210,7 @@ const searchbtn = () => {
 		path: '/search',
 		query: { search: search.value },
 	})
+	closeMobileMenu()
 }
 
 const getNoticeData = async () => {
@@ -254,7 +222,13 @@ const getNoticeData = async () => {
 	}
 }
 
-// Lifecycle
+watch(
+	() => route.fullPath,
+	() => {
+		closeMobileMenu()
+	},
+)
+
 onMounted(() => {
 	const token = localStorage.getItem('luffy_jwt_token')
 	if (token) {
@@ -265,118 +239,186 @@ onMounted(() => {
 })
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.header-btn {
-	background-color: #2c696d;
-	font-size: 14px;
-	line-height: 19px;
-	font-weight: 600;
-	padding: 14px 30px 15px;
-	color: #fff;
-	display: table;
-	margin: 0 auto;
-}
-
-#mask {
-	position: fixed;
-	z-index: 999;
-	top: 0;
-	left: 0;
-	width: 100%;
-	height: 100%;
-	background: #000;
-	filter: alpha(Opacity=30);
-	opacity: 0.2;
-	margin: 0;
-}
-
-#loginBox {
-	position: fixed;
-	left: 50%;
-	top: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 1000;
-	width: 380px;
-	height: 330px;
-	border: 1px solid #ccc;
-	background-color: #fff;
-}
-
-#loginBox h2 {
-	height: 40px;
-	text-align: center;
-	line-height: 40px;
-	font-size: 14px;
-	letter-spacing: 1px;
-	color: #666;
-	margin: 0 0 20px 0;
-	padding: 0;
-	border-bottom: 1px solid #ccc;
-}
-
-#loginBox h2 img {
-	display: block;
-	float: right;
+.site-header {
 	position: relative;
-	top: 10px;
-	right: 10px;
+}
+
+.site-header-shell {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 20px;
+	padding-top: 16px;
+	padding-bottom: 16px;
+}
+
+.logo-container {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 0;
+	flex-shrink: 0;
+}
+
+.brand-mark {
+	width: 46px;
+	height: 46px;
+	border-radius: 14px;
+	display: grid;
+	place-items: center;
+	background: linear-gradient(135deg, #72a0ff, #2663eb);
+	color: #ffffff;
+	font-size: 18px;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	box-shadow: 0 12px 28px rgba(38, 99, 235, 0.28);
+}
+
+.brand-copy {
+	display: flex;
+	flex-direction: column;
+}
+
+.brand-title {
+	font-size: 30px;
+	line-height: 1;
+	font-weight: 800;
+	color: #2663eb;
+	letter-spacing: -0.03em;
+}
+
+.tag-line {
+	top: 0;
+	font-size: 13px;
+	color: #7e8ba8;
+}
+
+.mobile-menu-button {
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	gap: 5px;
+	width: 46px;
+	height: 46px;
+	padding: 12px;
+	border-radius: 14px;
+	background: #f4f7ff;
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	box-shadow: 0 8px 20px rgba(38, 99, 235, 0.08);
+}
+
+.mobile-menu-button span {
+	display: block;
+	height: 2px;
+	border-radius: 999px;
+	background: #2663eb;
+}
+
+.main-nav {
+	display: flex;
+	align-items: center;
+	margin-left: auto;
+}
+
+.menu-list {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.menu-list > li > :deep(a),
+.nav-cta,
+.user-menu-trigger {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-height: 44px;
+	padding: 10px 16px;
+	border-radius: 999px;
+	color: #4a5568;
+	font-weight: 700;
+	transition:
+		background-color 0.2s ease,
+		color 0.2s ease,
+		transform 0.2s ease;
+}
+
+.menu-list > li > :deep(a:hover),
+.menu-list > li > :deep(a.router-link-active),
+.nav-cta:hover,
+.user-menu-trigger:hover {
+	color: #2663eb;
+	background: #edf3ff;
+}
+
+.nav-cta {
+	background: linear-gradient(135deg, #2663eb, #547ff6);
+	color: #fff;
+	box-shadow: 0 14px 28px rgba(38, 99, 235, 0.18);
+}
+
+.nav-cta:hover {
+	color: #fff;
+	background: linear-gradient(135deg, #1d4fc2, #2663eb);
+}
+
+.dropdown-action {
+	width: 100%;
+	text-align: left;
+	color: inherit;
 	cursor: pointer;
 }
 
-#loginBox .user,
-#loginBox .pass {
-	font-size: 14px;
-	color: #666;
-	padding: 5px 0;
-	text-align: center;
+.hero-badge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px 16px;
+	margin-bottom: 18px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.26);
+	border: 1px solid rgba(255, 255, 255, 0.3);
+	color: #eff4ff;
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	backdrop-filter: blur(12px);
 }
 
-#loginBox input.text {
-	width: 200px;
-	height: 25px;
-	font-size: 14px;
-	border: 1px solid #ccc;
-	background-color: #fff;
+.hero-topics {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: 10px;
+	margin-top: 22px;
 }
 
-#loginBox .button {
-	text-align: center;
-	padding: 10px 0;
-}
-
-#loginBox input.submit {
-	width: 107px;
-	height: 30px;
-	background-color: rgb(179, 146, 233);
-	border: none;
-	cursor: pointer;
-}
-
-#loginBox .other {
-	text-align: right;
-	padding: 15px 10px;
-	font-size: 14px;
-	color: #666;
-	cursor: pointer;
-}
-
-.iconfont {
-	font-size: 20px;
-	color: #000;
-	position: absolute;
-	right: 10px;
-	top: 10px;
+.hero-topic {
+	padding: 8px 14px;
+	border-radius: 999px;
+	background: rgba(255, 255, 255, 0.16);
+	color: #eff6ff;
+	font-size: 13px;
+	font-weight: 600;
+	border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .user-menu-item {
-	display: inline-block;
+	display: flex;
+	align-items: center;
 }
 
 .user-menu-trigger {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
+	gap: 8px;
+	cursor: pointer;
 }
 
 .header-avatar {
@@ -389,14 +431,96 @@ onMounted(() => {
 }
 
 @media (max-width: 768px) {
-	.auth-link {
-		position: absolute;
-		top: 10px;
-		right: 16px;
+	.site-header-shell {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) auto;
+		align-items: center;
+		padding-top: 14px;
+		padding-bottom: 14px;
 	}
-	.auth-link a {
-		color: #c1cad1;
-		font-weight: 600;
+
+	.logo-container {
+		min-width: 0;
+	}
+
+	.brand-copy {
+		min-width: 0;
+	}
+
+	.brand-title {
+		font-size: 23px;
+	}
+
+	.tag-line {
+		font-size: 12px;
+	}
+
+	.mobile-menu-button {
+		display: inline-flex;
+	}
+
+	.main-nav {
+		grid-column: 1 / -1;
+		margin-left: 0;
+		width: 100%;
+		max-height: 0;
+		overflow: hidden;
+		opacity: 0;
+		pointer-events: none;
+		transition:
+			max-height 0.25s ease,
+			opacity 0.2s ease,
+			margin-top 0.2s ease;
+	}
+
+	.main-nav.open {
+		max-height: 560px;
+		opacity: 1;
+		pointer-events: auto;
+		margin-top: 14px;
+	}
+
+	.menu-top-menu-container,
+	.menu-list {
+		width: 100%;
+	}
+
+	.menu-list {
+		flex-direction: column;
+		align-items: stretch;
+		padding: 14px;
+		border-radius: 22px;
+		background: rgba(255, 255, 255, 0.95);
+		border: 1px solid rgba(38, 99, 235, 0.1);
+		box-shadow: 0 16px 40px rgba(38, 99, 235, 0.08);
+	}
+
+	.menu-list > li > :deep(a),
+	.nav-cta,
+	.user-menu-trigger {
+		justify-content: flex-start;
+		width: 100%;
+	}
+
+	.hero-badge {
+		margin-top: 8px;
+	}
+}
+
+@media (max-width: 560px) {
+	.brand-mark {
+		width: 42px;
+		height: 42px;
+		border-radius: 12px;
+		font-size: 16px;
+	}
+
+	.brand-title {
+		font-size: 20px;
+	}
+
+	.search-header {
+		font-size: 2rem;
 	}
 }
 </style>

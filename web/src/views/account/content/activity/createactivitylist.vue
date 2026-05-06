@@ -1,114 +1,78 @@
 <template>
 	<div class="manage-page">
-		<h2>Activity Management</h2>
-		<el-tabs type="border-card">
+		<div class="page-heading">
+			<h1 class="page-title">Activity Management</h1>
+			<p class="page-subtitle">Manage the events you publish and the activities you join.</p>
+		</div>
+
+		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="My Published Activities">
-				<el-button
-					type="primary"
-					@click="router.push('/admin/createactivity')"
-				>
-					Create Activity
-				</el-button>
-				<el-table
-					:data="tableData"
-					border
-					v-loading="loading"
-					style="width: 100%; margin-top: 10px"
-				>
-					<el-table-column label="Date" width="140">
-						<template #default="scope">{{
-							formatDate(scope.row.createtime)
-						}}</template>
-					</el-table-column>
-					<el-table-column
-						prop="activity_title"
-						label="Title"
-						min-width="280"
-					/>
-					<el-table-column
-						prop="activity_lable"
-						label="Category"
-						width="100"
-					/>
-					<el-table-column label="Actions" width="170" fixed="right">
-						<template #default="scope">
-							<el-button
-								text
-								type="primary"
-								@click="
-									router.push(
-										`/admin/updateactivity/${scope.row.activity_id}`,
-									)
-								"
-							>
-								Edit
-							</el-button>
-							<el-button
-								text
-								type="danger"
-								@click="removeItem(scope.row.activity_id)"
-							>
-								Delete
-							</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
-				<div class="pager-wrap">
-					<el-pagination
-						v-model:current-page="query.page"
-						v-model:page-size="query.pagesize"
-						:page-sizes="[10, 20, 50, 100]"
-						layout="total, sizes, prev, pager, next, jumper"
-						:total="query.total"
-						@size-change="loadList"
-						@current-change="loadList"
-					/>
+				<div class="admin-panel admin-table">
+					<div class="admin-page-head">
+						<div></div>
+						<el-button type="primary" @click="router.push('/admin/createactivity')">
+							Create Activity
+						</el-button>
+					</div>
+					<el-table :data="tableData" border v-loading="loading" style="width: 100%">
+						<el-table-column label="Date" width="140">
+							<template #default="scope">{{ formatDate(scope.row.createtime) }}</template>
+						</el-table-column>
+						<el-table-column prop="activity_title" label="Title" min-width="280" />
+						<el-table-column prop="activity_lable" label="Category" width="100" />
+						<el-table-column label="Actions" width="170" fixed="right">
+							<template #default="scope">
+								<el-button
+									text
+									type="primary"
+									@click="router.push(`/admin/updateactivity/${scope.row.activity_id}`)"
+								>
+									Edit
+								</el-button>
+								<el-button text type="danger" @click="removeItem(scope.row.activity_id)">
+									Delete
+								</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+					<div class="admin-pagination">
+						<el-pagination
+							v-model:current-page="query.page"
+							v-model:page-size="query.pagesize"
+							:page-sizes="[10, 20, 50, 100]"
+							layout="total, sizes, prev, pager, next, jumper"
+							:total="query.total"
+							@size-change="loadList"
+							@current-change="loadList"
+						/>
+					</div>
 				</div>
 			</el-tab-pane>
 
 			<el-tab-pane label="My Joined Activities">
-				<el-table
-					:data="joinTableData"
-					border
-					v-loading="joinLoading"
-					style="width: 100%"
-				>
-					<el-table-column label="Joined At" width="180">
-						<template #default="scope">{{
-							formatDate(scope.row.joins_createtime)
-						}}</template>
-					</el-table-column>
-					<el-table-column
-						prop="activity_title"
-						label="Title"
-						min-width="280"
-					/>
-					<el-table-column
-						prop="activity_lable"
-						label="Category"
-						width="180"
-					/>
-					<el-table-column label="Actions" width="180" fixed="right">
-						<template #default="scope">
-							<el-link
-								:href="
-									getActivityDetailHref(scope.row.activity_id)
-								"
-								target="_blank"
-								type="primary"
-							>
-								View
-							</el-link>
-							<el-button
-								text
-								type="danger"
-								@click="removeJoin(scope.row.join_id)"
-							>
-								Cancel Join
-							</el-button>
-						</template>
-					</el-table-column>
-				</el-table>
+				<div class="admin-panel admin-table">
+					<el-table :data="joinTableData" border v-loading="joinLoading" style="width: 100%">
+						<el-table-column label="Joined At" width="180">
+							<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
+						</el-table-column>
+						<el-table-column prop="activity_title" label="Title" min-width="280" />
+						<el-table-column prop="activity_lable" label="Category" width="180" />
+						<el-table-column label="Actions" width="180" fixed="right">
+							<template #default="scope">
+								<el-link
+									:href="getActivityDetailHref(scope.row.activity_id)"
+									target="_blank"
+									type="primary"
+								>
+									View
+								</el-link>
+								<el-button text type="danger" @click="removeJoin(scope.row.join_id)">
+									Cancel Join
+								</el-button>
+							</template>
+						</el-table-column>
+					</el-table>
+				</div>
 			</el-tab-pane>
 		</el-tabs>
 	</div>
@@ -181,11 +145,9 @@ const loadJoinList = async () => {
 
 const removeItem = async activityId => {
 	try {
-		await ElMessageBox.confirm(
-			'Delete this activity permanently?',
-			'Confirm Deletion',
-			{ type: 'warning' },
-		)
+		await ElMessageBox.confirm('Delete this activity permanently?', 'Confirm Deletion', {
+			type: 'warning',
+		})
 		const res = await deleteActivity(activityId)
 		if (res.state?.type === 'SUCCESS') {
 			ElMessage.success('Deleted successfully')
@@ -220,15 +182,3 @@ onMounted(() => {
 	loadJoinList()
 })
 </script>
-
-<style scoped>
-.manage-page h2 {
-	margin-bottom: 12px;
-}
-
-.pager-wrap {
-	margin-top: 14px;
-	display: flex;
-	justify-content: flex-end;
-}
-</style>

@@ -1,50 +1,42 @@
 <template>
 	<div class="activity">
-		<div class="row-fluid top-cats">
-			<section class="widget">
-				<router-link to="/activity" custom v-slot="{ navigate }">
-					<div class="page-header section-header" @click="navigate">
-						<h3 class="section-title">Campus Activities</h3>
-						<h4 class="section-more">More &gt;</h4>
-					</div>
-				</router-link>
+		<section class="widget">
+			<router-link to="/activity" custom v-slot="{ navigate }">
+				<div class="page-header section-header" @click="navigate">
+					<h3 class="section-title">Campus Activities</h3>
+					<h4 class="section-more">More &gt;</h4>
+				</div>
+			</router-link>
 
-				<ul class="articles" v-loading="isLoading">
-					<li
-						class="article-entry standard"
-						v-for="(activity, idx) in tableData"
-						:key="activity.activity_id || idx"
-					>
-						<h4>
-							<router-link
-								:to="`/activitycontent/${activity.activity_id}`"
-							>
-								{{ activity.activity_title }}
-							</router-link>
-						</h4>
-						<span class="article-meta">
-							<a class="iconfont">&#xe619;</a>
-							{{ formatDate(activity.createtime) }}
-							<a class="iconfont" style="margin-left: 50px"
-								>&#xe609;</a
-							>
-							{{ activity.activity_locale }}
-						</span>
-						<span class="like-count">
-							<a class="iconfont" style="color: red">&#xe647;</a>
-							{{ activity.activity_read_num }}
-						</span>
-					</li>
+			<ul class="articles" v-loading="isLoading">
+				<li
+					class="article-entry standard"
+					v-for="(activity, idx) in tableData"
+					:key="activity.activity_id || idx"
+				>
+					<h4>
+						<router-link
+							:to="`/activitycontent/${activity.activity_id}`"
+						>
+							{{ activity.activity_title }}
+						</router-link>
+					</h4>
+					<span class="article-meta">
+						<span>{{ formatDate(activity.createtime) }}</span>
+						<span class="meta-separator">•</span>
+						<span>{{ activity.activity_locale }}</span>
+					</span>
+					<span class="like-count">Views {{ activity.activity_read_num }}</span>
+				</li>
 
-					<li
-						v-if="!isLoading && tableData.length === 0"
-						class="article-entry standard empty-state"
-					>
-						No activity data available
-					</li>
-				</ul>
-			</section>
-		</div>
+				<li
+					v-if="!isLoading && tableData.length === 0"
+					class="article-entry standard empty-state"
+				>
+					No activity data available
+				</li>
+			</ul>
+		</section>
 	</div>
 </template>
 
@@ -57,7 +49,7 @@ import { getWebActivityList } from '@/api/content'
 const pagelistquery = ref({
 	lable: '',
 	total: 0,
-	pagesize: 5,
+	pagesize: 3,
 	page: 1,
 })
 
@@ -125,6 +117,10 @@ onMounted(() => {
 .empty-state {
 	color: #9aa3ab;
 	text-align: center;
+}
+
+.meta-separator {
+	color: #c0c7d0;
 }
 
 @media (max-width: 768px) {

@@ -1,49 +1,47 @@
 <template>
 	<div class="admin-layout">
 		<div v-title data-title="Information Platform | Account Center"></div>
-		<div class="admin-wrapper">
-			<el-container class="admin-container">
-				<el-aside width="220px" class="admin-aside">
-					<el-menu
-						router
-						:default-active="$route.path"
-						class="admin-menu"
-					>
+		<div class="container">
+			<div class="admin-shell">
+				<aside class="admin-sidebar">
+					<div class="admin-sidebar-head">
+						<h1>Account Center</h1>
+						<p>Manage your profile, posts, verification, and notifications.</p>
+					</div>
+
+					<el-menu router :default-active="$route.path" class="admin-menu">
 						<el-menu-item index="/admin">Dashboard</el-menu-item>
-						<el-menu-item index="/admin/myself"
-							>Account Settings</el-menu-item
-						>
+						<el-menu-item index="/admin/myself">Account Settings</el-menu-item>
 						<el-sub-menu index="content-manage">
 							<template #title>Content Management</template>
-							<el-menu-item index="/admin/createhelplist"
-								>Q&amp;A</el-menu-item
-							>
+							<el-menu-item index="/admin/createhelplist">Q&amp;A</el-menu-item>
 							<el-menu-item
 								index="/admin/createactivitylist"
 								:disabled="userinfo.realstate !== 3"
-								>Activities</el-menu-item
 							>
+								Activities
+							</el-menu-item>
 							<el-menu-item
 								index="/admin/createoldstufflist"
 								:disabled="userinfo.realstate !== 3"
-								>Marketplace</el-menu-item
 							>
+								Marketplace
+							</el-menu-item>
 							<el-menu-item
 								index="/admin/articlelist"
 								:disabled="userinfo.realstate !== 3"
-								>Articles / News</el-menu-item
 							>
+								Articles / News
+							</el-menu-item>
 						</el-sub-menu>
-						<el-menu-item index="/admin/notice"
-							>Notifications</el-menu-item
-						>
+						<el-menu-item index="/admin/notice">Notifications</el-menu-item>
 					</el-menu>
-				</el-aside>
+				</aside>
 
-				<el-main class="admin-main">
+				<main class="admin-main">
 					<router-view />
-				</el-main>
-			</el-container>
+				</main>
+			</div>
 		</div>
 	</div>
 </template>
@@ -58,30 +56,64 @@ const userinfo = computed(() => store.state.user.userinfo || {})
 
 <style scoped>
 .admin-layout {
-	padding: 16px 0 24px;
+	padding: 24px 0 40px;
 }
 
-.admin-wrapper {
-	width: min(1180px, 92vw);
-	margin: 0 auto;
+.admin-shell {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr);
+	gap: 24px;
 }
 
-.admin-container {
-	border: 1px solid #e8edf2;
-	background: #fff;
-	min-height: 700px;
+.admin-sidebar,
+.admin-main {
+	background: rgba(255, 255, 255, 0.88);
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	border-radius: 28px;
+	box-shadow: 0 18px 40px rgba(38, 99, 235, 0.08);
+	backdrop-filter: blur(12px);
 }
 
-.admin-aside {
-	border-right: 1px solid #edf1f5;
-	background: #ffffff;
+.admin-sidebar {
+	padding: 20px;
+}
+
+.admin-sidebar-head {
+	margin-bottom: 18px;
+}
+
+.admin-sidebar-head h1 {
+	margin: 0 0 8px;
+	font-size: 1.4rem;
+	font-weight: 800;
+	letter-spacing: -0.03em;
+}
+
+.admin-sidebar-head p {
+	margin: 0;
+	color: #667085;
+	line-height: 1.65;
 }
 
 .admin-main {
-	padding: 20px;
+	padding: clamp(18px, 3vw, 28px);
+	min-height: 720px;
 }
 
 .admin-menu {
 	border-right: none;
+	background: transparent;
+}
+
+@media (min-width: 980px) {
+	.admin-shell {
+		grid-template-columns: 280px minmax(0, 1fr);
+		align-items: start;
+	}
+
+	.admin-sidebar {
+		position: sticky;
+		top: 110px;
+	}
 }
 </style>

@@ -29,13 +29,8 @@
 								item.nickname || 'Information Platform'
 							}}</a>
 						</span>
-						<span class="comments">
-							<a href="#" @click.prevent>3 Comments</a>
-						</span>
-						<span class="like-count">
-							<a class="iconfont" style="color: red">&#xe647;</a>
-							{{ item.article_read_num }}
-						</span>
+						<span class="comments">Campus update</span>
+						<span class="like-count">Views {{ item.article_read_num }}</span>
 					</div>
 				</header>
 			</article>

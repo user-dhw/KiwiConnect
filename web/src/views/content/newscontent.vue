@@ -1,32 +1,19 @@
 <template>
-	<div id="newscontent">
+	<div class="news-detail-page">
 		<div v-title data-title="Article Details"></div>
 
 		<div class="page-container">
 			<div class="container">
-				<div class="row">
-					<div class="span8 page-content">
-						<article
-							class="type-post format-standard hentry clearfix"
-						>
-							<h1 class="post-title">
-								<a>{{ content.article_title }}</a>
-							</h1>
+				<div class="page-shell detail-shell">
+					<div class="page-main">
+						<article class="content-article detail-article">
+							<h1 class="post-title">{{ content.article_title }}</h1>
 
-							<div class="post-meta clearfix">
-								<span class="date">{{
-									formatDateTime(content.article_createtime)
-								}}</span>
+							<div class="post-meta">
+								<span class="date">{{ formatDateTime(content.article_createtime) }}</span>
 								<span class="category">
-									<el-popover
-										placement="right"
-										:width="400"
-										trigger="hover"
-									>
-										<li
-											class="comment even thread-odd thread-alt depth-1"
-											id="li-comment-4"
-										>
+									<el-popover placement="right" :width="400" trigger="hover">
+										<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4">
 											<article id="comment-4">
 												<img
 													:src="content.avatar"
@@ -36,77 +23,40 @@
 												/>
 
 												<div class="comment-meta">
-													<h5 class="author">
-														{{ content.nickname }}
-													</h5>
-													<p
-														class="date"
-														v-if="
-															Number(
-																content.realstate,
-															) === 3
-														"
-													>
+													<h5 class="author">{{ content.nickname }}</h5>
+													<p class="date" v-if="Number(content.realstate) === 3">
 														Verified User
 													</p>
-													<p class="date" v-else>
-														Unverified User
-													</p>
+													<p class="date" v-else>Unverified User</p>
 												</div>
 											</article>
 										</li>
 
-										<div class="xinxi">
-											<p style="color: #000">Account:</p>
-											<p>{{ content.username }}</p>
-										</div>
-										<div class="xinxi">
-											<p style="color: #000">Email:</p>
-											<p>{{ content.mail }}</p>
-										</div>
-										<div class="xinxi">
-											<p style="color: #000">Bio:</p>
-											<p>{{ content.synopsis }}</p>
-										</div>
+										<div class="profile-detail"><strong>Account:</strong> {{ content.username }}</div>
+										<div class="profile-detail"><strong>Email:</strong> {{ content.mail }}</div>
+										<div class="profile-detail"><strong>Bio:</strong> {{ content.synopsis }}</div>
 
-										<el-button
-											@click="
-												reportUser(content.username)
-											"
-											style="margin: 10px 150px"
-											type="danger"
-											plain
-										>
+										<el-button @click="reportUser(content.username)" type="danger" plain>
 											Report
 										</el-button>
 
 										<template #reference>
-											<a
-												href="#"
-												title="author"
-												@click.prevent
-											>
-												{{ content.nickname }}
-											</a>
+											<a href="#" title="author" @click.prevent>{{ content.nickname }}</a>
 										</template>
 									</el-popover>
 								</span>
 								<span class="comments">
-									<a href="#" @click.prevent
-										>{{ commentnum }} Comments</a
-									>
+									<a href="#" @click.prevent>{{ commentnum }} Comments</a>
 								</span>
 							</div>
 
-							<blockquote
-								v-html="content.article_content"
-							></blockquote>
+							<blockquote v-html="content.article_content"></blockquote>
 						</article>
 
 						<Comment />
 					</div>
 
-					<aside class="span4 page-sidebar">
+					<aside class="page-aside panel-stack">
 						<Carousel />
 						<News />
 					</aside>
@@ -150,9 +100,7 @@ const formatDateTime = value => {
 
 const reportUser = username => {
 	const currentUrl =
-		typeof window !== 'undefined'
-			? encodeURIComponent(window.location.href)
-			: ''
+		typeof window !== 'undefined' ? encodeURIComponent(window.location.href) : ''
 	router.push({
 		path: '/report',
 		query: {
@@ -194,7 +142,8 @@ watch(
 </script>
 
 <style scoped>
-#newscontent {
-	min-height: 200px;
+.profile-detail {
+	margin-bottom: 10px;
+	color: #252b37;
 }
 </style>

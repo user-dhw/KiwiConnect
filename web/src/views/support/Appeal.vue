@@ -1,9 +1,16 @@
 <template>
-	<div class="appeal-page">
+	<div class="support-page">
 		<div v-title data-title="Information Platform | Account Appeal"></div>
 
-		<el-card class="appeal-card" shadow="hover">
-			<el-page-header @back="goBack" content="Account Appeal" />
+		<el-card class="support-card" shadow="hover">
+			<div class="page-heading">
+				<h1 class="page-title">Account Appeal</h1>
+				<p class="page-subtitle">
+					Check restriction status and submit an appeal request through a clearer,
+					step-based support flow.
+				</p>
+			</div>
+			<el-page-header @back="goBack" content="Back" />
 			<el-divider />
 
 			<el-form
@@ -28,11 +35,7 @@
 					/>
 				</el-form-item>
 				<el-form-item>
-					<el-button
-						type="primary"
-						:loading="isLoginLoading"
-						@click="handleLogin"
-					>
+					<el-button type="primary" :loading="isLoginLoading" @click="handleLogin">
 						Sign In
 					</el-button>
 				</el-form-item>
@@ -47,10 +50,7 @@
 				/>
 
 				<div v-if="isRestricted" class="action-row">
-					<el-button
-						type="primary"
-						@click="currentStep = STEP.APPEAL"
-					>
+					<el-button type="primary" @click="currentStep = STEP.APPEAL">
 						Proceed to Appeal
 					</el-button>
 				</div>
@@ -79,9 +79,7 @@
 					>
 						Submit Appeal
 					</el-button>
-					<el-button @click="currentStep = STEP.STATUS"
-						>Cancel</el-button
-					>
+					<el-button @click="currentStep = STEP.STATUS">Cancel</el-button>
 				</el-form-item>
 			</el-form>
 
@@ -267,8 +265,8 @@ const submitAppealForm = async () => {
 			return
 		}
 
+		ElMessage.success('Appeal submitted successfully')
 		currentStep.value = STEP.SUCCESS
-		appealForm.shensu_content = ''
 	} catch {
 		ElMessage.error('Failed to submit appeal')
 	} finally {
@@ -278,32 +276,7 @@ const submitAppealForm = async () => {
 </script>
 
 <style scoped>
-.appeal-page {
-	padding: 20px;
-}
-
-.appeal-card {
-	max-width: 880px;
-	margin: 0 auto;
-}
-
-.section {
-	max-width: 700px;
-	margin: 0 auto;
-}
-
 .action-row {
-	margin-top: 20px;
-	text-align: center;
-}
-
-@media (max-width: 768px) {
-	.appeal-page {
-		padding: 12px;
-	}
-
-	.section {
-		max-width: 100%;
-	}
+	margin-top: 18px;
 }
 </style>

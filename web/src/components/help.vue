@@ -20,17 +20,11 @@
 						</router-link>
 					</h4>
 					<span class="article-meta">
-						<a class="iconfont">&#xe619;</a>
-						{{ formatDate(item.createtime) }}
-						<a class="iconfont" style="margin-left: 50px"
-							>&#xe688;</a
-						>
-						Information Platform
+						<span>{{ formatDate(item.createtime) }}</span>
+						<span class="meta-separator">•</span>
+						<span>Information Platform</span>
 					</span>
-					<span class="like-count">
-						<a class="iconfont" style="color: red">&#xe647;</a>
-						{{ item.help_read_num }}
-					</span>
+					<span class="like-count">Views {{ item.help_read_num }}</span>
 				</li>
 
 				<li
@@ -53,7 +47,7 @@ import { getWebHelpList } from '@/api/content'
 const pagelistquery = ref({
 	lable: '',
 	tag: '',
-	pagesize: 5,
+	pagesize: 3,
 	page: 1,
 	total: 0,
 })
@@ -122,6 +116,10 @@ onMounted(() => {
 .empty-state {
 	color: #9aa3ab;
 	text-align: center;
+}
+
+.meta-separator {
+	color: #c0c7d0;
 }
 
 @media (max-width: 768px) {

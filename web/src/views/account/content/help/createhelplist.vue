@@ -1,65 +1,57 @@
 <template>
 	<div class="manage-page">
-		<div class="page-header">
-			<h2>Q&A Management</h2>
+		<div class="admin-page-head">
+			<div class="page-heading">
+				<h1 class="page-title">Q&A Management</h1>
+				<p class="page-subtitle">Create, review, edit, and remove your Q&A posts.</p>
+			</div>
 			<el-button type="primary" @click="router.push('/admin/createhelp')">
 				Create Q&A
 			</el-button>
 		</div>
 
-		<el-table
-			:data="tableData"
-			border
-			v-loading="loading"
-			style="width: 100%"
-		>
-			<el-table-column prop="createtime" label="Date" width="140">
-				<template #default="scope">
-					{{ formatDate(scope.row.createtime) }}
-				</template>
-			</el-table-column>
-			<el-table-column prop="help_title" label="Title" min-width="260" />
-			<el-table-column prop="help_lable" label="Category" width="100" />
-			<el-table-column label="Status" width="140">
-				<template #default="scope">
-					{{ mapStatus(scope.row.ispublic) }}
-				</template>
-			</el-table-column>
-			<el-table-column label="Actions" width="170" fixed="right">
-				<template #default="scope">
-					<el-button
-						text
-						type="primary"
-						@click="
-							router.push(
-								`/admin/updatehelp/${scope.row.help_id}`,
-							)
-						"
-					>
-						Edit
-					</el-button>
-					<el-button
-						text
-						type="danger"
-						@click="removeItem(scope.row.help_id)"
-					>
-						Delete
-					</el-button>
-				</template>
-			</el-table-column>
-		</el-table>
+		<section class="admin-panel admin-table">
+			<el-table :data="tableData" border v-loading="loading" style="width: 100%">
+				<el-table-column prop="createtime" label="Date" width="140">
+					<template #default="scope">
+						{{ formatDate(scope.row.createtime) }}
+					</template>
+				</el-table-column>
+				<el-table-column prop="help_title" label="Title" min-width="260" />
+				<el-table-column prop="help_lable" label="Category" width="100" />
+				<el-table-column label="Status" width="140">
+					<template #default="scope">
+						{{ mapStatus(scope.row.ispublic) }}
+					</template>
+				</el-table-column>
+				<el-table-column label="Actions" width="170" fixed="right">
+					<template #default="scope">
+						<el-button
+							text
+							type="primary"
+							@click="router.push(`/admin/updatehelp/${scope.row.help_id}`)"
+						>
+							Edit
+						</el-button>
+						<el-button text type="danger" @click="removeItem(scope.row.help_id)">
+							Delete
+						</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
 
-		<div class="pager-wrap">
-			<el-pagination
-				v-model:current-page="query.page"
-				v-model:page-size="query.pagesize"
-				:page-sizes="[10, 20, 50, 100]"
-				layout="total, sizes, prev, pager, next, jumper"
-				:total="query.total"
-				@size-change="loadList"
-				@current-change="loadList"
-			/>
-		</div>
+			<div class="admin-pagination">
+				<el-pagination
+					v-model:current-page="query.page"
+					v-model:page-size="query.pagesize"
+					:page-sizes="[10, 20, 50, 100]"
+					layout="total, sizes, prev, pager, next, jumper"
+					:total="query.total"
+					@size-change="loadList"
+					@current-change="loadList"
+				/>
+			</div>
+		</section>
 	</div>
 </template>
 
@@ -129,18 +121,3 @@ onMounted(() => {
 	loadList()
 })
 </script>
-
-<style scoped>
-.page-header {
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	margin-bottom: 12px;
-}
-
-.pager-wrap {
-	margin-top: 14px;
-	display: flex;
-	justify-content: flex-end;
-}
-</style>
