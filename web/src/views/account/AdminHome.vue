@@ -50,8 +50,8 @@ import { useRouter } from 'vue-router'
 import { getUser, getUserNumbering } from '@/api/account'
 
 const router = useRouter()
-const defaultAvatar =
-	'https://images.pexels.com/photos/5263577/pexels-photo-5263577.jpeg'
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+const defaultAvatar = `${apiBaseUrl}/uplodes/avatar.jpg`
 
 const form = reactive({
 	avatar: '',
@@ -67,8 +67,6 @@ const countData = reactive({
 	article: 0,
 	oldstuff: 0,
 })
-
-const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
 
 const normalizeFileUrl = value => {
 	if (!value || typeof value !== 'string') return ''
