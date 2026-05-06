@@ -37,7 +37,7 @@
 									>
 								</li>
 
-								<li v-if="avatar === ''">
+								<li v-if="avatar === ''" class="auth-link">
 									<a @click="closein" style="cursor: pointer"
 										>Sign In / Register</a
 									>
@@ -122,7 +122,6 @@
 							<option value="2">Q&A</option>
 							<option value="3">Events</option>
 							<option value="5">Marketplace</option>
-							<option value="6">Sign In / Register</option>
 						</select>
 					</nav>
 					<!-- End of Main Navigation -->
@@ -195,12 +194,9 @@ const changeHref = sortnum => {
 		2: '/help',
 		3: '/activity',
 		5: '/oldstuff',
-		6: null,
 	}
 
-	if (sortnum === 6) {
-		store.dispatch('user/close', true)
-	} else if (routes[sortnum]) {
+	if (routes[sortnum]) {
 		router.push({ path: routes[sortnum] })
 	}
 }
@@ -243,7 +239,9 @@ onMounted(() => {
 	const token = localStorage.getItem('luffy_jwt_token')
 	if (token) {
 		getNoticeData()
+		return
 	}
+	store.dispatch('user/close', true)
 })
 </script>
 
@@ -359,5 +357,17 @@ onMounted(() => {
 	display: inline-flex;
 	align-items: center;
 	gap: 6px;
+}
+
+@media (max-width: 768px) {
+	.auth-link {
+		position: absolute;
+		top: 10px;
+		right: 16px;
+	}
+	.auth-link a {
+		color: #c1cad1;
+		font-weight: 600;
+	}
 }
 </style>

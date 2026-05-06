@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus'
 import request from '@/utils/request'
 
 const toFormData = data => {
@@ -58,6 +59,8 @@ export async function uploadCommentImage(file) {
 	if (!url) {
 		throw new Error('Image upload failed')
 	}
+
+	ElMessage.success('Image uploaded successfully')
 
 	return url
 }

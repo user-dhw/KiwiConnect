@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus'
 import request from '@/utils/request'
 
 const toFormData = data => {
@@ -62,6 +63,8 @@ export async function uploadSupportImage(file) {
 			'Content-Type': 'multipart/form-data',
 		},
 	})
+
+	ElMessage.success('Image uploaded successfully')
 
 	return {
 		url: res?.url || res?.Url || '',

@@ -41,7 +41,7 @@
             <el-input v-model="item.carousel_title" />
           </el-form-item>
         </el-form>
-        <el-button type="success" class="save" circle @click="changecarousel(id)">Save</el-button>
+        <el-button type="success" :icon="Check" class="save" circle @click="changecarousel(id)" />
         <el-button type="danger" :icon="Delete" class="del" circle @click="del(id)" />
       </div>
     </el-main>
@@ -51,7 +51,7 @@
 <script setup>
   import { computed, onMounted, ref } from 'vue'
   import { ElMessage } from 'element-plus'
-  import { Delete, Plus } from '@element-plus/icons-vue'
+  import { Check, Delete, Plus } from '@element-plus/icons-vue'
   import axios from '../../utils/axios'
 
   const carouselList = ref([])

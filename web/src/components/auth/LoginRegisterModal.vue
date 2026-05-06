@@ -91,12 +91,12 @@ const formatBanTime = timestamp => {
 }
 
 const handleRegister = async () => {
-	const userReg = /^[1-9a-zA-Z]{1}[0-9a-zA-Z]{5,9}$/
+	const userReg = /^[1-9a-zA-Z][0-9a-zA-Z]{3,9}$/
 	const pwdReg = /^[a-zA-Z]\w{5,17}$/
 
 	if (!userReg.test(formData.value.username)) {
 		ElMessage.error(
-			'Username must be 6-10 characters (letters/numbers), cannot start with 0',
+			'Username must be 4-10 characters (letters/numbers), cannot start with 0',
 		)
 		return
 	}

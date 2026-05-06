@@ -1,3 +1,4 @@
+import { ElMessage } from 'element-plus'
 import request from '@/utils/request'
 
 export const IMAGE_UPLOAD_ACCEPT = '.jpg,.jpeg,.png,.webp'
@@ -120,10 +121,13 @@ export function uploadFile(file) {
 				'Content-Type': 'multipart/form-data',
 			},
 		})
-		.then(res => ({
-			...res,
-			url: res?.url || res?.Url || '',
-		}))
+		.then(res => {
+			ElMessage.success('Image uploaded successfully')
+			return {
+				...res,
+				url: res?.url || res?.Url || '',
+			}
+		})
 }
 
 export function getLabelList(lableName) {
