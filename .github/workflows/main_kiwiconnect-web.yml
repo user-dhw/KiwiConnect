@@ -52,17 +52,17 @@ jobs:
                   name: node-app
                   path: dist
 
-                        - name: Login to Azure
-                            uses: azure/login@v2
-                            with:
-                                    client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_14FC65EDDD0F47B4A95A4BBE70411D66 }}
-                                    tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7B454D2037924C72B285656D168180BC }}
-                                    subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BC842DF8CCBA421B979D9E2C55AAF023 }}
+            - name: Login to Azure
+              uses: azure/login@v2
+              with:
+                  client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_14FC65EDDD0F47B4A95A4BBE70411D66 }}
+                  tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_7B454D2037924C72B285656D168180BC }}
+                  subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_BC842DF8CCBA421B979D9E2C55AAF023 }}
 
-                        - name: Deploy to Azure Web App
-                            id: deploy-to-webapp
-                            uses: azure/webapps-deploy@v3
-                            with:
-                                    app-name: kiwiconnect-web
-                                    slot-name: Production
-                                    package: dist
+            - name: Deploy to Azure Web App
+              id: deploy-to-webapp
+              uses: azure/webapps-deploy@v3
+              with:
+                  app-name: kiwiconnect-web
+                  slot-name: Production
+                  package: dist
