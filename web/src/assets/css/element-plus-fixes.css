@@ -1,0 +1,6 @@
+.el-message,
+.el-notification,
+.el-message-box,
+.el-overlay-message-box {
+	z-index: 30000 !important;
+}
