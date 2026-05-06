@@ -34,7 +34,6 @@ public sealed class UserEntity
   public string? Studentid { get; set; } = string.Empty;
   public string? Studentcard { get; set; } = string.Empty;
   public string? Mail { get; set; } = string.Empty;
-  public string? Qq { get; set; } = string.Empty;
   public string? Phone { get; set; } = string.Empty;
   public string? Synopsis { get; set; } = string.Empty;
 }
@@ -164,7 +163,6 @@ public sealed class UpdateUserRequest
   public string Nickname { get; set; } = string.Empty;
   public string Synopsis { get; set; } = string.Empty;
   public string Mail { get; set; } = string.Empty;
-  public string Qq { get; set; } = string.Empty;
   public string Phone { get; set; } = string.Empty;
 }
 

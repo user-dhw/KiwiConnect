@@ -57,7 +57,6 @@ const form = reactive({
 	nickname: '',
 	realstate: 0,
 	mail: '',
-	qq: '',
 	synopsis: '',
 })
 

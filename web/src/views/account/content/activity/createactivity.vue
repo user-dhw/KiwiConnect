@@ -132,7 +132,6 @@
 						label="Nickname"
 						width="140"
 					/>
-					<el-table-column prop="qq" label="QQ" width="140" />
 					<el-table-column
 						prop="phone"
 						label="Phone"

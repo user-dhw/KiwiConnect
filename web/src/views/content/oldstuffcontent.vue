@@ -91,10 +91,6 @@
 												<p>{{ content.mail }}</p>
 											</div>
 											<div class="xinxi">
-												<p style="color: #000">QQ：</p>
-												<p>{{ content.qq }}</p>
-											</div>
-											<div class="xinxi">
 												<p style="color: #000">Bio:</p>
 												<p>{{ content.synopsis }}</p>
 											</div>
@@ -120,10 +116,6 @@
 											</template>
 										</el-popover>
 
-										<div class="show_unit fl">
-											<a class="iconfont ic">&#xe66a;</a>
-											{{ content.qq }}
-										</div>
 										<div class="show_unit fl">
 											<a class="iconfont ic">&#xe62a;</a>
 											{{ content.phone }}

@@ -100,7 +100,6 @@
 									<strong>Email:</strong>
 									{{ item.mail || '-' }}
 								</p>
-								<p><strong>QQ:</strong> {{ item.qq || '-' }}</p>
 								<p>
 									<strong>Bio:</strong>
 									{{ item.synopsis || '-' }}
@@ -205,10 +204,6 @@
 										<p>
 											<strong>Email:</strong>
 											{{ reply.mail || '-' }}
-										</p>
-										<p>
-											<strong>QQ:</strong>
-											{{ reply.qq || '-' }}
 										</p>
 										<p>
 											<strong>Bio:</strong>

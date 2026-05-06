@@ -30,9 +30,6 @@
 					<el-form-item label="Email">
 						<el-input v-model="form.mail" />
 					</el-form-item>
-					<el-form-item label="QQ">
-						<el-input v-model="form.qq" />
-					</el-form-item>
 					<el-form-item label="Phone">
 						<el-input v-model="form.phone" />
 					</el-form-item>
@@ -126,7 +123,6 @@ const form = reactive({
 	m: 'user',
 	avatar: '',
 	nickname: '',
-	qq: '',
 	mail: '',
 	phone: '',
 	synopsis: '',
@@ -258,7 +254,6 @@ const submitUserInfo = async () => {
 			avatar: form.avatar,
 			nickname: form.nickname,
 			mail: normalizeEmail(form.mail),
-			qq: form.qq,
 			phone: form.phone,
 			synopsis: form.synopsis,
 		}

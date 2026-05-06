@@ -488,8 +488,8 @@ public sealed class WebAdminService
       if (request.M == "user")
       {
         var affectedRows = await conn.ExecuteAsync(
-          "update user set avatar=@Avatar, nickname=@Nickname, synopsis=@Synopsis, mail=@Mail, qq=@Qq, phone=@Phone where user_id=@Uid",
-          new { request.Avatar, request.Nickname, request.Synopsis, request.Mail, request.Qq, request.Phone, Uid = uid });
+          "update user set avatar=@Avatar, nickname=@Nickname, synopsis=@Synopsis, mail=@Mail, phone=@Phone where user_id=@Uid",
+          new { request.Avatar, request.Nickname, request.Synopsis, request.Mail, request.Phone, Uid = uid });
 
         if (affectedRows == 1)
         {

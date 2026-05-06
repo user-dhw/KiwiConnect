@@ -68,10 +68,6 @@
 										<p>{{ content.mail }}</p>
 									</div>
 									<div class="xinxi">
-										<p style="color: #000">QQ：</p>
-										<p>{{ content.qq }}</p>
-									</div>
-									<div class="xinxi">
 										<p style="color: #000">Bio:</p>
 										<p>{{ content.synopsis }}</p>
 									</div>
