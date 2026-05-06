@@ -127,7 +127,6 @@ public sealed class ChangeCarouselRequest
 {
   public string Carousel_Id { get; set; } = string.Empty;
   public string Carousel_Img { get; set; } = string.Empty;
-  public string Carousel_Url { get; set; } = string.Empty;
   public string Carousel_Title { get; set; } = string.Empty;
 }
 

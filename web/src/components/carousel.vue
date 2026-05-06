@@ -4,18 +4,12 @@
 			<el-carousel :interval="5000" height="250px" v-loading="isLoading">
 				<el-carousel-item v-for="item in carouselItems" :key="item.id">
 					<div class="carousel-frame">
-						<a
-							:href="item.url || '#'"
-							target="_blank"
-							rel="noopener noreferrer"
-						>
-							<div class="carousel-title">{{ item.title }}</div>
-							<img
-								:src="item.image"
-								:alt="item.title"
-								class="carouselimg"
-							/>
-						</a>
+						<div class="carousel-title">{{ item.title }}</div>
+						<img
+							:src="item.image"
+							:alt="item.title"
+							class="carouselimg"
+						/>
 					</div>
 				</el-carousel-item>
 			</el-carousel>
@@ -33,19 +27,16 @@ const defaultItems = [
 		id: 1,
 		title: 'Information Exchange Platform',
 		image: livingRoomImage,
-		url: '#',
 	},
 	{
 		id: 2,
 		title: 'Share Together, Grow Together',
 		image: livingRoomImage,
-		url: '#',
 	},
 	{
 		id: 3,
 		title: 'Community Life Assistant',
 		image: livingRoomImage,
-		url: '#',
 	},
 ]
 
@@ -76,7 +67,6 @@ const normalizeCarouselItems = rows => {
 			id: row.carousel_id || idx,
 			title: row.carousel_title || 'Information Exchange Platform',
 			image: normalizeImageUrl(row.carousel_img) || livingRoomImage,
-			url: row.carousel_url || '#',
 		}))
 		.filter(item => item.image)
 }

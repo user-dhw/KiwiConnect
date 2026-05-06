@@ -391,11 +391,10 @@ public sealed class AdminService
     if (string.IsNullOrWhiteSpace(request.Carousel_Id))
     {
       await conn.ExecuteAsync(
-        "insert into carousel (carousel_img, carousel_url, carousel_title, carousel_createtime, carousel_id) values (@Img,@Url,@Title,@CreateTime,@Id)",
+        "insert into carousel (carousel_img, carousel_title, carousel_createtime, carousel_id) values (@Img,@Title,@CreateTime,@Id)",
         new
         {
           Img = request.Carousel_Img,
-          Url = request.Carousel_Url,
           Title = request.Carousel_Title,
           CreateTime = now,
           Id = Guid.NewGuid().ToString()
@@ -404,8 +403,8 @@ public sealed class AdminService
     else
     {
       await conn.ExecuteAsync(
-        "update carousel set carousel_img=@Img, carousel_url=@Url, carousel_title=@Title where carousel_id=@Id",
-        new { Img = request.Carousel_Img, Url = request.Carousel_Url, Title = request.Carousel_Title, Id = request.Carousel_Id });
+        "update carousel set carousel_img=@Img, carousel_title=@Title where carousel_id=@Id",
+        new { Img = request.Carousel_Img, Title = request.Carousel_Title, Id = request.Carousel_Id });
     }
     return ApiResponse.Success();
   }
