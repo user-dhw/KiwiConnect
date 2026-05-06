@@ -55,8 +55,6 @@
 												v-if="unread === 0"
 												:src="displayAvatar"
 												class="avatar touxiang avatar-60 photo header-avatar"
-												height="20"
-												width="20"
 												@error="handleAvatarError"
 											/>
 											<el-badge
@@ -67,8 +65,6 @@
 												<img
 													:src="displayAvatar"
 													class="avatar touxiang avatar-60 photo header-avatar"
-													height="20"
-													width="20"
 													@error="handleAvatarError"
 												/>
 											</el-badge>
@@ -384,9 +380,12 @@ onMounted(() => {
 }
 
 .header-avatar {
+	width: 32px;
+	height: 32px;
 	border-radius: 50%;
 	object-fit: cover;
 	display: inline-block;
+	border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 @media (max-width: 768px) {
