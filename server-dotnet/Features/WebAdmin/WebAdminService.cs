@@ -51,7 +51,7 @@ public sealed class WebAdminService
       Password = _md5Hasher.Hash($"{request.Password}{salt}"),
       CreateTime = now,
       Nickname = "This user has not set a nickname yet",
-      Avatar = "http://oss.guoang.xyz/morentouxiang.jpg",
+      Avatar = "https://images.pexels.com/photos/5263577/pexels-photo-5263577.jpeg",
       RealState = 1,
       UserState = 2
     });

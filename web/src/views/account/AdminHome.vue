@@ -50,7 +50,8 @@ import { useRouter } from 'vue-router'
 import { getUser, getUserNumbering } from '@/api/account'
 
 const router = useRouter()
-const defaultAvatar = 'http://oss.guoang.xyz/morentouxiang.jpg'
+const defaultAvatar =
+	'https://images.pexels.com/photos/5263577/pexels-photo-5263577.jpeg'
 
 const form = reactive({
 	avatar: '',
