@@ -149,12 +149,20 @@ const studentLocked = computed(
 
 const uploadAction = `${import.meta.env.VITE_API_URL || '/api'}/uplod`
 
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+
 const normalizeFileUrl = value => {
 	if (!value || typeof value !== 'string') return ''
+	if (value.startsWith('http://127.0.0.1:3000')) {
+		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
+	}
+	if (value.startsWith('http://localhost:3000')) {
+		return value.replace('http://localhost:3000', apiBaseUrl)
+	}
 	if (/^https?:\/\//i.test(value)) return value
 	if (value.startsWith('/api/')) return value
-	if (value.startsWith('/uplodes/')) return `/api${value}`
-	return `/api/uplodes/${value.replace(/^\/+/, '')}`
+	if (value.startsWith('/uplodes/')) return `${apiBaseUrl}${value}`
+	return `${apiBaseUrl}/uplodes/${value.replace(/^\/+/, '')}`
 }
 
 const uploadHeaders = computed(() => {

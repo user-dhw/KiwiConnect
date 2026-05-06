@@ -127,14 +127,22 @@ const query = reactive({
 	page: 1,
 })
 
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+
 const normalizeImageUrl = value => {
 	const src = String(value || '').trim()
 	if (!src) return ''
+	if (src.startsWith('http://127.0.0.1:3000')) {
+		return src.replace('http://127.0.0.1:3000', apiBaseUrl)
+	}
+	if (src.startsWith('http://localhost:3000')) {
+		return src.replace('http://localhost:3000', apiBaseUrl)
+	}
 	if (/^https?:\/\//i.test(src)) return src
 	if (src.startsWith('/api/')) return src
-	if (src.startsWith('/uplodes/')) return `/api${src}`
-	if (src.startsWith('/')) return `/api${src}`
-	return `/api/${src}`
+	if (src.startsWith('/uplodes/')) return `${apiBaseUrl}${src}`
+	if (src.startsWith('/')) return `${apiBaseUrl}${src}`
+	return `${apiBaseUrl}/${src}`
 }
 
 const loadItemList = async () => {

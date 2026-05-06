@@ -281,6 +281,22 @@ const reportUser = username => {
 	})
 }
 
+const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
+
+const normalizeFileUrl = value => {
+	if (!value || typeof value !== 'string') return ''
+	if (value.startsWith('http://127.0.0.1:3000')) {
+		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
+	}
+	if (value.startsWith('http://localhost:3000')) {
+		return value.replace('http://localhost:3000', apiBaseUrl)
+	}
+	if (/^https?:\/\//i.test(value)) return value
+	if (value.startsWith('/api/')) return value
+	if (value.startsWith('/uplodes/')) return `${apiBaseUrl}${value}`
+	return `${apiBaseUrl}/uplodes/${value.replace(/^\/+/, '')}`
+}
+
 const loadOldStuffContent = async id => {
 	if (!id) return
 
@@ -291,7 +307,11 @@ const loadOldStuffContent = async id => {
 			return
 		}
 
-		content.value = res.data || {}
+		content.value = {
+			...(res.data || {}),
+			oldstuff_img: normalizeFileUrl(res.data?.oldstuff_img || ''),
+			avatar: normalizeFileUrl(res.data?.avatar || ''),
+		}
 		await store.dispatch('setcontentinfo', {
 			contentname: res.data?.oldstuff_name || '',
 			contentuserid: res.data?.user_id || '',
