@@ -547,7 +547,7 @@ public sealed class WebAdminService
       "select * from joins,user where user.user_id=joins.user_id and joins.content_id=@Id",
       new { Id = id });
 
-    return list.Any() ? ApiResponse.Success(list) : ApiResponse.NotFound("No matching records were found");
+    return ApiResponse.Success(list);
   }
 
   public async Task<ApiResponse> CreateFankuiAsync(CreateFankuiRequest request)
