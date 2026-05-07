@@ -18,8 +18,9 @@
 							<h3 class="title">Main Features</h3>
 							<div class="textwidget">
 								<p>
-									Ask questions, discover events, trade second-hand items,
-									and stay connected with the Waikato student community.
+									Ask questions, discover events, trade
+									second-hand items, and stay connected with
+									the Waikato student community.
 								</p>
 							</div>
 						</section>
@@ -29,8 +30,9 @@
 							<h3 class="title">Community Notes</h3>
 							<div class="textwidget">
 								<p>
-									Keep discussions respectful and avoid inappropriate content
-									to maintain a safe student-friendly space.
+									Keep discussions respectful and avoid
+									inappropriate content to maintain a safe
+									student-friendly space.
 								</p>
 							</div>
 						</section>
@@ -45,7 +47,9 @@
 									class="footer-link-card"
 									role="listitem"
 								>
-									<span class="footer-link-label">Feedback</span>
+									<span class="footer-link-label"
+										>Feedback</span
+									>
 									<span class="footer-link-arrow">↗</span>
 								</router-link>
 								<router-link
@@ -54,7 +58,9 @@
 									class="footer-link-card"
 									role="listitem"
 								>
-									<span class="footer-link-label">Account Appeal</span>
+									<span class="footer-link-label"
+										>Account Appeal</span
+									>
 									<span class="footer-link-arrow">↗</span>
 								</router-link>
 								<router-link
@@ -63,7 +69,9 @@
 									class="footer-link-card"
 									role="listitem"
 								>
-									<span class="footer-link-label">Report Misconduct</span>
+									<span class="footer-link-label"
+										>Report Misconduct</span
+									>
 									<span class="footer-link-arrow">↗</span>
 								</router-link>
 							</div>
@@ -90,10 +98,14 @@
 
 #footer-wrapper {
 	background:
-		radial-gradient(circle at top left, rgba(38, 99, 235, 0.2), transparent 22%),
+		radial-gradient(
+			circle at top left,
+			rgba(38, 99, 235, 0.2),
+			transparent 22%
+		),
 		linear-gradient(135deg, #1c49b7 0%, #2663eb 58%, #1749c6 100%);
 	color: #dfe8ff;
-	padding: 34px 0 26px;
+	padding: 15px 0 26px;
 	margin-top: 40px;
 }
 
