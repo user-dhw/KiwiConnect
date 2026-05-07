@@ -1166,7 +1166,11 @@ html {
 
 body {
 	background:
-		radial-gradient(circle at top left, rgba(38, 99, 235, 0.1), transparent 24%),
+		radial-gradient(
+			circle at top left,
+			rgba(38, 99, 235, 0.1),
+			transparent 24%
+		),
 		linear-gradient(180deg, #f5f9ff 0%, #f7faff 38%, #f3f7fd 100%);
 	color: var(--kc-text);
 	font-family: 'Avenir Next', 'Segoe UI', sans-serif;
@@ -1251,7 +1255,11 @@ span.tag-line {
 .search-area-wrapper {
 	position: relative;
 	background:
-		linear-gradient(135deg, rgba(38, 99, 235, 0.92), rgba(110, 157, 255, 0.84)),
+		linear-gradient(
+			135deg,
+			rgba(38, 99, 235, 0.92),
+			rgba(110, 157, 255, 0.84)
+		),
 		url('../images/main-bg.jpg') center center no-repeat;
 	background-size: cover;
 	min-height: 420px;
@@ -1263,7 +1271,11 @@ span.tag-line {
 	position: absolute;
 	inset: 0;
 	background:
-		radial-gradient(circle at top center, rgba(255, 255, 255, 0.18), transparent 32%),
+		radial-gradient(
+			circle at top center,
+			rgba(255, 255, 255, 0.18),
+			transparent 32%
+		),
 		linear-gradient(180deg, rgba(255, 255, 255, 0.08), transparent 55%);
 	pointer-events: none;
 }
@@ -1347,7 +1359,10 @@ form.search-form input.search-btn:hover {
 	}
 
 	.header-wrapper .container {
-		display: block;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		flex-wrap: nowrap;
 		min-height: auto;
 		height: auto !important;
 	}

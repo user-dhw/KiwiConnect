@@ -28,6 +28,13 @@
 						<span></span>
 						<span></span>
 					</button>
+					<button
+						v-if="mobileMenuOpen"
+						class="mobile-nav-backdrop"
+						type="button"
+						aria-label="Close navigation menu"
+						@click="closeMobileMenu"
+					></button>
 					<nav
 						id="site-nav-panel"
 						:class="['main-nav', { open: mobileMenuOpen }]"
@@ -349,6 +356,10 @@ onMounted(() => {
 	box-shadow: 0 8px 20px rgba(38, 99, 235, 0.08);
 }
 
+.mobile-nav-backdrop {
+	display: none;
+}
+
 .mobile-menu-button span {
 	display: block;
 	height: 2px;
@@ -473,35 +484,70 @@ onMounted(() => {
 
 @media (max-width: 768px) {
 	.site-header-shell {
-		display: grid;
-		grid-template-columns: minmax(0, 1fr) auto;
-		align-items: center;
+		position: relative;
+		display: flex;
+		flex-wrap: nowrap;
+		align-items: flex-start;
+		gap: 14px;
 		padding-top: 14px;
-		padding-bottom: 14px;
+		padding-bottom: 12px;
 	}
 
 	.logo-container {
+		display: flex;
 		min-width: 0;
+		flex: 1 1 auto;
+		align-items: flex-start;
+		gap: 12px;
 	}
 
 	.brand-copy {
 		min-width: 0;
+		padding-top: 2px;
 	}
 
 	.brand-title {
-		font-size: 23px;
+		font-size: 22px;
+		line-height: 1.05;
 	}
 
 	.tag-line {
-		font-size: 12px;
+		display: block;
+		margin-top: 4px;
+		font-size: 11px;
+		line-height: 1.45;
+		max-width: 190px;
 	}
 
 	.mobile-menu-button {
 		display: inline-flex;
+		flex: 0 0 auto;
+		margin-left: auto;
+		margin-top: 2px;
+		width: 42px;
+		height: 42px;
+		padding: 10px;
+		border-radius: 14px;
+		background: linear-gradient(180deg, #f7faff 0%, #eef4ff 100%);
+		box-shadow: 0 12px 24px rgba(38, 99, 235, 0.12);
+		position: relative;
+		z-index: 35;
+	}
+
+	.mobile-nav-backdrop {
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 25;
+		background: rgba(18, 31, 57, 0.18);
+		backdrop-filter: blur(3px);
 	}
 
 	.main-nav {
-		grid-column: 1 / -1;
+		position: absolute;
+		top: calc(100% + 8px);
+		left: 0;
+		right: 0;
 		margin-left: 0;
 		width: 100%;
 		display: block;
@@ -509,17 +555,19 @@ onMounted(() => {
 		overflow: hidden;
 		opacity: 0;
 		pointer-events: none;
+		transform: translateY(-6px);
+		z-index: 30;
 		transition:
 			max-height 0.25s ease,
 			opacity 0.2s ease,
-			margin-top 0.2s ease;
+			transform 0.2s ease;
 	}
 
 	.main-nav.open {
 		max-height: 560px;
 		opacity: 1;
 		pointer-events: auto;
-		margin-top: 14px;
+		transform: translateY(0);
 	}
 
 	.menu-top-menu-container,
@@ -534,11 +582,11 @@ onMounted(() => {
 	.menu-list {
 		flex-direction: column;
 		align-items: stretch;
-		padding: 14px;
-		border-radius: 22px;
-		background: rgba(255, 255, 255, 0.95);
+		padding: 12px;
+		border-radius: 24px;
+		background: rgba(255, 255, 255, 0.98);
 		border: 1px solid rgba(38, 99, 235, 0.1);
-		box-shadow: 0 16px 40px rgba(38, 99, 235, 0.08);
+		box-shadow: 0 24px 48px rgba(38, 99, 235, 0.14);
 	}
 
 	.menu-list > li > :deep(a),
@@ -546,6 +594,14 @@ onMounted(() => {
 	.user-menu-trigger {
 		justify-content: flex-start;
 		width: 100%;
+		min-height: 46px;
+		padding: 12px 14px;
+		border-radius: 16px;
+		font-size: 15px;
+	}
+
+	.nav-cta {
+		justify-content: center;
 	}
 
 	.hero-badge {
@@ -555,14 +611,19 @@ onMounted(() => {
 
 @media (max-width: 560px) {
 	.brand-mark {
-		width: 42px;
-		height: 42px;
+		width: 40px;
+		height: 40px;
 		border-radius: 12px;
-		font-size: 16px;
+		font-size: 15px;
 	}
 
 	.brand-title {
-		font-size: 20px;
+		font-size: 18px;
+	}
+
+	.tag-line {
+		max-width: 160px;
+		font-size: 10px;
 	}
 
 	.search-header {
