@@ -1,77 +1,109 @@
 <template>
 	<div class="manage-page">
-		<div class="page-heading">
-			<h1 class="page-title">Activity Management</h1>
-			<p class="page-subtitle">Manage the events you publish and the activities you join.</p>
+		<div class="admin-heading">
+			<div class="page-heading">
+				<h1 class="page-title">Activity Management</h1>
+				<p class="page-subtitle">Manage the events you publish and the activities you join.</p>
+			</div>
+
+			<div class="admin-overview">
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Published</span>
+					<span class="admin-stat-value">{{ query.total }}</span>
+					<span class="admin-stat-note">Activities you created for the community</span>
+				</div>
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Joined</span>
+					<span class="admin-stat-value">{{ joinTableData.length }}</span>
+					<span class="admin-stat-note">Events you signed up to attend</span>
+				</div>
+			</div>
 		</div>
 
 		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="My Published Activities">
 				<div class="admin-panel admin-table">
-					<div class="admin-page-head">
-						<div></div>
-						<el-button type="primary" @click="router.push('/admin/createactivity')">
-							Create Activity
-						</el-button>
-					</div>
-					<el-table :data="tableData" border v-loading="loading" style="width: 100%">
-						<el-table-column label="Date" width="140">
-							<template #default="scope">{{ formatDate(scope.row.createtime) }}</template>
-						</el-table-column>
-						<el-table-column prop="activity_title" label="Title" min-width="280" />
-						<el-table-column prop="activity_lable" label="Category" width="100" />
-						<el-table-column label="Actions" width="170" fixed="right">
-							<template #default="scope">
-								<el-button
-									text
-									type="primary"
-									@click="router.push(`/admin/updateactivity/${scope.row.activity_id}`)"
-								>
-									Edit
+					<div class="admin-workspace">
+						<div class="admin-workspace-head">
+							<div class="admin-workspace-copy">
+								<h2 class="admin-workspace-title">Published Activities</h2>
+								<p class="admin-workspace-note">
+									Review your upcoming events and update details before students join.
+								</p>
+							</div>
+							<div class="admin-workspace-actions">
+								<el-button type="primary" @click="router.push('/admin/createactivity')">
+									Create Activity
 								</el-button>
-								<el-button text type="danger" @click="removeItem(scope.row.activity_id)">
-									Delete
-								</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-					<div class="admin-pagination">
-						<el-pagination
-							v-model:current-page="query.page"
-							v-model:page-size="query.pagesize"
-							:page-sizes="[10, 20, 50, 100]"
-							layout="total, sizes, prev, pager, next, jumper"
-							:total="query.total"
-							@size-change="loadList"
-							@current-change="loadList"
-						/>
+							</div>
+						</div>
+						<el-table :data="tableData" border v-loading="loading" style="width: 100%">
+							<el-table-column label="Date" width="140">
+								<template #default="scope">{{ formatDate(scope.row.createtime) }}</template>
+							</el-table-column>
+							<el-table-column prop="activity_title" label="Title" min-width="280" />
+							<el-table-column prop="activity_lable" label="Category" width="100" />
+							<el-table-column label="Actions" width="170" fixed="right">
+								<template #default="scope">
+									<el-button
+										text
+										type="primary"
+										@click="router.push(`/admin/updateactivity/${scope.row.activity_id}`)"
+									>
+										Edit
+									</el-button>
+									<el-button text type="danger" @click="removeItem(scope.row.activity_id)">
+										Delete
+									</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+						<div class="admin-pagination">
+							<el-pagination
+								v-model:current-page="query.page"
+								v-model:page-size="query.pagesize"
+								:page-sizes="[10, 20, 50, 100]"
+								layout="total, sizes, prev, pager, next, jumper"
+								:total="query.total"
+								@size-change="loadList"
+								@current-change="loadList"
+							/>
+						</div>
 					</div>
 				</div>
 			</el-tab-pane>
 
 			<el-tab-pane label="My Joined Activities">
 				<div class="admin-panel admin-table">
-					<el-table :data="joinTableData" border v-loading="joinLoading" style="width: 100%">
-						<el-table-column label="Joined At" width="180">
-							<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
-						</el-table-column>
-						<el-table-column prop="activity_title" label="Title" min-width="280" />
-						<el-table-column prop="activity_lable" label="Category" width="180" />
-						<el-table-column label="Actions" width="180" fixed="right">
-							<template #default="scope">
-								<el-link
-									:href="getActivityDetailHref(scope.row.activity_id)"
-									target="_blank"
-									type="primary"
-								>
-									View
-								</el-link>
-								<el-button text type="danger" @click="removeJoin(scope.row.join_id)">
-									Cancel Join
-								</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
+					<div class="admin-workspace">
+						<div class="admin-workspace-copy">
+							<h2 class="admin-workspace-title">Joined Activities</h2>
+							<p class="admin-workspace-note">
+								Track your sign-ups and quickly open event pages when plans change.
+							</p>
+						</div>
+						<el-table :data="joinTableData" border v-loading="joinLoading" style="width: 100%">
+							<el-table-column label="Joined At" width="180">
+								<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
+							</el-table-column>
+							<el-table-column prop="activity_title" label="Title" min-width="280" />
+							<el-table-column prop="activity_lable" label="Category" width="180" />
+							<el-table-column label="Actions" width="180" fixed="right">
+								<template #default="scope">
+									<el-link
+										:href="getActivityDetailHref(scope.row.activity_id)"
+										target="_blank"
+										type="primary"
+									>
+										View
+									</el-link>
+									<el-button text type="danger" @click="removeJoin(scope.row.join_id)">
+										Cancel Join
+									</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
 				</div>
 			</el-tab-pane>
 		</el-tabs>

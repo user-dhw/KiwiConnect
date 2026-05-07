@@ -1,51 +1,78 @@
 <template>
 	<div class="manage-page">
-		<div class="admin-page-head">
-			<div class="page-heading">
-				<h1 class="page-title">Articles / News Management</h1>
-				<p class="page-subtitle">Manage published articles, review states, and edit news content.</p>
+		<div class="admin-heading">
+			<div class="admin-page-head">
+				<div class="page-heading">
+					<h1 class="page-title">Articles / News Management</h1>
+					<p class="page-subtitle">Manage published articles, review states, and edit news content.</p>
+				</div>
+				<el-button type="primary" @click="router.push('/admin/createarticle')">
+					Create Article
+				</el-button>
 			</div>
-			<el-button type="primary" @click="router.push('/admin/createarticle')">
-				Create Article
-			</el-button>
+
+			<div class="admin-overview">
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Published</span>
+					<span class="admin-stat-value">{{ query.total }}</span>
+					<span class="admin-stat-note">Articles and news posts in your library</span>
+				</div>
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Review State</span>
+					<span class="admin-stat-value">Tracked</span>
+					<span class="admin-stat-note">Monitor approval state before publishing updates</span>
+				</div>
+			</div>
 		</div>
 
 		<section class="admin-panel admin-table">
-			<el-table :data="tableData" border v-loading="loading" style="width: 100%">
-				<el-table-column label="Date" width="150">
-					<template #default="scope">{{ formatDate(scope.row.article_createtime) }}</template>
-				</el-table-column>
-				<el-table-column prop="article_title" label="Title" min-width="280" />
-				<el-table-column prop="article_lable" label="Category" width="100" />
-				<el-table-column label="Status" width="140">
-					<template #default="scope">{{ mapStatus(scope.row.ispublic) }}</template>
-				</el-table-column>
-				<el-table-column label="Actions" width="170" fixed="right">
-					<template #default="scope">
-						<el-button
-							text
-							type="primary"
-							@click="router.push(`/admin/updataarticle/${scope.row.article_id}`)"
-						>
-							Edit
-						</el-button>
-						<el-button text type="danger" @click="handleDelete(scope.row)">
-							Delete
-						</el-button>
-					</template>
-				</el-table-column>
-			</el-table>
+			<div class="admin-workspace">
+				<div class="admin-workspace-copy">
+					<h2 class="admin-workspace-title">Publishing Queue</h2>
+					<p class="admin-workspace-note">
+						Keep your articles tidy and update important announcements quickly.
+					</p>
+				</div>
+				<el-table :data="tableData" border v-loading="loading" style="width: 100%">
+					<el-table-column label="Date" width="150">
+						<template #default="scope">{{ formatDate(scope.row.article_createtime) }}</template>
+					</el-table-column>
+					<el-table-column prop="article_title" label="Title" min-width="280" />
+					<el-table-column prop="article_lable" label="Category" width="100" />
+					<el-table-column label="Status" width="140">
+						<template #default="scope">
+							<span class="admin-status" :class="statusClass(scope.row.ispublic)">
+								{{ mapStatus(scope.row.ispublic) }}
+							</span>
+						</template>
+					</el-table-column>
+					<el-table-column label="Actions" width="170" fixed="right">
+						<template #default="scope">
+							<el-button
+								text
+								type="primary"
+								@click="router.push(`/admin/updataarticle/${scope.row.article_id}`)"
+							>
+								Edit
+							</el-button>
+							<el-button text type="danger" @click="handleDelete(scope.row)">
+								Delete
+							</el-button>
+						</template>
+					</el-table-column>
+				</el-table>
 
-			<div class="admin-pagination">
-				<el-pagination
-					v-model:current-page="query.page"
-					v-model:page-size="query.pagesize"
-					:page-sizes="[10, 20, 50, 100]"
-					layout="total, sizes, prev, pager, next, jumper"
-					:total="query.total"
-					@size-change="loadList"
-					@current-change="loadList"
-				/>
+				<div class="admin-pagination">
+					<el-pagination
+						v-model:current-page="query.page"
+						v-model:page-size="query.pagesize"
+						:page-sizes="[10, 20, 50, 100]"
+						layout="total, sizes, prev, pager, next, jumper"
+						:total="query.total"
+						@size-change="loadList"
+						@current-change="loadList"
+					/>
+				</div>
 			</div>
 		</section>
 	</div>
@@ -75,6 +102,13 @@ const mapStatus = state => {
 	if (String(state) === '0') return 'Pending Review'
 	if (String(state) === '-1') return 'Rejected'
 	return 'Unknown'
+}
+
+const statusClass = state => {
+	if (String(state) === '1') return 'is-approved'
+	if (String(state) === '0') return 'is-pending'
+	if (String(state) === '-1') return 'is-rejected'
+	return 'is-info'
 }
 
 const loadList = async () => {

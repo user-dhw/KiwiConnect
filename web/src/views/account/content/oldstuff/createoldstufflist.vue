@@ -1,79 +1,111 @@
 <template>
 	<div class="manage-page">
-		<div class="page-heading">
-			<h1 class="page-title">Marketplace Management</h1>
-			<p class="page-subtitle">Manage your listings and track purchase interest from other users.</p>
+		<div class="admin-heading">
+			<div class="page-heading">
+				<h1 class="page-title">Marketplace Management</h1>
+				<p class="page-subtitle">Manage your listings and track purchase interest from other users.</p>
+			</div>
+
+			<div class="admin-overview">
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Listings</span>
+					<span class="admin-stat-value">{{ query.total }}</span>
+					<span class="admin-stat-note">Items currently managed by you</span>
+				</div>
+				<div class="admin-stat-card">
+					<span class="admin-stat-label">Interests</span>
+					<span class="admin-stat-value">{{ joinTableData.length }}</span>
+					<span class="admin-stat-note">Purchase enquiries from the marketplace</span>
+				</div>
+			</div>
 		</div>
 
 		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="My Listings">
 				<section class="admin-panel admin-table">
-					<div class="admin-page-head">
-						<div></div>
-						<el-button type="primary" @click="router.push('/admin/createoldstuff')">
-							Create Listing
-						</el-button>
-					</div>
-					<el-table :data="tableData" border v-loading="loading" style="width: 100%">
-						<el-table-column label="Date" width="140">
-							<template #default="scope">{{ formatDate(scope.row.createtime) }}</template>
-						</el-table-column>
-						<el-table-column prop="oldstuff_name" label="Item" min-width="220" />
-						<el-table-column prop="oldstuff_lable" label="Category" width="100" />
-						<el-table-column prop="oldstuff_price" label="Price" width="100" />
-						<el-table-column label="Actions" width="170" fixed="right">
-							<template #default="scope">
-								<el-button
-									text
-									type="primary"
-									@click="router.push(`/admin/updateoldstuff/${scope.row.oldstuff_id}`)"
-								>
-									Edit
+					<div class="admin-workspace">
+						<div class="admin-workspace-head">
+							<div class="admin-workspace-copy">
+								<h2 class="admin-workspace-title">Marketplace Listings</h2>
+								<p class="admin-workspace-note">
+									Manage product details, pricing, and what buyers will see first.
+								</p>
+							</div>
+							<div class="admin-workspace-actions">
+								<el-button type="primary" @click="router.push('/admin/createoldstuff')">
+									Create Listing
 								</el-button>
-								<el-button text type="danger" @click="removeItem(scope.row.oldstuff_id)">
-									Delete
-								</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
-					<div class="admin-pagination">
-						<el-pagination
-							v-model:current-page="query.page"
-							v-model:page-size="query.pagesize"
-							:page-sizes="[10, 20, 50, 100]"
-							layout="total, sizes, prev, pager, next, jumper"
-							:total="query.total"
-							@size-change="loadList"
-							@current-change="loadList"
-						/>
+							</div>
+						</div>
+						<el-table :data="tableData" border v-loading="loading" style="width: 100%">
+							<el-table-column label="Date" width="140">
+								<template #default="scope">{{ formatDate(scope.row.createtime) }}</template>
+							</el-table-column>
+							<el-table-column prop="oldstuff_name" label="Item" min-width="220" />
+							<el-table-column prop="oldstuff_lable" label="Category" width="100" />
+							<el-table-column prop="oldstuff_price" label="Price" width="100" />
+							<el-table-column label="Actions" width="170" fixed="right">
+								<template #default="scope">
+									<el-button
+										text
+										type="primary"
+										@click="router.push(`/admin/updateoldstuff/${scope.row.oldstuff_id}`)"
+									>
+										Edit
+									</el-button>
+									<el-button text type="danger" @click="removeItem(scope.row.oldstuff_id)">
+										Delete
+									</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+						<div class="admin-pagination">
+							<el-pagination
+								v-model:current-page="query.page"
+								v-model:page-size="query.pagesize"
+								:page-sizes="[10, 20, 50, 100]"
+								layout="total, sizes, prev, pager, next, jumper"
+								:total="query.total"
+								@size-change="loadList"
+								@current-change="loadList"
+							/>
+						</div>
 					</div>
 				</section>
 			</el-tab-pane>
 
 			<el-tab-pane label="My Purchase Interests">
 				<section class="admin-panel admin-table">
-					<el-table :data="joinTableData" border v-loading="joinLoading" style="width: 100%">
-						<el-table-column label="Added At" width="180">
-							<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
-						</el-table-column>
-						<el-table-column prop="oldstuff_name" label="Item" min-width="220" />
-						<el-table-column prop="oldstuff_price" label="Price" width="100" />
-						<el-table-column prop="name" label="My Offer" width="160" />
-						<el-table-column label="Actions" width="190" fixed="right">
-							<template #default="scope">
-								<el-link
-									:href="getOldStuffDetailHref(scope.row.oldstuff_id)"
-									target="_blank"
-									type="primary"
-								>
-									View
-								</el-link>
-								<el-button text type="danger" @click="removeJoin(scope.row.join_id)">
-									Cancel Interest
-								</el-button>
-							</template>
-						</el-table-column>
-					</el-table>
+					<div class="admin-workspace">
+						<div class="admin-workspace-copy">
+							<h2 class="admin-workspace-title">Purchase Interests</h2>
+							<p class="admin-workspace-note">
+								See which items you expressed interest in and cancel outdated requests.
+							</p>
+						</div>
+						<el-table :data="joinTableData" border v-loading="joinLoading" style="width: 100%">
+							<el-table-column label="Added At" width="180">
+								<template #default="scope">{{ formatDate(scope.row.joins_createtime) }}</template>
+							</el-table-column>
+							<el-table-column prop="oldstuff_name" label="Item" min-width="220" />
+							<el-table-column prop="oldstuff_price" label="Price" width="100" />
+							<el-table-column prop="name" label="My Offer" width="160" />
+							<el-table-column label="Actions" width="190" fixed="right">
+								<template #default="scope">
+									<el-link
+										:href="getOldStuffDetailHref(scope.row.oldstuff_id)"
+										target="_blank"
+										type="primary"
+									>
+										View
+									</el-link>
+									<el-button text type="danger" @click="removeJoin(scope.row.join_id)">
+										Cancel Interest
+									</el-button>
+								</template>
+							</el-table-column>
+						</el-table>
+					</div>
 				</section>
 			</el-tab-pane>
 		</el-tabs>
