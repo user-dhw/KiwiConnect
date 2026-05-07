@@ -4,7 +4,7 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="page-shell">
+				<div class="page-shell page-shell--full">
 					<div class="page-main">
 						<div class="page-heading">
 							<h1 class="page-title">
@@ -86,11 +86,6 @@
 						/>
 					</div>
 
-					<aside class="page-aside panel-stack">
-						<Carousel />
-						<ActivityWidget />
-						<NewsWidget />
-					</aside>
 				</div>
 			</div>
 		</div>
@@ -100,9 +95,6 @@
 <script setup>
 import { reactive, ref, onMounted } from 'vue'
 import { Picture } from '@element-plus/icons-vue'
-import Carousel from '@/components/carousel.vue'
-import ActivityWidget from '@/components/activity.vue'
-import NewsWidget from '@/components/news.vue'
 import { getLabelOptions, getWebOldStuffList } from '@/api/content'
 
 const subtitle = ref('')
@@ -223,6 +215,12 @@ onMounted(async () => {
 	.image-error {
 		height: 160px;
 		font-size: 36px;
+	}
+}
+
+@media (min-width: 900px) {
+	.page-shell--full {
+		grid-template-columns: minmax(0, 1fr);
 	}
 }
 </style>

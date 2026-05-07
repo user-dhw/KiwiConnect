@@ -4,7 +4,7 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="page-shell detail-shell">
+				<div class="page-shell detail-shell page-shell--full">
 					<div class="page-main">
 						<article class="content-article detail-article">
 							<h1 class="post-title">{{ content.help_title }}</h1>
@@ -12,32 +12,54 @@
 							<div class="post-meta">
 								<span class="date">{{ formatDateTime(content.createtime) }}</span>
 								<span class="category">
-									<el-popover placement="right" :width="400" trigger="hover">
-										<li class="comment even thread-odd thread-alt depth-1" id="li-comment-4">
-											<article id="comment-4">
+									<el-popover
+										placement="top-end"
+										:width="320"
+										trigger="hover"
+										popper-class="author-popover"
+									>
+										<div class="author-popover-card">
+											<div class="author-popover-header">
 												<img
 													:src="content.avatar"
-													class="avatar touxiang avatar-60 photo"
+													class="author-popover-avatar"
 													height="60"
 													width="60"
 												/>
-												<div class="comment-meta">
-													<h5 class="author">{{ content.nickname }}</h5>
-													<p class="date" v-if="Number(content.realstate) === 3">
-														Verified User
+												<div class="author-popover-meta">
+													<h5 class="author-popover-name">{{ content.nickname }}</h5>
+													<p
+														class="author-popover-status"
+														:class="{ 'is-verified': Number(content.realstate) === 3 }"
+													>
+														{{
+															Number(content.realstate) === 3
+																? 'Verified User'
+																: 'Unverified User'
+														}}
 													</p>
-													<p class="date" v-else>Unverified User</p>
 												</div>
-											</article>
-										</li>
+											</div>
 
-										<div class="profile-detail"><strong>Account:</strong> {{ content.username }}</div>
-										<div class="profile-detail"><strong>Email:</strong> {{ content.mail }}</div>
-										<div class="profile-detail"><strong>Bio:</strong> {{ content.synopsis }}</div>
+											<div class="author-popover-body">
+												<div class="profile-detail">
+													<strong>Account</strong>
+													<span>{{ content.username || '-' }}</span>
+												</div>
+												<div class="profile-detail">
+													<strong>Email</strong>
+													<span>{{ content.mail || '-' }}</span>
+												</div>
+												<div class="profile-detail">
+													<strong>Bio</strong>
+													<span>{{ content.synopsis || 'No bio yet' }}</span>
+												</div>
+											</div>
 
-										<el-button @click="reportUser(content.username)" type="danger" plain>
-											Report
-										</el-button>
+											<el-button @click="reportUser(content.username)" type="danger" plain>
+												Report
+											</el-button>
+										</div>
 
 										<template #reference>
 											<a href="#" title="author" @click.prevent>{{ content.nickname }}</a>
@@ -66,10 +88,6 @@
 						<Comment />
 					</div>
 
-					<aside class="page-aside panel-stack">
-						<Carousel />
-						<Help />
-					</aside>
 				</div>
 			</div>
 		</div>
@@ -82,10 +100,9 @@ import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import moment from 'moment'
 import { ElMessage } from 'element-plus'
-import Carousel from '@/components/carousel.vue'
 import Comment from '@/components/comment.vue'
-import Help from '@/components/help.vue'
 import { getHelpContent } from '@/api/content'
+import { normalizeFileUrl } from '@/utils/currentUser'
 
 const props = defineProps({
 	id: {
@@ -102,7 +119,6 @@ const content = ref({})
 
 const contentId = computed(() => String(props.id || route.params.id || ''))
 const commentnum = computed(() => store.state.commentnum)
-
 const helpTags = computed(() => {
 	const raw = content.value?.help_tag
 	if (Array.isArray(raw)) return raw
@@ -145,7 +161,10 @@ const loadHelpContent = async id => {
 			return
 		}
 
-		content.value = res.data || {}
+		content.value = {
+			...(res.data || {}),
+			avatar: normalizeFileUrl(res.data?.avatar || ''),
+		}
 		await store.dispatch('setcontentinfo', {
 			contentname: res.data?.help_title || '',
 			contentuserid: res.data?.user_id || '',
@@ -168,7 +187,80 @@ watch(
 
 <style scoped>
 .profile-detail {
-	margin-bottom: 10px;
+	display: grid;
+	gap: 4px;
 	color: #252b37;
+}
+
+.profile-detail strong {
+	font-size: 0.78rem;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	color: #7a869f;
+}
+
+.profile-detail span {
+	word-break: break-word;
+}
+
+.author-popover-card {
+	display: grid;
+	gap: 16px;
+}
+
+.author-popover-header {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+}
+
+.author-popover-avatar {
+	flex: 0 0 auto;
+	width: 60px;
+	height: 60px;
+	border-radius: 18px;
+	object-fit: cover;
+	border: 1px solid rgba(38, 99, 235, 0.12);
+}
+
+.author-popover-meta {
+	display: grid;
+	gap: 4px;
+}
+
+.author-popover-name {
+	margin: 0;
+	font-size: 1.4rem;
+	font-weight: 800;
+	color: #252b37;
+}
+
+.author-popover-status {
+	margin: 0;
+	font-size: 0.95rem;
+	color: #7a869f;
+}
+
+.author-popover-status.is-verified {
+	color: #2663eb;
+	font-weight: 600;
+}
+
+.author-popover-body {
+	display: grid;
+	gap: 12px;
+}
+
+:deep(.author-popover) {
+	padding: 18px;
+	border-radius: 24px;
+	border: 1px solid rgba(38, 99, 235, 0.12);
+	box-shadow: 0 22px 54px rgba(38, 99, 235, 0.14);
+}
+
+@media (min-width: 900px) {
+	.page-shell--full {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }
 </style>

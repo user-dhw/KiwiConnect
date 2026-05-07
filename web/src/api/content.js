@@ -74,6 +74,10 @@ export function getArticleList(params) {
 	return request.post('/web/getarticlelist', toFormData(params), formConfig)
 }
 
+export function searchContent(search) {
+	return request.post('/web/search', toFormData({ search }), formConfig)
+}
+
 export function getArticleContent(id) {
 	return request.post(
 		'/web/getarticlecontent',

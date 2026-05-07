@@ -98,6 +98,7 @@ import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { getUser, updateUser } from '@/api/account'
 import { IMAGE_UPLOAD_ACCEPT, validateImageFile } from '@/api/content'
+import { mapServerUserToStoreUserInfo } from '@/utils/currentUser'
 import { isValidEmail, normalizeEmail } from '@/utils/validators'
 
 const store = useStore()
@@ -173,6 +174,7 @@ const loadUser = async () => {
 		avatar: normalizeFileUrl(res.data?.avatar || ''),
 		realstate: Number(res.data?.realstate || 0),
 	})
+	store.dispatch('user/setUserInfo', mapServerUserToStoreUserInfo(res.data))
 
 	let parsedCards = []
 	try {

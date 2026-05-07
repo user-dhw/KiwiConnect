@@ -18,57 +18,55 @@
 							<h3 class="title">Main Features</h3>
 							<div class="textwidget">
 								<p>
-									KiwiConnect is the information sharing and
-									communication platform. After registering an
-									account, users can post information and
-									comments, seek help, and assist others.
-								</p>
-							</div>
-							<h3 class="title">Announcements</h3>
-							<div class="textwidget">
-								<p>
-									Inappropriate content is prohibited on this
-									platform.<br />
-									Abusive language is not allowed and will
-									result in account suspension.
+									Ask questions, discover events, trade second-hand items,
+									and stay connected with the Waikato student community.
 								</p>
 							</div>
 						</section>
 					</div>
 					<div class="footer-column">
 						<section class="widget">
-							<h3 class="title">Advertisements</h3>
-							<div id="twitter_update_list">
-								<ul>
-									<li>No ads currently</li>
-								</ul>
+							<h3 class="title">Community Notes</h3>
+							<div class="textwidget">
+								<p>
+									Keep discussions respectful and avoid inappropriate content
+									to maintain a safe student-friendly space.
+								</p>
 							</div>
 						</section>
 					</div>
 					<div class="footer-column">
 						<section class="widget">
 							<h3 class="title">Customer Service</h3>
-							<ul>
-								<li>
-									<router-link to="/feedback" title="Feedback"
-										>Feedback</router-link
-									>
-								</li>
-								<li>
-									<router-link
-										to="/appeal"
-										title="Account Appeal"
-										>Account Appeal</router-link
-									>
-								</li>
-								<li>
-									<router-link
-										to="/report"
-										title="Report Misconduct"
-										>Report Misconduct</router-link
-									>
-								</li>
-							</ul>
+							<div class="footer-links" role="list">
+								<router-link
+									to="/feedback"
+									title="Feedback"
+									class="footer-link-card"
+									role="listitem"
+								>
+									<span class="footer-link-label">Feedback</span>
+									<span class="footer-link-arrow">↗</span>
+								</router-link>
+								<router-link
+									to="/appeal"
+									title="Account Appeal"
+									class="footer-link-card"
+									role="listitem"
+								>
+									<span class="footer-link-label">Account Appeal</span>
+									<span class="footer-link-arrow">↗</span>
+								</router-link>
+								<router-link
+									to="/report"
+									title="Report Misconduct"
+									class="footer-link-card"
+									role="listitem"
+								>
+									<span class="footer-link-label">Report Misconduct</span>
+									<span class="footer-link-arrow">↗</span>
+								</router-link>
+							</div>
 						</section>
 					</div>
 				</div>
@@ -95,38 +93,38 @@
 		radial-gradient(circle at top left, rgba(38, 99, 235, 0.2), transparent 22%),
 		linear-gradient(135deg, #1c49b7 0%, #2663eb 58%, #1749c6 100%);
 	color: #dfe8ff;
-	padding: 56px 0 48px;
-	margin-top: 56px;
+	padding: 34px 0 26px;
+	margin-top: 40px;
 }
 
 #footer {
-	padding: 20px 0;
+	padding: 8px 0;
 }
 
 .footer-brand {
 	display: flex;
 	align-items: center;
 	gap: 16px;
-	margin-bottom: 28px;
-	padding: 0 0 6px;
+	margin-bottom: 18px;
+	padding: 0;
 }
 
 .footer-brand-mark {
-	width: 50px;
-	height: 50px;
-	border-radius: 16px;
+	width: 42px;
+	height: 42px;
+	border-radius: 14px;
 	display: grid;
 	place-items: center;
 	background: linear-gradient(135deg, #ffffff, #dbe7ff);
 	color: #2663eb;
-	font-size: 20px;
+	font-size: 18px;
 	font-weight: 800;
 	letter-spacing: 0.08em;
-	box-shadow: 0 14px 30px rgba(19, 53, 137, 0.24);
+	box-shadow: 0 10px 20px rgba(19, 53, 137, 0.22);
 }
 
 .footer-brand-title {
-	font-size: 24px;
+	font-size: 18px;
 	font-weight: 800;
 	line-height: 1;
 	color: #ffffff;
@@ -134,8 +132,8 @@
 }
 
 .footer-brand-subtitle {
-	margin-top: 6px;
-	font-size: 13px;
+	margin-top: 4px;
+	font-size: 12px;
 	color: rgba(235, 242, 255, 0.82);
 }
 
@@ -147,60 +145,74 @@
 
 .footer-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-	gap: 24px;
+	grid-template-columns: 1.15fr 1.15fr 1fr;
+	gap: 16px;
 }
 
 .widget {
-	margin-bottom: 20px;
-	padding: 24px;
-	border-radius: 22px;
+	height: 100%;
+	padding: 18px 20px;
+	border-radius: 18px;
 	background: rgba(255, 255, 255, 0.08);
 	border: 1px solid rgba(255, 255, 255, 0.12);
 	box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
 }
 
 .widget .title {
-	font-size: 16px;
-	font-weight: 600;
+	font-size: 15px;
+	font-weight: 700;
 	color: #fff;
-	margin-bottom: 15px;
-	padding-bottom: 10px;
+	margin-bottom: 12px;
+	padding-bottom: 8px;
 	border-bottom: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .widget .textwidget {
-	font-size: 14px;
-	line-height: 1.6;
+	font-size: 13px;
+	line-height: 1.65;
 	color: #dfe8ff;
 }
 
-.widget ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
+.footer-links {
+	display: grid;
+	gap: 10px;
 }
 
-.widget ul li {
-	margin-bottom: 10px;
-}
-
-.widget ul li a {
-	color: #e7efff;
+.footer-link-card {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+	padding: 12px 14px;
+	border-radius: 14px;
+	background: rgba(255, 255, 255, 0.06);
+	border: 1px solid rgba(255, 255, 255, 0.1);
+	color: #edf3ff;
 	text-decoration: none;
-	font-size: 14px;
-	transition: color 0.3s;
+	font-size: 13px;
+	font-weight: 600;
+	transition:
+		background 0.2s ease,
+		border-color 0.2s ease,
+		transform 0.2s ease,
+		color 0.2s ease;
 }
 
-.widget ul li a:hover {
+.footer-link-card:hover {
+	transform: translateY(-1px);
+	background: rgba(255, 255, 255, 0.12);
+	border-color: rgba(255, 255, 255, 0.18);
 	color: #fff;
-	text-decoration: none;
 }
 
-#twitter_update_list ul li {
-	color: #e7efff;
+.footer-link-label {
+	line-height: 1.2;
+}
+
+.footer-link-arrow {
+	flex: 0 0 auto;
 	font-size: 14px;
-	margin-bottom: 8px;
+	opacity: 0.78;
 }
 
 @media (max-width: 768px) {
@@ -208,8 +220,12 @@
 		align-items: flex-start;
 	}
 
+	.footer-grid {
+		grid-template-columns: 1fr;
+	}
+
 	.widget {
-		padding: 20px;
+		padding: 16px 18px;
 	}
 }
 </style>

@@ -62,6 +62,7 @@ import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 import { register, login as apiLogin } from '@/api/auth'
 import { User, Lock } from '@element-plus/icons-vue'
+import { syncCurrentUserProfile } from '@/utils/currentUser'
 const store = useStore()
 
 const formData = ref({
@@ -163,8 +164,11 @@ const handleLogin = async () => {
 		})
 
 		if (res.state?.type === 'SUCCESS') {
-			store.dispatch('user/setUserInfo', res.data?.userinfo || {})
 			store.dispatch('user/setToken', res.data?.token || null)
+			await syncCurrentUserProfile(store)
+			if (!store.state.user.userinfo?.nickname) {
+				store.dispatch('user/setUserInfo', res.data?.userinfo || {})
+			}
 			store.dispatch('user/changeislog', true)
 			store.dispatch('user/close', false)
 			resetForm()

@@ -3,11 +3,17 @@
 		<div class="header-wrapper">
 			<header class="site-header">
 				<div class="container site-header-shell">
-					<router-link to="/" class="logo-container" aria-label="KiwiConnect Waikato home">
+					<router-link
+						to="/"
+						class="logo-container"
+						aria-label="KiwiConnect Waikato home"
+					>
 						<div class="brand-mark">KC</div>
 						<div class="brand-copy">
 							<span class="brand-title">KiwiConnect</span>
-							<span class="tag-line">Waikato student community platform</span>
+							<span class="tag-line"
+								>Waikato student community platform</span
+							>
 						</div>
 					</router-link>
 					<button
@@ -30,18 +36,28 @@
 						<div class="menu-top-menu-container">
 							<ul id="menu-top-menu" class="menu-list">
 								<li v-for="item in navItems" :key="item.to">
-									<router-link :to="item.to" @click="closeMobileMenu">
+									<router-link
+										:to="item.to"
+										@click="closeMobileMenu"
+									>
 										{{ item.label }}
 									</router-link>
 								</li>
 								<li v-if="avatar === ''" class="auth-link">
-									<button type="button" class="nav-cta" @click="closein">
+									<button
+										type="button"
+										class="nav-cta"
+										@click="closein"
+									>
 										Sign In / Register
 									</button>
 								</li>
 								<li v-else class="user-menu-item">
 									<el-dropdown>
-										<button type="button" class="user-menu-trigger">
+										<button
+											type="button"
+											class="user-menu-trigger"
+										>
 											<img
 												v-if="unread === 0"
 												:src="displayAvatar"
@@ -64,18 +80,35 @@
 										<template #dropdown>
 											<el-dropdown-menu>
 												<el-dropdown-item>
-													<router-link to="/admin">Profile</router-link>
+													<router-link to="/admin"
+														>Profile</router-link
+													>
 												</el-dropdown-item>
 												<el-dropdown-item>
-													<router-link to="/admin/notice">
-														<span v-if="unread === 0">Notifications</span>
-														<el-badge v-else :value="unread" class="item">
-															<span>Notifications</span>
+													<router-link
+														to="/admin/notice"
+													>
+														<span
+															v-if="unread === 0"
+															>Notifications</span
+														>
+														<el-badge
+															v-else
+															:value="unread"
+															class="item"
+														>
+															<span
+																>Notifications</span
+															>
 														</el-badge>
 													</router-link>
 												</el-dropdown-item>
 												<el-dropdown-item>
-													<button type="button" class="dropdown-action" @click="logout">
+													<button
+														type="button"
+														class="dropdown-action"
+														@click="logout"
+													>
 														Sign Out
 													</button>
 												</el-dropdown-item>
@@ -89,13 +122,17 @@
 				</div>
 			</header>
 		</div>
-		<div class="search-area-wrapper">
+		<div v-if="showHeroSection" class="search-area-wrapper">
 			<div class="search-area container">
-				<div class="hero-badge">Campus hub for students, clubs and everyday life</div>
-				<h3 class="search-header">A softer, smarter community space for KiwiConnect Waikato</h3>
+				<div class="hero-badge">
+					Campus hub for students, clubs and everyday life
+				</div>
+				<h3 class="search-header">
+					A softer, smarter community space for KiwiConnect Waikato
+				</h3>
 				<p class="search-tag-line">
-					Find answers, discover events, share updates, and trade second-hand
-					items in one modern student-friendly platform.
+					Find answers, discover events, share updates, and trade
+					second-hand items in one modern student-friendly platform.
 				</p>
 				<form class="search-form" @submit.prevent="onSubmit">
 					<input
@@ -134,6 +171,7 @@ import { ElMessage } from 'element-plus'
 import foot from '@/components/foot.vue'
 import LoginRegisterModal from '@/components/auth/LoginRegisterModal.vue'
 import { getNotice } from '@/api/auth'
+import { getStoredAuthToken, syncCurrentUserProfile } from '@/utils/currentUser'
 
 const store = useStore()
 const router = useRouter()
@@ -141,6 +179,7 @@ const route = useRoute()
 
 const search = ref('')
 const mobileMenuOpen = ref(false)
+const showHeroSection = computed(() => route.path === '/')
 
 const navItems = [
 	{ label: 'Home', to: '/' },
@@ -230,9 +269,11 @@ watch(
 )
 
 onMounted(() => {
-	const token = localStorage.getItem('luffy_jwt_token')
+	const token = getStoredAuthToken()
 	if (token) {
-		getNoticeData()
+		syncCurrentUserProfile(store).finally(() => {
+			getNoticeData()
+		})
 		return
 	}
 	store.dispatch('user/close', true)
@@ -463,6 +504,7 @@ onMounted(() => {
 		grid-column: 1 / -1;
 		margin-left: 0;
 		width: 100%;
+		display: block;
 		max-height: 0;
 		overflow: hidden;
 		opacity: 0;
@@ -483,6 +525,10 @@ onMounted(() => {
 	.menu-top-menu-container,
 	.menu-list {
 		width: 100%;
+	}
+
+	.main-nav > .menu-top-menu-container {
+		display: block !important;
 	}
 
 	.menu-list {

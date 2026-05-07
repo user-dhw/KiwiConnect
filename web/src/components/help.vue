@@ -1,39 +1,44 @@
 <template>
 	<div class="hoothelp">
-		<section class="widget">
+		<section class="hub-section">
 			<router-link to="/help" custom v-slot="{ navigate }">
-				<div class="page-header section-header" @click="navigate">
-					<h3 class="section-title">Discussion / Q&A</h3>
-					<h4 class="section-more">More &gt;</h4>
+				<div class="section-header" @click="navigate">
+					<div>
+						<p class="section-eyebrow">Student Support</p>
+						<h3 class="section-title">Discussion / Q&A</h3>
+					</div>
+					<h4 class="section-more">More</h4>
 				</div>
 			</router-link>
 
-			<ul class="articles" v-loading="isLoading">
+			<div class="hub-list" v-loading="isLoading">
 				<li
-					class="article-entry standard"
+					class="hub-item"
 					v-for="(item, id) in tableData"
 					:key="item.help_id || id"
 				>
-					<h4>
+					<div class="hub-item-top">
+						<span class="hub-badge">Q&A</span>
+						<span class="hub-views">{{ item.help_read_num || 0 }} views</span>
+					</div>
+					<h4 class="hub-item-title">
 						<router-link :to="`/helpcontent/${item.help_id}`">
 							{{ item.help_title }}
 						</router-link>
 					</h4>
-					<span class="article-meta">
+					<span class="hub-meta">
 						<span>{{ formatDate(item.createtime) }}</span>
-						<span class="meta-separator">•</span>
 						<span>Information Platform</span>
 					</span>
-					<span class="like-count">Views {{ item.help_read_num }}</span>
 				</li>
 
 				<li
 					v-if="!isLoading && tableData.length === 0"
-					class="article-entry standard empty-state"
+					class="hub-item empty-state"
 				>
 					No Q&A data available
 				</li>
-			</ul>
+			</div>
 		</section>
 	</div>
 </template>
@@ -83,25 +88,41 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.hub-section {
+	height: 100%;
+	display: grid;
+	grid-template-rows: auto 1fr;
+}
+
 .section-header {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	gap: 12px;
 	cursor: pointer;
-	margin-bottom: 8px;
+	margin-bottom: 16px;
+}
+
+.section-eyebrow {
+	margin: 0 0 8px;
+	font-size: 0.74rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #7f93bb;
 }
 
 .section-title {
 	margin: 0;
 	line-height: 1.25;
+	font-size: 1.02rem;
 }
 
 .section-more {
 	margin: 0;
-	font-size: 14px;
-	font-weight: 500;
-	color: #5f6b7a;
+	font-size: 13px;
+	font-weight: 700;
+	color: #6281bf;
 	white-space: nowrap;
 	transition:
 		color 0.2s ease,
@@ -109,17 +130,78 @@ onMounted(() => {
 }
 
 .section-header:hover .section-more {
-	color: #2f6fdd;
+	color: #2663eb;
 	transform: translateX(2px);
+}
+
+.hub-list {
+	display: grid;
+	gap: 12px;
+	align-content: start;
+}
+
+.hub-item {
+	display: grid;
+	gap: 10px;
+	padding: 16px;
+	border-radius: 18px;
+	background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	box-shadow: 0 8px 18px rgba(38, 99, 235, 0.05);
+}
+
+.hub-item-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.hub-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 10px;
+	border-radius: 999px;
+	background: rgba(38, 99, 235, 0.1);
+	color: #2663eb;
+	font-size: 0.73rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.hub-views {
+	font-size: 0.8rem;
+	font-weight: 700;
+	color: #6d7c96;
+}
+
+.hub-item-title {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.45;
+}
+
+.hub-item-title a {
+	color: #243047;
+	text-decoration: none;
+}
+
+.hub-item-title a:hover {
+	color: #2663eb;
+}
+
+.hub-meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 12px;
+	font-size: 0.86rem;
+	color: #7a869f;
 }
 
 .empty-state {
 	color: #9aa3ab;
 	text-align: center;
-}
-
-.meta-separator {
-	color: #c0c7d0;
 }
 
 @media (max-width: 768px) {

@@ -125,16 +125,12 @@
 							</p>
 							<p
 								@click="
-									isUserVerified
-										? openReplyEditor(
-												idx,
-												item.nickname,
-												item.user_id,
-												item.comment_id,
-											)
-										: ElMessage.warning(
-												'You must verify your account before replying',
-											)
+									handleReplyAction(
+										idx,
+										item.nickname,
+										item.user_id,
+										item.comment_id,
+									)
 								"
 								:style="{
 									cursor: isUserVerified
@@ -227,7 +223,7 @@
 								<div class="comment-footer">
 									<p
 										@click="
-											openNestedReplyEditor(
+											handleNestedReplyAction(
 												replyIdx,
 												reply.nickname,
 												reply.user_id,
@@ -266,6 +262,11 @@ import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 import moment from 'moment'
 import CommentEditor from '@/components/comment/CommentEditor.vue'
+import {
+	getStoredAuthToken,
+	normalizeFileUrl,
+	syncCurrentUserProfile,
+} from '@/utils/currentUser'
 import {
 	createComment,
 	createReply,
@@ -311,7 +312,9 @@ const contentUserId = computed(
 )
 const commentCount = computed(() => Number(store.state.commentnum || 0))
 
-const currentAvatar = computed(() => store.state.user?.userinfo?.avatar || '')
+const currentAvatar = computed(() =>
+	normalizeFileUrl(store.state.user?.userinfo?.avatar || ''),
+)
 const currentNickname = computed(
 	() => store.state.user?.userinfo?.nickname || '',
 )
@@ -323,6 +326,26 @@ const isUserVerified = computed(() => {
 	const userinfo = store.state.user?.userinfo || {}
 	return Number(userinfo.realstate) === 3
 })
+
+const ensureVerifiedUser = async () => {
+	if (isUserVerified.value) {
+		return true
+	}
+
+	if (!getStoredAuthToken()) {
+		ElMessage.warning('Please log in first')
+		store.dispatch('user/close', true)
+		return false
+	}
+
+	const latestUser = await syncCurrentUserProfile(store)
+	if (Number(latestUser?.realstate) === 3) {
+		return true
+	}
+
+	ElMessage.warning('You must verify your account before commenting')
+	return false
+}
 
 const formatDate = value => {
 	return value ? moment(value).format('YYYY-MM-DD HH:mm') : '-'
@@ -341,9 +364,8 @@ const reportUser = username => {
 	})
 }
 
-const openCommentEditor = () => {
-	if (!isUserVerified.value) {
-		ElMessage.warning('You must verify your account before commenting')
+const openCommentEditor = async () => {
+	if (!(await ensureVerifiedUser())) {
 		return
 	}
 	editorId.value = -1
@@ -351,7 +373,11 @@ const openCommentEditor = () => {
 	resetReplyTargets()
 }
 
-const openReplyEditor = (index, nickname, userId, commentId) => {
+const openReplyEditor = async (index, nickname, userId, commentId) => {
+	if (!(await ensureVerifiedUser())) {
+		return
+	}
+
 	if (editorId.value === index) {
 		editorId.value = -2
 		resetReplyTargets()
@@ -365,7 +391,11 @@ const openReplyEditor = (index, nickname, userId, commentId) => {
 	currentCommentId.value = commentId || ''
 }
 
-const openNestedReplyEditor = (index, nickname, userId, commentId) => {
+const openNestedReplyEditor = async (index, nickname, userId, commentId) => {
+	if (!(await ensureVerifiedUser())) {
+		return
+	}
+
 	if (replyEditorId.value === index) {
 		replyEditorId.value = -2
 		resetReplyTargets()
@@ -388,7 +418,12 @@ const loadReplies = async commentId => {
 	try {
 		const res = await getReplyList(commentId)
 		if (res.state?.type === 'SUCCESS') {
-			replyList.value = Array.isArray(res.data) ? res.data : []
+			replyList.value = Array.isArray(res.data)
+				? res.data.map(item => ({
+						...item,
+						avatar: normalizeFileUrl(item?.avatar || ''),
+					}))
+				: []
 			return
 		}
 		replyList.value = []
@@ -408,6 +443,14 @@ const toggleReplyList = async (commentId, index) => {
 	await loadReplies(commentId)
 }
 
+const handleReplyAction = async (index, nickname, userId, commentId) => {
+	await openReplyEditor(index, nickname, userId, commentId)
+}
+
+const handleNestedReplyAction = async (index, nickname, userId, commentId) => {
+	await openNestedReplyEditor(index, nickname, userId, commentId)
+}
+
 const loadComments = async () => {
 	if (!contentId.value) {
 		commentList.value = []
@@ -418,7 +461,12 @@ const loadComments = async () => {
 	try {
 		const res = await getCommentList(contentId.value)
 		if (res.state?.type === 'SUCCESS') {
-			commentList.value = Array.isArray(res.data) ? res.data : []
+			commentList.value = Array.isArray(res.data)
+				? res.data.map(item => ({
+						...item,
+						avatar: normalizeFileUrl(item?.avatar || ''),
+					}))
+				: []
 			store.dispatch('setcommentnum', Number(res.count || 0))
 			return
 		}
@@ -431,8 +479,7 @@ const loadComments = async () => {
 }
 
 const submitComment = async () => {
-	if (!isUserVerified.value) {
-		ElMessage.error('You must verify your account before commenting')
+	if (!(await ensureVerifiedUser())) {
 		return
 	}
 
@@ -470,8 +517,8 @@ const submitComment = async () => {
 			})
 		}
 
-		if (res.State?.Type == 'UNAUTHORIZED') {
-			ElMessage.error('Please log in to submit a comment')
+		if (res.state?.type !== 'SUCCESS') {
+			ElMessage.error(res.state?.msg || 'Failed to submit comment')
 			return
 		}
 
@@ -492,7 +539,10 @@ const submitComment = async () => {
 	}
 }
 
-onMounted(() => {
+onMounted(async () => {
+	if (getStoredAuthToken()) {
+		await syncCurrentUserProfile(store)
+	}
 	loadComments()
 })
 </script>

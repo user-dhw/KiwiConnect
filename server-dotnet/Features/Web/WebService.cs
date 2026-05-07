@@ -401,7 +401,15 @@ public sealed class WebService
       // 对每个表分别进行错误处理
       try
       {
-        help = (await conn.QueryAsync("select * from help,user where help.user_id=user.user_id and help.help_title like @Key", new { Key = key })).ToArray();
+        help = (await conn.QueryAsync(
+          @"select * from help,user
+            where help.user_id=user.user_id
+              and (
+                help.help_title like @Key
+                or help.help_content like @Key
+                or help.help_tag like @Key
+              )",
+          new { Key = key })).ToArray();
       }
       catch (Exception)
       {
@@ -409,7 +417,12 @@ public sealed class WebService
 
       try
       {
-        activity = (await conn.QueryAsync("select * from activity where activity.activity_title like @Key", new { Key = key })).ToArray();
+        activity = (await conn.QueryAsync(
+          @"select * from activity
+            where activity.activity_title like @Key
+               or activity.activity_content like @Key
+               or activity.activity_locale like @Key",
+          new { Key = key })).ToArray();
       }
       catch (Exception)
       {
@@ -419,7 +432,12 @@ public sealed class WebService
 
       try
       {
-        oldstuff = (await conn.QueryAsync("select * from oldstuff where oldstuff_name like @Key", new { Key = key })).ToArray();
+        oldstuff = (await conn.QueryAsync(
+          @"select * from oldstuff
+            where oldstuff_name like @Key
+               or oldstuff_content like @Key
+               or oldstuff_lable like @Key",
+          new { Key = key })).ToArray();
       }
       catch (Exception)
       {
@@ -427,7 +445,15 @@ public sealed class WebService
 
       try
       {
-        article = (await conn.QueryAsync("select * from article,user where article.user_id=user.user_id and (article.article_title like @Key or article.article_introduction like @Key)", new { Key = key })).ToArray();
+        article = (await conn.QueryAsync(
+          @"select * from article,user
+            where article.user_id=user.user_id
+              and (
+                article.article_title like @Key
+                or article.article_introduction like @Key
+                or article.article_content like @Key
+              )",
+          new { Key = key })).ToArray();
       }
       catch (Exception)
       {
@@ -512,4 +538,5 @@ public sealed class WebService
       return ApiResponse.Error("GET_LABLE_FAILED", $"获取标签列表失败: {ex.Message}");
     }
   }
+
 }

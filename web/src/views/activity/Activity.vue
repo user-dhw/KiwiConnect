@@ -4,7 +4,7 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="page-shell">
+				<div class="page-shell page-shell--full">
 					<div class="page-main">
 						<div class="page-heading">
 							<h1 class="page-title">
@@ -77,9 +77,6 @@
 						/>
 					</div>
 
-					<aside class="page-aside panel-stack">
-						<Carousel />
-					</aside>
 				</div>
 			</div>
 		</div>
@@ -90,7 +87,6 @@
 import { reactive, ref, onMounted } from 'vue'
 import { LocationFilled } from '@element-plus/icons-vue'
 import moment from 'moment'
-import Carousel from '@/components/carousel.vue'
 import { getLabelOptions, getWebActivityList } from '@/api/content'
 
 const subtitle = ref('')
@@ -173,5 +169,11 @@ onMounted(async () => {
 	margin-top: 24px;
 	display: flex;
 	justify-content: center;
+}
+
+@media (min-width: 900px) {
+	.page-shell--full {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }
 </style>

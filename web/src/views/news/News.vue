@@ -4,7 +4,7 @@
 
 		<div class="page-container">
 			<div class="container">
-				<div class="page-shell">
+				<div class="page-shell page-shell--full">
 					<div class="page-main">
 						<div class="page-heading">
 							<h1 class="page-title">
@@ -107,10 +107,6 @@
 						/>
 					</div>
 
-					<aside class="page-aside panel-stack">
-						<Carousel />
-						<OldStuffWidget />
-					</aside>
 				</div>
 			</div>
 		</div>
@@ -122,8 +118,6 @@ import { reactive, ref, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import { Calendar, User, View } from '@element-plus/icons-vue'
 import moment from 'moment'
-import Carousel from '@/components/carousel.vue'
-import OldStuffWidget from '@/components/oldstuff.vue'
 import { getLabelOptions, getArticleList } from '@/api/content'
 
 const route = useRoute()
@@ -246,5 +240,11 @@ onMounted(async () => {
 	margin-top: 18px;
 	display: flex;
 	justify-content: center;
+}
+
+@media (min-width: 900px) {
+	.page-shell--full {
+		grid-template-columns: minmax(0, 1fr);
+	}
 }
 </style>

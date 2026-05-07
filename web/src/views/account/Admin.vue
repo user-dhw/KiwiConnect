@@ -14,22 +14,27 @@
 						<el-menu-item index="/admin/myself">Account Settings</el-menu-item>
 						<el-sub-menu index="content-manage">
 							<template #title>Content Management</template>
-							<el-menu-item index="/admin/createhelplist">Q&amp;A</el-menu-item>
+							<el-menu-item
+								index="/admin/createhelplist"
+								:disabled="!isVerified"
+							>
+								Q&amp;A
+							</el-menu-item>
 							<el-menu-item
 								index="/admin/createactivitylist"
-								:disabled="userinfo.realstate !== 3"
+								:disabled="!isVerified"
 							>
 								Activities
 							</el-menu-item>
 							<el-menu-item
 								index="/admin/createoldstufflist"
-								:disabled="userinfo.realstate !== 3"
+								:disabled="!isVerified"
 							>
 								Marketplace
 							</el-menu-item>
 							<el-menu-item
 								index="/admin/articlelist"
-								:disabled="userinfo.realstate !== 3"
+								:disabled="!isVerified"
 							>
 								Articles / News
 							</el-menu-item>
@@ -47,11 +52,17 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useStore } from 'vuex'
+import { syncCurrentUserProfile } from '@/utils/currentUser'
 
 const store = useStore()
 const userinfo = computed(() => store.state.user.userinfo || {})
+const isVerified = computed(() => Number(userinfo.value.realstate) === 3)
+
+onMounted(() => {
+	syncCurrentUserProfile(store)
+})
 </script>
 
 <style scoped>

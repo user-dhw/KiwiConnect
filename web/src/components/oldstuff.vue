@@ -1,48 +1,40 @@
 <template>
 	<div class="help">
-		<section class="widget">
+		<section class="hub-section">
 			<router-link to="/oldstuff" custom v-slot="{ navigate }">
-				<div class="page-header section-header" @click="navigate">
-					<h3 class="section-title">Second-hand Trading</h3>
-					<h4 class="section-more">More &gt;</h4>
+				<div class="section-header" @click="navigate">
+					<div>
+						<p class="section-eyebrow">Market Board</p>
+						<h3 class="section-title">Second-hand Trading</h3>
+					</div>
+					<h4 class="section-more">More</h4>
 				</div>
 			</router-link>
 
-			<div class="oldstuff-grid" v-loading="isLoading">
+			<div class="hub-list" v-loading="isLoading">
 				<div
-					class="oldstuff-card"
+					class="hub-item oldstuff-item"
 					v-for="(oldstuff, id) in tableData"
 					:key="oldstuff.oldstuff_id || id"
 				>
-					<router-link
-						:to="`/oldstuffcontent/${oldstuff.oldstuff_id}`"
-					>
-						<div class="thumbnail">
-							<img
-								data-src="holder.js/100%x200"
-								alt="100%x200"
-								:src="oldstuff.oldstuff_img"
-								data-holder-rendered="true"
-								style="
-									height: 200px;
-									object-fit: cover;
-									width: 100%;
-									display: block;
-								"
-							/>
-							<div class="caption">
-								<h3 style="color: red">
-									￥{{ oldstuff.oldstuff_price }}
-								</h3>
-								<p>{{ oldstuff.oldstuff_name }}</p>
+					<router-link :to="`/oldstuffcontent/${oldstuff.oldstuff_id}`" class="oldstuff-link">
+						<div class="oldstuff-thumb">
+							<img alt="Item photo" :src="oldstuff.oldstuff_img" />
+						</div>
+						<div class="oldstuff-copy">
+							<div class="hub-item-top">
+								<span class="hub-badge">Listing</span>
+								<span class="oldstuff-price">￥{{ oldstuff.oldstuff_price }}</span>
 							</div>
+							<h4 class="hub-item-title">{{ oldstuff.oldstuff_name }}</h4>
+							<p class="oldstuff-note">Student marketplace pick</p>
 						</div>
 					</router-link>
 				</div>
 
 				<div
 					v-if="!isLoading && tableData.length === 0"
-					class="empty-state"
+					class="hub-item empty-state"
 				>
 					No second-hand listings available
 				</div>
@@ -94,67 +86,99 @@ onMounted(() => {
 	min-height: 200px;
 }
 
-.oldstuff-grid {
+.hub-section {
+	height: 100%;
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	gap: 16px;
-	align-items: start;
+	grid-template-rows: auto 1fr;
 }
 
-.oldstuff-card {
+.hub-list {
+	display: grid;
+	gap: 12px;
+	align-content: start;
+}
+
+.hub-item {
+	display: grid;
+	gap: 10px;
+	padding: 16px;
+	border-radius: 18px;
+	background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	box-shadow: 0 8px 18px rgba(38, 99, 235, 0.05);
+}
+
+.oldstuff-link {
+	display: grid;
+	grid-template-columns: 92px minmax(0, 1fr);
+	gap: 14px;
+	align-items: center;
+	color: inherit;
+	text-decoration: none;
+}
+
+.oldstuff-thumb {
+	width: 92px;
+	height: 92px;
+	border-radius: 18px;
+	overflow: hidden;
+	background: #eef4ff;
+}
+
+.oldstuff-thumb img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.oldstuff-copy {
+	display: grid;
+	gap: 10px;
 	min-width: 0;
 }
 
-.oldstuff-card .thumbnail {
+.oldstuff-price {
+	font-size: 0.95rem;
+	font-weight: 800;
+	color: #eb3b3b;
+}
+
+.oldstuff-note {
 	margin: 0;
-	border-radius: 10px;
-	overflow: hidden;
-	background: #fff;
-	box-shadow: 0 2px 12px rgba(30, 73, 120, 0.08);
-	transition:
-		transform 0.2s ease,
-		box-shadow 0.2s ease;
-}
-
-.oldstuff-card .thumbnail:hover {
-	transform: translateY(-2px);
-	box-shadow: 0 6px 16px rgba(30, 73, 120, 0.13);
-}
-
-.oldstuff-card .caption {
-	padding: 10px 12px 12px;
-}
-
-.oldstuff-card .caption h3 {
-	margin: 0 0 6px;
-}
-
-.oldstuff-card .caption p {
-	margin: 0;
-	color: #2f3c48;
-	line-height: 1.45;
-	word-break: break-word;
+	font-size: 0.85rem;
+	color: #7a869f;
 }
 
 .section-header {
 	display: flex;
-	align-items: center;
+	align-items: flex-start;
 	justify-content: space-between;
 	gap: 12px;
 	cursor: pointer;
-	margin-bottom: 8px;
+	margin-bottom: 16px;
+}
+
+.section-eyebrow {
+	margin: 0 0 8px;
+	font-size: 0.74rem;
+	font-weight: 700;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: #7f93bb;
 }
 
 .section-title {
 	margin: 0;
 	line-height: 1.25;
+	font-size: 1.02rem;
 }
 
 .section-more {
 	margin: 0;
-	font-size: 14px;
-	font-weight: 500;
-	color: #5f6b7a;
+	font-size: 13px;
+	font-weight: 700;
+	color: #6281bf;
 	white-space: nowrap;
 	transition:
 		color 0.2s ease,
@@ -162,26 +186,56 @@ onMounted(() => {
 }
 
 .section-header:hover .section-more {
-	color: #2f6fdd;
+	color: #2663eb;
 	transform: translateX(2px);
+}
+
+.hub-item-top {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+}
+
+.hub-badge {
+	display: inline-flex;
+	align-items: center;
+	padding: 6px 10px;
+	border-radius: 999px;
+	background: rgba(38, 99, 235, 0.1);
+	color: #2663eb;
+	font-size: 0.73rem;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.hub-item-title {
+	margin: 0;
+	font-size: 1rem;
+	line-height: 1.45;
+	color: #243047;
+	word-break: break-word;
 }
 
 .empty-state {
 	color: #9aa3ab;
-	padding: 8px 0;
+	padding: 16px;
 	text-align: center;
-	width: 100%;
-	grid-column: 1 / -1;
 }
 
 @media (max-width: 768px) {
-	.oldstuff-grid {
-		grid-template-columns: 1fr;
-		gap: 12px;
-	}
-
 	.section-more {
 		font-size: 13px;
+	}
+
+	.oldstuff-link {
+		grid-template-columns: 76px minmax(0, 1fr);
+	}
+
+	.oldstuff-thumb {
+		width: 76px;
+		height: 76px;
 	}
 }
 </style>

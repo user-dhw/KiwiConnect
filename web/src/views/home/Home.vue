@@ -41,14 +41,15 @@ import OldStuff from '@/components/oldstuff.vue'
 
 <style scoped>
 .home {
-	padding: 28px 0 36px;
+	padding: 24px 0 32px;
 }
 
 .page-container {
 	background:
-		radial-gradient(circle at top left, rgba(109, 200, 170, 0.12), transparent 26%),
-		linear-gradient(180deg, #eef5f2 0%, #f7faf8 38%, #eef4f1 100%);
-	padding: 24px 0 40px;
+		radial-gradient(circle at top left, rgba(38, 99, 235, 0.08), transparent 26%),
+		radial-gradient(circle at top right, rgba(144, 168, 255, 0.08), transparent 24%),
+		linear-gradient(180deg, #f4f8ff 0%, #f8fbff 38%, #f1f6ff 100%);
+	padding: 20px 0 36px;
 }
 
 .container {
@@ -61,31 +62,34 @@ import OldStuff from '@/components/oldstuff.vue'
 	display: grid;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 	grid-auto-rows: 1fr;
-	gap: 24px;
+	gap: 20px;
 	align-items: stretch;
 }
 
 .carousel-section {
-	margin-bottom: 30px;
+	margin-bottom: 24px;
 	border-radius: 28px;
 	overflow: hidden;
-	box-shadow: 0 22px 60px rgba(21, 64, 54, 0.16);
+	box-shadow: 0 24px 60px rgba(38, 99, 235, 0.14);
 }
 
 .content-card {
-	background: rgba(255, 255, 255, 0.84);
-	border-radius: 24px;
+	background: linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, #fbfdff 100%);
+	border-radius: 26px;
 	padding: 22px;
-	border: 1px solid rgba(110, 148, 134, 0.14);
-	box-shadow: 0 18px 38px rgba(23, 68, 58, 0.08);
-	backdrop-filter: blur(10px);
-	transition: box-shadow 0.3s ease;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	box-shadow: 0 18px 44px rgba(38, 99, 235, 0.08);
+	backdrop-filter: blur(14px);
+	transition:
+		box-shadow 0.3s ease,
+		transform 0.3s ease;
 	min-height: 100%;
 	height: 100%;
 }
 
 .content-card:hover {
-	box-shadow: 0 22px 44px rgba(23, 68, 58, 0.12);
+	transform: translateY(-2px);
+	box-shadow: 0 24px 50px rgba(38, 99, 235, 0.12);
 }
 
 .widget {
