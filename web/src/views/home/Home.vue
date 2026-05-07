@@ -92,14 +92,6 @@ import OldStuff from '@/components/oldstuff.vue'
 	box-shadow: 0 24px 50px rgba(38, 99, 235, 0.12);
 }
 
-.widget {
-	margin-bottom: 20px;
-}
-
-.guomore {
-	float: right;
-}
-
 @media (max-width: 768px) {
 	.row {
 		grid-template-columns: 1fr;
