@@ -11,18 +11,12 @@
       </div>
 
       <div class="dashboard-body">
-        <section class="hero-card">
-          <div>
-            <p class="hero-eyebrow">Admin Overview</p>
-            <h1 class="hero-title">Platform analytics at a glance</h1>
-            <p class="hero-copy">
-              Track users, content volume, and discussion activity from one central dashboard.
-            </p>
-          </div>
-          <el-button type="primary" plain @click="numbering">
-            Refresh data
-          </el-button>
-        </section>
+        <div class="page-header">
+          <h2 class="page-title">Data Center</h2>
+          <p class="page-copy">
+            Track users, content volume, and discussion activity from one central dashboard.
+          </p>
+        </div>
 
         <section class="stats-grid">
           <article class="metric-card">
@@ -48,6 +42,9 @@
               <h2>Insights</h2>
               <p>Switch between growth trends and content distribution without losing chart scale.</p>
             </div>
+            <el-button type="primary" plain @click="numbering">
+              Refresh data
+            </el-button>
           </div>
 
           <el-tabs v-model="activeTab" class="dashboard-tabs">
@@ -447,41 +444,23 @@ onBeforeUnmount(() => {
 
 .dashboard-body {
   margin-top: 40px;
-  padding: 24px;
-  background: #f8fbff;
+  padding: 20px;
+  background: #fff;
 }
 
-.hero-card {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 28px 32px;
-  border: 1px solid #dbe7ff;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
-  box-shadow: 0 20px 45px rgba(38, 99, 235, 0.08);
+.page-header {
+  margin-bottom: 20px;
 }
 
-.hero-eyebrow {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #2663eb;
-}
-
-.hero-title {
+.page-title {
   margin: 0;
-  font-size: 34px;
-  line-height: 1.1;
+  font-size: 28px;
   color: #1f2a44;
 }
 
-.hero-copy {
+.page-copy {
   max-width: 720px;
-  margin: 12px 0 0;
+  margin: 10px 0 0;
   color: #667085;
   line-height: 1.7;
 }
@@ -490,7 +469,7 @@ onBeforeUnmount(() => {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 18px;
-  margin-top: 22px;
+  margin-top: 0;
 }
 
 .metric-card {
@@ -525,17 +504,23 @@ onBeforeUnmount(() => {
 
 .chart-panel {
   margin-top: 22px;
-  padding: 24px;
-  border: 1px solid #e3edff;
-  border-radius: 24px;
+  padding: 0;
+  border: 0;
   background: #fff;
-  box-shadow: 0 16px 40px rgba(15, 23, 42, 0.05);
+  box-shadow: none;
 }
 
 .chart-panel__header h2 {
   margin: 0;
   font-size: 24px;
   color: #1f2a44;
+}
+
+.chart-panel__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .chart-panel__header p {
@@ -584,16 +569,11 @@ onBeforeUnmount(() => {
 
 @media (max-width: 768px) {
   .dashboard-body {
-    padding: 16px;
+    padding: 20px;
   }
 
-  .hero-card {
+  .chart-panel__header {
     flex-direction: column;
-    padding: 24px;
-  }
-
-  .hero-title {
-    font-size: 28px;
   }
 
   .metric-value {

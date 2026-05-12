@@ -9,27 +9,23 @@
       </div>
 
       <div class="profile-body">
-        <section class="profile-hero">
-          <div>
-            <p class="profile-eyebrow">Admin Profile</p>
-            <h1 class="profile-title">{{ tableData.nickname || tableData.username || 'admin' }}</h1>
-            <p class="profile-copy">
-              Review account details, update your display name, and manage access credentials from
-              one place.
-            </p>
-          </div>
-          <div class="profile-badges">
-            <span
-              class="status-badge"
-              :class="String(tableData.user_state) === '1' ? 'is-enabled' : 'is-disabled'"
-            >
-              {{ String(tableData.user_state) === '1' ? 'Enabled' : 'Disabled' }}
-            </span>
-            <span class="role-badge">
-              {{ tableData.username === 'admin' ? 'Super Admin' : 'Normal Admin' }}
-            </span>
-          </div>
-        </section>
+        <div class="page-header">
+          <h2 class="page-title">Personal Center</h2>
+          <p class="page-copy">
+            Review account details, update your display name, and manage access credentials from one place.
+          </p>
+        </div>
+        <div class="profile-badges">
+          <span
+            class="status-badge"
+            :class="String(tableData.user_state) === '1' ? 'is-enabled' : 'is-disabled'"
+          >
+            {{ String(tableData.user_state) === '1' ? 'Enabled' : 'Disabled' }}
+          </span>
+          <span class="role-badge">
+            {{ tableData.username === 'admin' ? 'Super Admin' : 'Normal Admin' }}
+          </span>
+        </div>
 
         <section class="profile-grid">
           <article class="profile-card">
@@ -291,40 +287,24 @@
   }
 
   .profile-body {
-    padding: 10px;
+    margin-top: 40px;
+    padding: 20px;
+    background: #fff;
   }
 
-  .profile-hero {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 24px;
-    padding: 28px 32px;
-    border: 1px solid #dbe7ff;
-    border-radius: 24px;
-    background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
-    box-shadow: 0 20px 45px rgba(38, 99, 235, 0.08);
+  .page-header {
+    margin-bottom: 16px;
   }
 
-  .profile-eyebrow {
-    margin: 0 0 8px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #2663eb;
-  }
-
-  .profile-title {
+  .page-title {
     margin: 0;
-    font-size: 34px;
-    line-height: 1.1;
+    font-size: 28px;
     color: #1f2a44;
   }
 
-  .profile-copy {
+  .page-copy {
     max-width: 720px;
-    margin: 12px 0 0;
+    margin: 10px 0 0;
     color: #667085;
     line-height: 1.7;
   }
@@ -333,6 +313,7 @@
     display: flex;
     flex-wrap: wrap;
     gap: 10px;
+    margin-bottom: 20px;
   }
 
   .status-badge,
@@ -503,16 +484,7 @@
 
   @media (max-width: 768px) {
     .profile-body {
-      padding: 16px;
-    }
-
-    .profile-hero {
-      flex-direction: column;
-      padding: 24px;
-    }
-
-    .profile-title {
-      font-size: 28px;
+      padding: 20px;
     }
 
     .profile-card {

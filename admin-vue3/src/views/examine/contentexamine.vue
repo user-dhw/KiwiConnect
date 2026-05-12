@@ -10,8 +10,13 @@
       </div>
 
       <div class="main">
-        <section class="workspace-card">
-          <div class="search workspace-filters">
+        <div class="page-header">
+          <h2 class="page-title">Content Review</h2>
+          <p class="page-copy">
+            Review submissions across Q&amp;A, activities, marketplace listings, and articles from one moderation workspace.
+          </p>
+        </div>
+        <div class="search">
             <el-form :inline="true" :model="filterForm" class="demo-form-inline">
               <el-form-item>
                 <el-input v-model="filterForm.user" placeholder="User" />
@@ -242,7 +247,6 @@
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
           />
-        </section>
       </div>
     </el-main>
   </div>
@@ -426,55 +430,24 @@
   }
   .main {
     margin-top: 40px;
-    padding: 24px;
-    background-color: #f8fbff;
+    padding: 20px;
+    background-color: #fff;
   }
 
-  .workspace-hero,
-  .workspace-card {
-    border: 1px solid #e3edff;
-    border-radius: 24px;
-    background: #fff;
-    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
+  .page-header {
+    margin-bottom: 20px;
   }
 
-  .workspace-hero {
-    padding: 28px 32px;
-    background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
-  }
-
-  .workspace-eyebrow {
-    margin: 0 0 8px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #2663eb;
-  }
-
-  .workspace-title {
+  .page-title {
     margin: 0;
-    font-size: 34px;
-    line-height: 1.1;
+    font-size: 28px;
     color: #1f2a44;
   }
 
-  .workspace-copy {
+  .page-copy {
     max-width: 760px;
-    margin: 12px 0 0;
+    margin: 10px 0 0;
     color: #667085;
     line-height: 1.7;
-  }
-
-  .workspace-card {
-    margin-top: 22px;
-    padding: 24px;
-  }
-
-  .workspace-filters {
-    padding: 18px 20px 2px;
-    border: 1px solid #edf2ff;
-    border-radius: 20px;
-    background: #f9fbff;
   }
 </style>
