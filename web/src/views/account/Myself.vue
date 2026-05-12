@@ -9,7 +9,8 @@
 
 		<el-tabs type="border-card" class="profile-tabs">
 			<el-tab-pane label="Profile Information">
-				<el-form :model="form" label-width="120px" class="profile-form">
+				<form @submit.prevent="submitUserInfo">
+					<el-form :model="form" label-width="120px" class="profile-form">
 					<el-form-item label="Avatar">
 						<el-upload
 							:action="uploadAction"
@@ -37,11 +38,12 @@
 						<el-input v-model="form.synopsis" type="textarea" :rows="4" />
 					</el-form-item>
 					<el-form-item>
-						<el-button type="primary" :loading="savingUser" @click="submitUserInfo">
+						<el-button type="primary" native-type="submit" :loading="savingUser">
 							Save
 						</el-button>
 					</el-form-item>
-				</el-form>
+					</el-form>
+				</form>
 			</el-tab-pane>
 
 			<el-tab-pane label="Identity Verification">
@@ -52,7 +54,8 @@
 						<el-step title="Verified" />
 					</el-steps>
 
-					<el-form :model="student" label-width="120px" class="profile-form">
+					<form @submit.prevent="submitStudentInfo">
+						<el-form :model="student" label-width="120px" class="profile-form">
 						<el-form-item label="Full Name">
 							<el-input v-model="student.realname" :disabled="studentLocked" />
 						</el-form-item>
@@ -77,14 +80,15 @@
 						<el-form-item>
 							<el-button
 								type="primary"
+								native-type="submit"
 								:disabled="studentLocked"
 								:loading="savingStudent"
-								@click="submitStudentInfo"
 							>
 								Submit Verification
 							</el-button>
 						</el-form-item>
-					</el-form>
+						</el-form>
+					</form>
 				</div>
 			</el-tab-pane>
 		</el-tabs>

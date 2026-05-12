@@ -24,13 +24,12 @@
 				<div v-if="form.jubao_url">Violation URL: {{ form.jubao_url }}</div>
 			</el-alert>
 
-			<el-form
-				v-if="step === STEP.FORM"
-				:model="form"
-				label-width="130px"
-				class="section"
-				@submit.prevent
-			>
+			<form v-if="step === STEP.FORM" @submit.prevent="handleSubmit">
+				<el-form
+					:model="form"
+					label-width="130px"
+					class="section"
+				>
 				<el-form-item label="Reported Account">
 					<el-input
 						v-model.trim="form.jubao_user"
@@ -71,12 +70,13 @@
 				</el-form-item>
 
 				<el-form-item>
-					<el-button type="primary" :loading="isSubmitting" @click="handleSubmit">
+					<el-button type="primary" native-type="submit" :loading="isSubmitting">
 						Submit
 					</el-button>
 					<el-button @click="resetForm">Cancel</el-button>
 				</el-form-item>
-			</el-form>
+				</el-form>
+			</form>
 
 			<support-submit-success
 				v-else

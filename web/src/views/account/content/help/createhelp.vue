@@ -6,7 +6,8 @@
 		</div>
 
 		<section class="admin-form-card">
-			<el-form :model="form" label-width="120px" class="admin-form">
+			<form @submit.prevent="submit">
+				<el-form :model="form" label-width="120px" class="admin-form">
 				<el-form-item label="Title">
 					<el-input v-model="form.help_title" />
 				</el-form-item>
@@ -38,11 +39,12 @@
 				</el-form-item>
 				<el-form-item>
 					<div class="inline-actions">
-						<el-button type="primary" @click="submit">Save</el-button>
+						<el-button type="primary" native-type="submit">Save</el-button>
 						<el-button @click="router.push('/admin/createhelplist')">Cancel</el-button>
 					</div>
 				</el-form-item>
-			</el-form>
+				</el-form>
+			</form>
 		</section>
 	</div>
 </template>

@@ -8,7 +8,8 @@
 		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="Listing Details">
 				<section class="admin-form-card">
-					<el-form :model="form" label-width="130px" class="admin-form">
+					<form @submit.prevent="submit">
+						<el-form :model="form" label-width="130px" class="admin-form">
 						<el-form-item label="Item Image">
 							<div class="image-preview-wrap">
 								<el-image
@@ -50,11 +51,12 @@
 						</el-form-item>
 						<el-form-item>
 							<div class="inline-actions">
-								<el-button type="primary" @click="submit">Save</el-button>
+								<el-button type="primary" native-type="submit">Save</el-button>
 								<el-button @click="router.push('/admin/createoldstufflist')">Cancel</el-button>
 							</div>
 						</el-form-item>
-					</el-form>
+						</el-form>
+					</form>
 				</section>
 			</el-tab-pane>
 

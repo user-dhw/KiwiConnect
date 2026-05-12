@@ -7,7 +7,8 @@
 		@close="handleClose"
 		:close-on-click-modal="false"
 	>
-		<el-form class="auth-form" :model="formData">
+		<form @submit.prevent="handleAuthSubmit">
+			<el-form class="auth-form" :model="formData">
 			<el-form-item>
 				<el-input
 					v-model="formData.username"
@@ -40,10 +41,10 @@
 			<el-button
 				class="auth-submit"
 				type="primary"
+				native-type="submit"
 				size="large"
 				:loading="loading"
 				:disabled="loading"
-				@click="islogin ? handleLogin() : handleRegister()"
 			>
 				{{ islogin ? 'Login' : 'Register' }}
 			</el-button>
@@ -53,7 +54,8 @@
 					{{ islogin ? 'Register a new account' : 'Back to login' }}
 				</el-link>
 			</div>
-		</el-form>
+			</el-form>
+		</form>
 	</el-dialog>
 </template>
 <script setup>
@@ -199,6 +201,15 @@ const handleLogin = async () => {
 	} finally {
 		loading.value = false
 	}
+}
+
+const handleAuthSubmit = () => {
+	if (loading.value) return
+	if (islogin.value) {
+		handleLogin()
+		return
+	}
+	handleRegister()
 }
 
 const handleToggleMode = () => {

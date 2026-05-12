@@ -13,13 +13,12 @@
 			<el-page-header @back="goBack" content="Back" />
 			<el-divider />
 
-			<el-form
-				v-if="currentStep === STEP.LOGIN"
-				:model="loginForm"
-				label-width="90px"
-				class="section"
-				@submit.prevent
-			>
+			<form v-if="currentStep === STEP.LOGIN" @submit.prevent="handleLogin">
+				<el-form
+					:model="loginForm"
+					label-width="90px"
+					class="section"
+				>
 				<el-form-item label="Username">
 					<el-input
 						v-model.trim="loginForm.username"
@@ -35,11 +34,12 @@
 					/>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" :loading="isLoginLoading" @click="handleLogin">
+					<el-button type="primary" native-type="submit" :loading="isLoginLoading">
 						Sign In
 					</el-button>
 				</el-form-item>
-			</el-form>
+				</el-form>
+			</form>
 
 			<div v-else-if="currentStep === STEP.STATUS" class="section">
 				<appeal-status-panel
@@ -56,13 +56,12 @@
 				</div>
 			</div>
 
-			<el-form
-				v-else-if="currentStep === STEP.APPEAL"
-				:model="appealForm"
-				label-width="120px"
-				class="section"
-				@submit.prevent
-			>
+			<form v-else-if="currentStep === STEP.APPEAL" @submit.prevent="submitAppealForm">
+				<el-form
+					:model="appealForm"
+					label-width="120px"
+					class="section"
+				>
 				<el-form-item label="Appeal Description">
 					<el-input
 						v-model.trim="appealForm.shensu_content"
@@ -74,14 +73,15 @@
 				<el-form-item>
 					<el-button
 						type="primary"
+						native-type="submit"
 						:loading="isSubmitLoading"
-						@click="submitAppealForm"
 					>
 						Submit Appeal
 					</el-button>
 					<el-button @click="currentStep = STEP.STATUS">Cancel</el-button>
 				</el-form-item>
-			</el-form>
+				</el-form>
+			</form>
 
 			<el-result
 				v-else

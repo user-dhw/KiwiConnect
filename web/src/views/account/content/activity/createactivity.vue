@@ -8,7 +8,8 @@
 		<el-tabs type="border-card" class="admin-tabs">
 			<el-tab-pane label="Activity Editor">
 				<section class="admin-form-card">
-					<el-form :model="form" label-width="140px" class="admin-form">
+					<form @submit.prevent="submit">
+						<el-form :model="form" label-width="140px" class="admin-form">
 						<el-form-item label="Title">
 							<el-input v-model="form.activity_title" />
 						</el-form-item>
@@ -53,11 +54,12 @@
 						</el-form-item>
 						<el-form-item>
 							<div class="inline-actions">
-								<el-button type="primary" @click="submit">Save</el-button>
+								<el-button type="primary" native-type="submit">Save</el-button>
 								<el-button @click="router.push('/admin/createactivitylist')">Cancel</el-button>
 							</div>
 						</el-form-item>
-					</el-form>
+						</el-form>
+					</form>
 				</section>
 			</el-tab-pane>
 
@@ -126,7 +128,7 @@
 					>
 						<el-form :model="announcement" label-width="90px">
 							<el-form-item label="Title">
-								<el-input v-model="announcement.announcement_name" maxlength="80" show-word-limit />
+								<el-input v-model="announcement.announcement_name" maxlength="80" show-word-limit @keyup.enter="publishAnnouncement" />
 							</el-form-item>
 							<el-form-item label="Content">
 								<el-input

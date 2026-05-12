@@ -135,10 +135,10 @@
 									>
 										<el-form :model="intentForm" size="default">
 											<el-form-item label="Contact info">
-												<el-input autocomplete="off" v-model="intentForm.describe" />
+												<el-input autocomplete="off" v-model="intentForm.describe" @keyup.enter="submitJoin" />
 											</el-form-item>
 											<el-form-item label="Intended price">
-												<el-input autocomplete="off" v-model="intentForm.name" />
+												<el-input autocomplete="off" v-model="intentForm.name" @keyup.enter="submitJoin" />
 											</el-form-item>
 										</el-form>
 
