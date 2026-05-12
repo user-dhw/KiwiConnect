@@ -7,14 +7,14 @@
 		@close="handleClose"
 		:close-on-click-modal="false"
 	>
-		<form @submit.prevent="handleAuthSubmit">
-			<el-form class="auth-form" :model="formData">
+		<el-form class="auth-form" :model="formData">
 			<el-form-item>
 				<el-input
 					v-model="formData.username"
 					placeholder="Enter username"
 					:prefix-icon="User"
 					clearable
+					@keyup.enter="handleAuthSubmit"
 				/>
 			</el-form-item>
 
@@ -25,6 +25,7 @@
 					type="password"
 					:prefix-icon="Lock"
 					show-password
+					@keyup.enter="handleAuthSubmit"
 				/>
 			</el-form-item>
 
@@ -35,16 +36,17 @@
 					type="password"
 					:prefix-icon="Lock"
 					show-password
+					@keyup.enter="handleAuthSubmit"
 				/>
 			</el-form-item>
 
 			<el-button
 				class="auth-submit"
 				type="primary"
-				native-type="submit"
 				size="large"
 				:loading="loading"
 				:disabled="loading"
+				@click="handleAuthSubmit"
 			>
 				{{ islogin ? 'Login' : 'Register' }}
 			</el-button>
@@ -54,8 +56,7 @@
 					{{ islogin ? 'Register a new account' : 'Back to login' }}
 				</el-link>
 			</div>
-			</el-form>
-		</form>
+		</el-form>
 	</el-dialog>
 </template>
 <script setup>
