@@ -102,7 +102,10 @@ import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import { getUser, updateUser } from '@/api/account'
 import { IMAGE_UPLOAD_ACCEPT, validateImageFile } from '@/api/content'
-import { mapServerUserToStoreUserInfo } from '@/utils/currentUser'
+import {
+	mapServerUserToStoreUserInfo,
+	normalizeFileUrl,
+} from '@/utils/currentUser'
 import { isValidEmail, normalizeEmail } from '@/utils/validators'
 
 const store = useStore()
@@ -134,22 +137,6 @@ const studentLocked = computed(
 )
 
 const uploadAction = `${import.meta.env.VITE_API_URL || '/api'}/uplod`
-const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
-
-const normalizeFileUrl = value => {
-	if (!value || typeof value !== 'string') return ''
-	if (value.startsWith('http://127.0.0.1:3000')) {
-		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
-	}
-	if (value.startsWith('http://localhost:3000')) {
-		return value.replace('http://localhost:3000', apiBaseUrl)
-	}
-	if (/^https?:\/\//i.test(value)) return value
-	if (value.startsWith('/api/')) return value
-	if (value.startsWith('/uplodes/')) return `${apiBaseUrl}${value}`
-	return `${apiBaseUrl}/uplodes/${value.replace(/^\/+/, '')}`
-}
-
 const uploadHeaders = computed(() => {
 	const token =
 		store.state.user?.token || window.localStorage.getItem('luffy_jwt_token')

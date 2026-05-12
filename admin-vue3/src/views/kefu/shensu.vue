@@ -184,6 +184,7 @@ import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import axios from '../../utils/axios'
 import { formatDate } from '../../utils/dateFormat'
+import { toFormData } from '../../utils/form'
 
 const router = useRouter()
 
@@ -202,16 +203,6 @@ const pagelistquery = reactive({
 	state: '0',
 	id: '',
 })
-
-const toFormData = payload => {
-	const params = new URLSearchParams()
-	Object.entries(payload).forEach(([key, value]) => {
-		if (value !== undefined && value !== null) {
-			params.append(key, String(value))
-		}
-	})
-	return params
-}
 
 const changestate = async (row, state) => {
 	const data = {

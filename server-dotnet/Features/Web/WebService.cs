@@ -6,6 +6,12 @@ namespace InfoExchange.Api.Features.Web;
 
 public sealed class WebService
 {
+  private sealed class JoinRequester
+  {
+    public string? Nickname { get; init; }
+    public int Realstate { get; init; }
+  }
+
   private readonly IDbConnectionFactory _connectionFactory;
 
   public WebService(IDbConnectionFactory connectionFactory)
@@ -226,11 +232,11 @@ public sealed class WebService
     using var conn = _connectionFactory.CreateConnection();
 
     // Check if user is verified (realstate must be 3)
-    var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
+    var realstate = await conn.QueryFirstOrDefaultAsync<int?>(
         "select realstate from user where user_id=@Uid",
         new { Uid = uid });
 
-    if (user == null || user.realstate != 3)
+    if (realstate != 3)
     {
       return ApiResponse.Error(msg: "Only verified users can comment on posts");
     }
@@ -260,11 +266,11 @@ public sealed class WebService
     using var conn = _connectionFactory.CreateConnection();
 
     // Check if user is verified (realstate must be 3)
-    var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
+    var realstate = await conn.QueryFirstOrDefaultAsync<int?>(
         "select realstate from user where user_id=@Uid",
         new { Uid = uid });
 
-    if (user == null || user.realstate != 3)
+    if (realstate != 3)
     {
       return ApiResponse.Error(msg: "Only verified users can reply to comments");
     }
@@ -335,11 +341,11 @@ public sealed class WebService
     using var conn = _connectionFactory.CreateConnection();
 
     // Check if user is verified (realstate must be 3)
-    var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
+    var user = await conn.QueryFirstOrDefaultAsync<JoinRequester>(
         "select nickname, realstate from user where user_id=@Uid",
         new { Uid = uid });
 
-    if (user == null || user.realstate != 3)
+    if (user?.Realstate != 3)
     {
       return ApiResponse.Error(msg: "Only verified users can join activities");
     }
@@ -354,7 +360,9 @@ public sealed class WebService
     }
 
     var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - 8 * 60 * 60;
-    var joinerNickname = (string?)user.nickname ?? "A user";
+    var joinerNickname = string.IsNullOrWhiteSpace(user.Nickname)
+      ? "A user"
+      : user.Nickname;
     var normalizedRoute = NormalizeNoticeRoute(request.Type);
     var selfAction = normalizedRoute == "oldstuffcontent"
       ? "You have successfully submitted your purchase interest"

@@ -172,6 +172,7 @@ import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
 import Comment from '@/components/comment.vue'
 import { getOldStuffContent, setJoin } from '@/api/content'
+import { normalizeFileUrl } from '@/utils/currentUser'
 
 const props = defineProps({
 	id: {
@@ -220,22 +221,6 @@ const reportUser = username => {
 			url: currentUrl,
 		},
 	})
-}
-
-const apiBaseUrl = import.meta.env.VITE_API_URL || '/api'
-
-const normalizeFileUrl = value => {
-	if (!value || typeof value !== 'string') return ''
-	if (value.startsWith('http://127.0.0.1:3000')) {
-		return value.replace('http://127.0.0.1:3000', apiBaseUrl)
-	}
-	if (value.startsWith('http://localhost:3000')) {
-		return value.replace('http://localhost:3000', apiBaseUrl)
-	}
-	if (/^https?:\/\//i.test(value)) return value
-	if (value.startsWith('/api/')) return value
-	if (value.startsWith('/uplodes/')) return `${apiBaseUrl}${value}`
-	return `${apiBaseUrl}/uplodes/${value.replace(/^\/+/, '')}`
 }
 
 const loadOldStuffContent = async id => {

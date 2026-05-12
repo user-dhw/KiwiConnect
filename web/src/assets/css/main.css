@@ -404,30 +404,6 @@ li.comment > article .avatar {
 	font-weight: bold;
 }
 
-/* Page - Sidebar ----------------------------------------------------------------------------------------------------*/
-.page-content {
-	margin-bottom: 20px;
-}
-
-.page-sidebar #twitter_update_list > ul {
-	margin: 0 0 10px;
-}
-.page-sidebar #twitter_update_list > ul > li {
-	background: none;
-	padding: 0 0 10px;
-	margin-bottom: 10px;
-}
-.page-sidebar #twitter_update_list > ul > li span {
-	display: block;
-	font-size: 11px;
-}
-.page-sidebar .flickr-photos img {
-	background-color: #f2f2f2;
-}
-.page-sidebar .flickr-photos img:hover {
-	background-color: #cccccc;
-}
-
 #searchform input {
 	margin-bottom: 10px;
 }
@@ -465,70 +441,6 @@ li.comment > article .avatar {
 	float: left;
 	width: 35%;
 	margin-right: 5%;
-}
-
-/* Articles List ------------------------------------------------------------------------------------------------------*/
-.main-listing {
-	margin-bottom: 20px;
-}
-.main-listing article.hentry {
-	margin-bottom: 0;
-}
-
-.like-btn .like-it {
-	display: inline-block;
-	height: 20px;
-	line-height: 20px;
-	padding: 5px 13px;
-	padding-left: 25px;
-	cursor: pointer;
-	-webkit-border-radius: 3px;
-	-moz-border-radius: 3px;
-	border-radius: 3px;
-	color: #8cd24e;
-}
-.like-btn .like-it:hover {
-	background: #b6b6b6 url('../images/like-btn.png') no-repeat 10px 10px;
-	color: #fff;
-}
-.like-btn .like-it.already-voted {
-	cursor: default;
-}
-.like-btn .like-it.already-voted:hover {
-	color: #8cd24e;
-}
-
-.hentry.type-post .post-title {
-	padding-left: 35px;
-	background: url('../images/standard-large.png') no-repeat 0 3px;
-	font-size: 20px;
-	line-height: 30px;
-}
-.hentry.type-post h1.post-title {
-	font-size: 26px;
-	line-height: 36px;
-	background-position: 0 6px;
-}
-.hentry.type-post h1.post-title a {
-	color: #3b4348;
-}
-
-.single-faq .hentry h1.post-title {
-	font-size: 24px;
-	line-height: 34px;
-}
-
-.hentry.format-image .post-title {
-	background: url('../images/image-large.png') no-repeat 0 3px;
-}
-
-.hentry.format-video .post-title {
-	background: url('../images/video-large.png') no-repeat 0 3px;
-}
-
-.faq.hentry .post-title {
-	background: url('../images/question-large.png') no-repeat 0 5px;
-	padding-left: 30px;
 }
 
 .post-video {
@@ -650,60 +562,6 @@ h1.search-title span {
 	color: #395996;
 }
 
-/* FAQs --------------------------------------------------------------------------------------------------------------*/
-.faq-item {
-	padding: 12px 25px 10px 45px;
-	border: 1px solid #fff;
-	border-bottom: 1px solid #e8e8e8;
-	position: relative;
-}
-
-.faq-icon {
-	background-image: url('../images/faq-plus.png');
-	background-repeat: no-repeat;
-	background-position: 0 0;
-	position: absolute;
-	display: inline-block;
-	height: 17px;
-	width: 17px;
-	top: 15px;
-	left: 15px;
-	cursor: pointer;
-}
-
-.faq-item.active .faq-icon {
-	background-image: url('../images/faq-minus.png');
-}
-
-.faq-item.active {
-	background-color: #f5f5f5;
-	border: 1px solid #eaeaea;
-	margin-bottom: 5px;
-}
-.faq-item.active h3.faq-question {
-	color: #395996;
-}
-
-.faq-item h3.faq-question {
-	color: #666565;
-	font-size: 14px;
-	line-height: 22px;
-	font-family:
-		'HelveticaNeue', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-	font-weight: 600;
-	margin: 0;
-}
-.faq-item h3.faq-question a {
-	color: inherit;
-}
-.faq-item h3.faq-question a:hover {
-	color: #395996;
-}
-
-.faq-item .faq-answer {
-	margin-top: 10px;
-}
-
 /* Contact -----------------------------------------------------------------------------------------------------------*/
 #contact-form label {
 	font-weight: 700;
@@ -736,35 +594,6 @@ input[type='text'].error,
 .tagcloud a {
 	margin: 3px;
 	font-size: 11px;
-}
-
-/* Footer ------------------------------------------------------------------------------------------------------------*/
-.flickr-photos {
-	margin-left: -10px;
-}
-.flickr-photos img {
-	margin: 0 0 10px 10px;
-	padding: 4px;
-	background-color: #8f98a0;
-}
-.flickr-photos img:hover {
-	background-color: #b8bec3;
-}
-
-.social-nav li.rss a {
-	background: url(../images/rss.png) no-repeat 0 0;
-}
-.social-nav li.skype a {
-	background: url(../images/skype.png) no-repeat 0 0;
-}
-.social-nav li.stumble a {
-	background: url(../images/stumble.png) no-repeat 0 0;
-}
-.social-nav li.twitter a {
-	background: url(../images/twitter.png) no-repeat 0 0;
-}
-.social-nav li > a:hover {
-	background-position: 0 -40px;
 }
 
 /* Accordion Styles -----------------------------------------------------------------------------------*/
@@ -936,28 +765,6 @@ p.notice {
 .touxiang {
 	border-radius: 50%;
 }
-/* Scroll Top ------------------------------------------------------------------------------------------------------- */
-a#scroll-top {
-	display: none;
-	position: fixed;
-	right: 20px;
-	bottom: 20px;
-	height: 42px;
-	width: 42px;
-	line-height: 42px;
-	background: #131517 url('../images/scroll-top.png') center center no-repeat;
-	opacity: 0.8;
-	-moz-opacity: 0.8;
-	-webkit-opacity: 0.8;
-	border-radius: 4px;
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-}
-
-a#scroll-top:hover {
-	background-color: #353c41;
-}
-
 /*------------------------------------------------------------------------------------------------------------------- */
 /* CUSTOM RESPONSIVE CSS -------------------------------------------------------------------------------------------- */
 /*------------------------------------------------------------------------------------------------------------------- */
@@ -1045,14 +852,6 @@ a#scroll-top:hover {
 		left: 150px;
 	}
 
-	/* Flickr */
-	.flickr-photos {
-		margin-left: -10px;
-	}
-	.flickr-photos img {
-		width: 67px;
-		height: 67px;
-	}
 }
 /*------------------------------------------------------------------------------------------------------------------- */
 /* Responsive: Landscape phone to desktop/tablet -------------------------------------------------------------------- */
@@ -1098,17 +897,6 @@ a#scroll-top:hover {
 	.commentlist li.comment .children {
 		margin-left: 0;
 	}
-
-	.social-nav > li {
-		float: left;
-		margin: 0;
-		margin-right: 4px;
-	}
-
-	.hentry .post-meta .like-count {
-		float: none;
-	}
-
 	.page-404 h1.title-404 {
 		font-size: 100px;
 		line-height: 105px;

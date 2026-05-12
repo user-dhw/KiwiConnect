@@ -133,6 +133,7 @@
   import { useUserStore } from '../../store/modules/user'
   import axios from '../../utils/axios'
   import { formatDate } from '../../utils/dateFormat'
+  import { toFormData } from '../../utils/form'
 
   const userStore = useUserStore()
 
@@ -141,16 +142,6 @@
   const tableData = ref({})
 
   const uinfo = computed(() => userStore.uinfo || {})
-
-  const toFormData = payload => {
-    const params = new URLSearchParams()
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        params.append(key, String(value))
-      }
-    })
-    return params
-  }
 
   const changeadminuser = async () => {
     try {

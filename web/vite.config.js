@@ -5,6 +5,25 @@ import AutoImport from 'unplugin-auto-import/vite'
 import Components from 'unplugin-vue-components/vite'
 import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
+const getElementPlusChunkName = id => {
+	if (id.includes('@element-plus/icons-vue')) {
+		return 'vendor-element-plus-icons'
+	}
+
+	if (
+		id.includes('async-validator') ||
+		id.includes('@floating-ui') ||
+		id.includes('lodash-unified') ||
+		id.includes('normalize-wheel-es') ||
+		id.includes('@ctrl/tinycolor') ||
+		id.includes('@vueuse')
+	) {
+		return 'vendor-element-plus-utils'
+	}
+
+	return 'vendor-element-plus'
+}
+
 export default defineConfig(({ mode }) => ({
 	plugins: [
 		vue(),
@@ -42,8 +61,19 @@ export default defineConfig(({ mode }) => ({
 			output: {
 				manualChunks(id) {
 					if (id.includes('node_modules')) {
-						if (id.includes('element-plus'))
-							return 'vendor-element-plus'
+						if (
+							id.includes('element-plus') ||
+							id.includes('@element-plus/icons-vue') ||
+							id.includes('async-validator') ||
+							id.includes('@floating-ui') ||
+							id.includes('lodash-unified') ||
+							id.includes('normalize-wheel-es') ||
+							id.includes('@ctrl/tinycolor') ||
+							id.includes('@vueuse') ||
+							id.includes('/dayjs/')
+						) {
+							return getElementPlusChunkName(id)
+						}
 						if (
 							id.includes('echarts') ||
 							id.includes('vue-echarts')

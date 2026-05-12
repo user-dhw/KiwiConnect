@@ -299,6 +299,7 @@
 import { onMounted, reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
 import axios from '../../utils/axios'
+import { toFormData } from '../../utils/form'
 
 const changepassword = ref({})
 const dialogpw = ref(false)
@@ -321,16 +322,6 @@ const pagelistquery = reactive({
 	state: '',
 })
 const tableData = ref([])
-
-const toFormData = payload => {
-	const params = new URLSearchParams()
-	Object.entries(payload).forEach(([key, value]) => {
-		if (value !== undefined && value !== null) {
-			params.append(key, String(value))
-		}
-	})
-	return params
-}
 
 const resetUserForm = () => {
 	user.username = ''

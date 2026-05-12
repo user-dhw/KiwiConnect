@@ -388,6 +388,7 @@ import { ElMessage } from 'element-plus'
 import { useUserStore } from '../../store/modules/user'
 import axios from '../../utils/axios'
 import { formatDate } from '../../utils/dateFormat'
+import { toFormData } from '../../utils/form'
 
 const userStore = useUserStore()
 
@@ -403,16 +404,6 @@ const pagelistquery = reactive({
 
 const uinfo = computed(() => userStore.uinfo || {})
 const isSuperAdmin = computed(() => uinfo.value?.username === 'admin')
-
-const toFormData = payload => {
-	const params = new URLSearchParams()
-	Object.entries(payload).forEach(([key, value]) => {
-		if (value !== undefined && value !== null) {
-			params.append(key, String(value))
-		}
-	})
-	return params
-}
 
 const getreply = async () => {
 	if (!tableData.value.length) return

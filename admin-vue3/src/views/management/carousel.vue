@@ -53,6 +53,7 @@
   import { ElMessage } from 'element-plus'
   import { Check, Delete, Plus } from '@element-plus/icons-vue'
   import axios from '../../utils/axios'
+  import { toFormData } from '../../utils/form'
 
   const carouselList = ref([])
   const MAX_FILE_SIZE = 5 * 1024 * 1024
@@ -84,16 +85,6 @@
     }
 
     return true
-  }
-
-  const toFormData = payload => {
-    const params = new URLSearchParams()
-    Object.entries(payload).forEach(([key, value]) => {
-      if (value !== undefined && value !== null) {
-        params.append(key, String(value))
-      }
-    })
-    return params
   }
 
   const isComplete = item => item.carousel_img !== '' && item.carousel_title !== ''

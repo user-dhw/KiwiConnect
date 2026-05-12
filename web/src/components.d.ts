@@ -59,7 +59,6 @@ declare module 'vue' {
     LoginRegisterModal: typeof import('./components/auth/LoginRegisterModal.vue')['default']
     News: typeof import('./components/news.vue')['default']
     Oldstuff: typeof import('./components/oldstuff.vue')['default']
-    Oldstuffhot: typeof import('./components/oldstuffhot.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SupportSubmitSuccess: typeof import('./components/support/SupportSubmitSuccess.vue')['default']

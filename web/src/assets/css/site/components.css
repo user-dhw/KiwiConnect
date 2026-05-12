@@ -92,8 +92,7 @@
 }
 
 .item-card,
-.oldstuff-card .thumbnail,
-.oldstuffhot-card .thumbnail {
+.oldstuff-card .thumbnail {
 	height: 100%;
 	border-radius: var(--kc-radius-md);
 	border: 1px solid var(--kc-border);
@@ -108,7 +107,6 @@
 
 .item-card:hover,
 .oldstuff-card .thumbnail:hover,
-.oldstuffhot-card .thumbnail:hover,
 .content-card:hover,
 .section-card:hover,
 .support-card:hover {
