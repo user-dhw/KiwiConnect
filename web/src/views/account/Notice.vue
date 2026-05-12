@@ -96,12 +96,28 @@ const total = ref(0)
 const unread = computed(() => store.state.user.unread || 0)
 
 const normalizeContentRoute = routeKey => {
-	const key = String(routeKey || '').toLowerCase()
+	const key = String(routeKey || '').split('?')[0].toLowerCase()
 	if (key.includes('help')) return 'helpcontent'
 	if (key.includes('oldstuff')) return 'oldstuffcontent'
 	if (key.includes('activity')) return 'activitycontent'
 	if (key.includes('article') || key.includes('news')) return 'articlecontent'
 	return ''
+}
+
+const parseNoticeRoute = routeKey => {
+	const raw = String(routeKey || '').trim()
+	if (!raw) return { nameOrPath: '', query: {} }
+
+	const [nameOrPath, queryString] = raw.split('?')
+	const query = {}
+	if (queryString) {
+		const params = new URLSearchParams(queryString)
+		params.forEach((value, key) => {
+			query[key] = value
+		})
+	}
+
+	return { nameOrPath, query }
 }
 
 const formatPlatform = routeKey => {
@@ -119,17 +135,19 @@ const getNoticeHref = notice => {
 	const routeKey = String(notice?.router || '').trim()
 	const contentId = String(notice?.content_id || '').trim()
 	if (!contentId) return '#'
+	const { nameOrPath, query } = parseNoticeRoute(routeKey)
 
-	if (routeKey && router.hasRoute(routeKey)) {
+	if (nameOrPath && router.hasRoute(nameOrPath)) {
 		return router.resolve({
-			name: routeKey,
+			name: nameOrPath,
 			params: { id: contentId },
+			query,
 		}).href
 	}
 
 	const normalized = normalizeContentRoute(routeKey)
 	if (!normalized) return '#'
-	return router.resolve({ path: `/${normalized}/${contentId}` }).href
+	return router.resolve({ path: `/${normalized}/${contentId}`, query }).href
 }
 
 const loadNotices = async () => {

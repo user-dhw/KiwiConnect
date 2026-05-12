@@ -270,8 +270,9 @@ public sealed class WebService
     }
 
     var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - 8 * 60 * 60;
+    var replyNoticeRouter = BuildNoticeRouter(request.Router, request.Comment_Id, openReplies: true);
 
-    await SetNoticeAsync(conn, uid, request.To_Userid, nickname, request.Content_Id, request.Contentname, "replied to you", request.Router);
+    await SetNoticeAsync(conn, uid, request.To_Userid, nickname, request.Content_Id, request.Contentname, "replied to your comment", replyNoticeRouter);
     await conn.ExecuteAsync(
         @"insert into reply
               (reply_id, user_id, comment_id, reply_content, tousernickname, touserid, createtime, reply_state, reply_istop, ispublic)
@@ -335,7 +336,7 @@ public sealed class WebService
 
     // Check if user is verified (realstate must be 3)
     var user = await conn.QueryFirstOrDefaultAsync<dynamic>(
-        "select realstate from user where user_id=@Uid",
+        "select nickname, realstate from user where user_id=@Uid",
         new { Uid = uid });
 
     if (user == null || user.realstate != 3)
@@ -353,9 +354,17 @@ public sealed class WebService
     }
 
     var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - 8 * 60 * 60;
+    var joinerNickname = (string?)user.nickname ?? "A user";
+    var normalizedRoute = NormalizeNoticeRoute(request.Type);
+    var selfAction = normalizedRoute == "oldstuffcontent"
+      ? "You have successfully submitted your purchase interest"
+      : "You have successfully joined this activity";
+    var ownerAction = normalizedRoute == "oldstuffcontent"
+      ? "is interested in your listing"
+      : "joined your activity";
 
-    await SetNoticeAsync(conn, string.Empty, uid, "System notification", request.Content_Id, request.Contentname, "You have successfully joined", request.Type);
-    await SetNoticeAsync(conn, string.Empty, request.To_Userid, "System notification", request.Content_Id, request.Contentname, "A user has joined your published content", request.Type);
+    await SetNoticeAsync(conn, string.Empty, uid, "System notification", request.Content_Id, request.Contentname, selfAction, normalizedRoute);
+    await SetNoticeAsync(conn, uid, request.To_Userid, joinerNickname, request.Content_Id, request.Contentname, ownerAction, normalizedRoute);
 
     await conn.ExecuteAsync(
       @"insert into joins (join_id, user_id, type, jions_createtime, name, `describe`, content_id)
@@ -500,6 +509,48 @@ public sealed class WebService
           Router = router,
           CreateTime = now
         });
+  }
+
+  private static string NormalizeNoticeRoute(string? route)
+  {
+    var normalized = string.IsNullOrWhiteSpace(route) ? string.Empty : route.Trim();
+    if (normalized.Equals("HelpContent", StringComparison.OrdinalIgnoreCase) || normalized.Equals("HelpContentLegacy", StringComparison.OrdinalIgnoreCase))
+    {
+      return "helpcontent";
+    }
+    if (normalized.Equals("ActivityContent", StringComparison.OrdinalIgnoreCase) || normalized.Equals("ActivityContentLegacy", StringComparison.OrdinalIgnoreCase))
+    {
+      return "activitycontent";
+    }
+    if (normalized.Equals("OldStuffContent", StringComparison.OrdinalIgnoreCase) || normalized.Equals("OldStuffContentLegacy", StringComparison.OrdinalIgnoreCase))
+    {
+      return "oldstuffcontent";
+    }
+    if (normalized.Equals("ArticleContent", StringComparison.OrdinalIgnoreCase)
+      || normalized.Equals("ArticleContentLegacy", StringComparison.OrdinalIgnoreCase)
+      || normalized.Equals("NewsContentLegacy", StringComparison.OrdinalIgnoreCase))
+    {
+      return "articlecontent";
+    }
+
+    return normalized.ToLowerInvariant();
+  }
+
+  private static string BuildNoticeRouter(string? route, string? commentId, bool openReplies)
+  {
+    var normalized = NormalizeNoticeRoute(route);
+    if (string.IsNullOrWhiteSpace(commentId))
+    {
+      return normalized;
+    }
+
+    var query = openReplies ? "openReplies=1" : string.Empty;
+    if (!string.IsNullOrWhiteSpace(query))
+    {
+      return $"{normalized}?commentId={Uri.EscapeDataString(commentId)}&{query}";
+    }
+
+    return $"{normalized}?commentId={Uri.EscapeDataString(commentId)}";
   }
 
   public async Task<ApiResponse> CarouselListAsync()

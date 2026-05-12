@@ -256,7 +256,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useStore } from 'vuex'
 import { ElMessage } from 'element-plus'
@@ -443,6 +443,26 @@ const toggleReplyList = async (commentId, index) => {
 	await loadReplies(commentId)
 }
 
+const openRepliesFromRoute = async () => {
+	const targetCommentId = String(route.query?.commentId || '').trim()
+	const shouldOpenReplies = String(route.query?.openReplies || '') === '1'
+
+	if (!targetCommentId || !shouldOpenReplies || !commentList.value.length) {
+		return
+	}
+
+	const index = commentList.value.findIndex(
+		item => String(item?.comment_id || '') === targetCommentId,
+	)
+
+	if (index < 0) {
+		return
+	}
+
+	replyListVisibleIndex.value = index
+	await loadReplies(targetCommentId)
+}
+
 const handleReplyAction = async (index, nickname, userId, commentId) => {
 	await openReplyEditor(index, nickname, userId, commentId)
 }
@@ -468,6 +488,7 @@ const loadComments = async () => {
 					}))
 				: []
 			store.dispatch('setcommentnum', Number(res.count || 0))
+			await openRepliesFromRoute()
 			return
 		}
 		commentList.value = []
@@ -545,6 +566,13 @@ onMounted(async () => {
 	}
 	loadComments()
 })
+
+watch(
+	() => [route.query?.commentId, route.query?.openReplies],
+	() => {
+		openRepliesFromRoute()
+	},
+)
 </script>
 
 <style scoped>
