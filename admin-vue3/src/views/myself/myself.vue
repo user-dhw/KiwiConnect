@@ -291,9 +291,7 @@
   }
 
   .profile-body {
-    margin-top: 40px;
-    padding: 24px;
-    background: #f8fbff;
+    padding: 10px;
   }
 
   .profile-hero {

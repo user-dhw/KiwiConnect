@@ -374,9 +374,7 @@
     width: 100%;
   }
   .main {
-    margin-top: 40px;
-    padding: 24px;
-    background-color: #f8fbff;
+    padding: 10px;
   }
 
   .workspace-hero,
