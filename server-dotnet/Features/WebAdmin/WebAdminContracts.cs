@@ -185,6 +185,18 @@ public sealed class SetAnnouncementRequest
   public string Contentname { get; set; } = string.Empty;
 }
 
+public sealed class UpdateAnnouncementRequest
+{
+  public string Announcement_Id { get; set; } = string.Empty;
+  public string Announcement_Name { get; set; } = string.Empty;
+  public string Announcement_Content { get; set; } = string.Empty;
+}
+
+public sealed class AnnouncementIdRequest
+{
+  public string Announcement_Id { get; set; } = string.Empty;
+}
+
 public sealed class CreateFankuiRequest
 {
   public string Fankui_Content { get; set; } = string.Empty;

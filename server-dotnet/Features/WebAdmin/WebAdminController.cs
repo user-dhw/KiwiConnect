@@ -288,6 +288,24 @@ public sealed class WebAdminController : ControllerBase
     return this.FromApiResponse(result);
   }
 
+  [HttpPost("/webadmin/updateannouncement")]
+  [Authorize]
+  public async Task<IActionResult> UpdateAnnouncement([FromForm] UpdateAnnouncementRequest request)
+  {
+    var uid = User.FindFirstValue("uid") ?? string.Empty;
+    var result = await _service.UpdateAnnouncementAsync(uid, request);
+    return this.FromApiResponse(result);
+  }
+
+  [HttpPost("/webadmin/deleteannouncement")]
+  [Authorize]
+  public async Task<IActionResult> DeleteAnnouncement([FromForm] AnnouncementIdRequest request)
+  {
+    var uid = User.FindFirstValue("uid") ?? string.Empty;
+    var result = await _service.DeleteAnnouncementAsync(uid, request.Announcement_Id);
+    return this.FromApiResponse(result);
+  }
+
   [HttpPost("/webadmin/createfankui")]
   [Authorize]
   public async Task<IActionResult> CreateFankui([FromForm] CreateFankuiRequest request)

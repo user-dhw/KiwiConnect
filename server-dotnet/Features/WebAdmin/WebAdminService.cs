@@ -637,6 +637,62 @@ public sealed class WebAdminService
     return ApiResponse.Success();
   }
 
+  public async Task<ApiResponse> UpdateAnnouncementAsync(string uid, UpdateAnnouncementRequest request)
+  {
+    using var conn = _connectionFactory.CreateConnection();
+
+    if (string.IsNullOrWhiteSpace(request.Announcement_Id))
+    {
+      return ApiResponse.Error("MISSING_ANNOUNCEMENT_ID", "Announcement id is required");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Announcement_Name) || string.IsNullOrWhiteSpace(request.Announcement_Content))
+    {
+      return ApiResponse.Error("MISSING_ANNOUNCEMENT", "Announcement title and content are required");
+    }
+
+    var validation = await ValidateActivityAnnouncementPermissionAsync(conn, uid, request.Announcement_Id);
+    if (validation.Error is not null)
+    {
+      return validation.Error;
+    }
+
+    await conn.ExecuteAsync(
+      @"update announcement
+        set announcement_name=@AnnouncementName, announcement_content=@AnnouncementContent
+        where announcement_id=@AnnouncementId",
+      new
+      {
+        AnnouncementName = request.Announcement_Name,
+        AnnouncementContent = request.Announcement_Content,
+        AnnouncementId = request.Announcement_Id
+      });
+
+    return ApiResponse.Success();
+  }
+
+  public async Task<ApiResponse> DeleteAnnouncementAsync(string uid, string announcementId)
+  {
+    using var conn = _connectionFactory.CreateConnection();
+
+    if (string.IsNullOrWhiteSpace(announcementId))
+    {
+      return ApiResponse.Error("MISSING_ANNOUNCEMENT_ID", "Announcement id is required");
+    }
+
+    var validation = await ValidateActivityAnnouncementPermissionAsync(conn, uid, announcementId);
+    if (validation.Error is not null)
+    {
+      return validation.Error;
+    }
+
+    await conn.ExecuteAsync(
+      "delete from announcement where announcement_id=@AnnouncementId",
+      new { AnnouncementId = announcementId });
+
+    return ApiResponse.Success();
+  }
+
   public async Task<ApiResponse> CreateFankuiAsync(CreateFankuiRequest request)
   {
     using var conn = _connectionFactory.CreateConnection();
@@ -730,6 +786,61 @@ public sealed class WebAdminService
         Router = router,
         CreateTime = now
       });
+  }
+
+  private static async Task<(ApiResponse? Error, UserEntity? User, dynamic? Activity)> ValidateActivityAnnouncementPermissionAsync(
+    System.Data.IDbConnection conn,
+    string uid,
+    string announcementId)
+  {
+    var user = await conn.QueryFirstOrDefaultAsync<UserEntity>(
+      "select * from user where user_id=@Uid",
+      new { Uid = uid });
+
+    if (user is null)
+    {
+      return (ApiResponse.Unauthorized(), null, null);
+    }
+
+    if (user.Realstate != 3)
+    {
+      return (ApiResponse.Forbidden("Only verified users can manage activity announcements"), user, null);
+    }
+
+    var announcement = await conn.QueryFirstOrDefaultAsync(
+      "select announcement_id, content_id, announcement_type from announcement where announcement_id=@AnnouncementId",
+      new { AnnouncementId = announcementId });
+
+    if (announcement is null)
+    {
+      return (ApiResponse.NotFound("Announcement not found"), user, null);
+    }
+
+    if (!string.Equals((string?)announcement.announcement_type, "activity", StringComparison.OrdinalIgnoreCase))
+    {
+      return (ApiResponse.Forbidden("Only activity announcements can be managed here"), user, null);
+    }
+
+    var activity = await conn.QueryFirstOrDefaultAsync(
+      "select activity_id, user_id, ispublic, activity_title from activity where activity_id=@ActivityId",
+      new { ActivityId = (string?)announcement.content_id ?? string.Empty });
+
+    if (activity is null)
+    {
+      return (ApiResponse.NotFound("Activity not found"), user, null);
+    }
+
+    if (!string.Equals((string?)activity.user_id, uid, StringComparison.Ordinal))
+    {
+      return (ApiResponse.Forbidden("You can only manage announcements for your own activities"), user, activity);
+    }
+
+    if (Convert.ToInt32(activity.ispublic) != 1)
+    {
+      return (ApiResponse.Forbidden("Only approved activities can manage announcements"), user, activity);
+    }
+
+    return (null, user, activity);
   }
 
   private async Task<ApiResponse> GetOwnPagedListAsync(string uid, PagingRequest request, string tableName)

@@ -346,3 +346,19 @@ export function deleteJoin(id) {
 export function setAnnouncement(data) {
 	return request.post('/webadmin/setannouncement', toFormData(data), formConfig)
 }
+
+export function updateAnnouncement(data) {
+	return request.post(
+		'/webadmin/updateannouncement',
+		toFormData(data),
+		formConfig,
+	)
+}
+
+export function deleteAnnouncement(announcementId) {
+	return request.post(
+		'/webadmin/deleteannouncement',
+		toFormData({ announcement_id: announcementId }),
+		formConfig,
+	)
+}
