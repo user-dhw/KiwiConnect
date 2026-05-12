@@ -72,15 +72,17 @@
 							</div>
 
 							<div
-								v-if="helpLead || helpTags.length || content.help_lable"
+								v-if="content.help_content || helpTags.length || content.help_lable"
 								class="detail-summary-card"
 							>
 								<p v-if="content.help_lable" class="detail-summary-eyebrow">
 									{{ content.help_lable }}
 								</p>
-								<p v-if="helpLead" class="detail-summary-text">
-									{{ helpLead }}
-								</p>
+								<div
+									v-if="content.help_content"
+									class="detail-summary-text detail-summary-text--rich"
+									v-html="content.help_content"
+								></div>
 								<div v-if="helpTags.length" class="detail-summary-tags">
 									<span
 										v-for="(tag, id) in helpTags"
@@ -92,18 +94,6 @@
 								</div>
 							</div>
 
-							<blockquote v-html="content.help_content"></blockquote>
-
-							<div class="tag-list">
-								<span
-									v-for="(tag, id) in helpTags"
-									:key="`${tag}-${id}`"
-									class="tag-chip"
-									@click="navigateByTag(tag)"
-								>
-									{{ tag }}
-								</span>
-							</div>
 						</article>
 
 						<Comment />
@@ -148,12 +138,6 @@ const helpTags = computed(() => {
 		.split(',')
 		.map(item => item.trim())
 		.filter(Boolean)
-})
-const helpLead = computed(() => {
-	const raw = String(content.value?.help_content || '')
-	const plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
-	if (!plain) return ''
-	return plain.length > 180 ? `${plain.slice(0, 180)}...` : plain
 })
 
 const formatDateTime = value => {
@@ -309,6 +293,20 @@ watch(
 	font-size: 1.02rem;
 	line-height: 1.8;
 	color: #56637d;
+}
+
+.detail-summary-text--rich :deep(p) {
+	margin: 0 0 12px;
+}
+
+.detail-summary-text--rich :deep(p:last-child) {
+	margin-bottom: 0;
+}
+
+.detail-summary-text--rich :deep(img) {
+	max-width: 100%;
+	height: auto;
+	border-radius: 14px;
 }
 
 .detail-summary-tags {
