@@ -43,6 +43,13 @@
 							</el-table-column>
 							<el-table-column prop="oldstuff_name" label="Item" min-width="220" />
 							<el-table-column prop="oldstuff_lable" label="Category" width="100" />
+							<el-table-column label="Status" width="140">
+								<template #default="scope">
+									<span class="admin-status" :class="statusClass(scope.row.ispublic)">
+										{{ mapStatus(scope.row.ispublic) }}
+									</span>
+								</template>
+							</el-table-column>
 							<el-table-column prop="oldstuff_price" label="Price" width="100" />
 							<el-table-column label="Actions" width="170" fixed="right">
 								<template #default="scope">
@@ -138,6 +145,20 @@ const query = reactive({
 })
 
 const formatDate = value => moment(value).format('YYYY-MM-DD HH:mm')
+
+const mapStatus = state => {
+	if (String(state) === '1') return 'Approved'
+	if (String(state) === '0') return 'Pending Review'
+	if (String(state) === '-1') return 'Rejected'
+	return 'Unknown'
+}
+
+const statusClass = state => {
+	if (String(state) === '1') return 'is-approved'
+	if (String(state) === '0') return 'is-pending'
+	if (String(state) === '-1') return 'is-rejected'
+	return 'is-info'
+}
 
 const getOldStuffDetailHref = oldstuffId => {
 	if (!oldstuffId) return '#'
