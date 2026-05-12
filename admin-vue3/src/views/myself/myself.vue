@@ -12,13 +12,17 @@
         <section class="profile-hero">
           <div>
             <p class="profile-eyebrow">Admin Profile</p>
-            <h1 class="profile-title">{{ tableData.nickname || tableData.username || 'Administrator' }}</h1>
+            <h1 class="profile-title">{{ tableData.nickname || tableData.username || 'admin' }}</h1>
             <p class="profile-copy">
-              Review account details, update your display name, and manage access credentials from one place.
+              Review account details, update your display name, and manage access credentials from
+              one place.
             </p>
           </div>
           <div class="profile-badges">
-            <span class="status-badge" :class="String(tableData.user_state) === '1' ? 'is-enabled' : 'is-disabled'">
+            <span
+              class="status-badge"
+              :class="String(tableData.user_state) === '1' ? 'is-enabled' : 'is-disabled'"
+            >
               {{ String(tableData.user_state) === '1' ? 'Enabled' : 'Disabled' }}
             </span>
             <span class="role-badge">
@@ -103,16 +107,36 @@
             </div>
 
             <div class="permission-list">
-              <span class="permission-chip" :class="{ 'is-active': String(tableData.issh) === '1' || tableData.username === 'admin' }">
+              <span
+                class="permission-chip"
+                :class="{
+                  'is-active': String(tableData.issh) === '1' || tableData.username === 'admin',
+                }"
+              >
                 Review Center
               </span>
-              <span class="permission-chip" :class="{ 'is-active': String(tableData.isyh) === '1' || tableData.username === 'admin' }">
+              <span
+                class="permission-chip"
+                :class="{
+                  'is-active': String(tableData.isyh) === '1' || tableData.username === 'admin',
+                }"
+              >
                 User Management
               </span>
-              <span class="permission-chip" :class="{ 'is-active': String(tableData.isgl) === '1' || tableData.username === 'admin' }">
+              <span
+                class="permission-chip"
+                :class="{
+                  'is-active': String(tableData.isgl) === '1' || tableData.username === 'admin',
+                }"
+              >
                 Website Management
               </span>
-              <span class="permission-chip" :class="{ 'is-active': String(tableData.isfk) === '1' || tableData.username === 'admin' }">
+              <span
+                class="permission-chip"
+                :class="{
+                  'is-active': String(tableData.isfk) === '1' || tableData.username === 'admin',
+                }"
+              >
                 Feedback Center
               </span>
             </div>
@@ -122,7 +146,8 @@
                 Super admin accounts automatically have full access across all modules.
               </template>
               <template v-else>
-                Permissions are assigned based on your admin role and can be updated by a super admin.
+                Permissions are assigned based on your admin role and can be updated by a super
+                admin.
               </template>
             </div>
           </article>
@@ -137,29 +162,51 @@
           </div>
 
           <div class="responsibility-list">
-            <div v-if="String(uinfo?.jurisdiction?.issh) === '1' || uinfo?.username === 'admin'" class="responsibility-item">
+            <div
+              v-if="String(uinfo?.jurisdiction?.issh) === '1' || uinfo?.username === 'admin'"
+              class="responsibility-item"
+            >
               <strong>Review Center</strong>
-              <span>Review site content, moderate community submissions, and monitor comment activity.</span>
+              <span>
+                Review site content, moderate community submissions, and monitor comment activity.
+              </span>
             </div>
-            <div v-if="String(uinfo?.jurisdiction?.isyh) === '1' || uinfo?.username === 'admin'" class="responsibility-item">
+            <div
+              v-if="String(uinfo?.jurisdiction?.isyh) === '1' || uinfo?.username === 'admin'"
+              class="responsibility-item"
+            >
               <strong>User Management</strong>
               <span>Manage user verification, access state, and account integrity.</span>
             </div>
-            <div v-if="String(uinfo?.jurisdiction?.isgl) === '1' || uinfo?.username === 'admin'" class="responsibility-item">
+            <div
+              v-if="String(uinfo?.jurisdiction?.isgl) === '1' || uinfo?.username === 'admin'"
+              class="responsibility-item"
+            >
               <strong>Website Management</strong>
               <span>Maintain homepage carousel, labels, and core platform configuration.</span>
             </div>
-            <div v-if="String(uinfo?.jurisdiction?.isfk) === '1' || uinfo?.username === 'admin'" class="responsibility-item">
+            <div
+              v-if="String(uinfo?.jurisdiction?.isfk) === '1' || uinfo?.username === 'admin'"
+              class="responsibility-item"
+            >
               <strong>Feedback Center</strong>
               <span>Handle feedback, appeals, and reports raised by platform users.</span>
             </div>
             <div v-if="uinfo?.username === 'admin'" class="responsibility-item">
               <strong>Super Admin Oversight</strong>
-              <span>Manage admin accounts and intervene in platform-wide moderation when required.</span>
+              <span>
+                Manage admin accounts and intervene in platform-wide moderation when required.
+              </span>
             </div>
-            <div v-if="String(uinfo?.user_state) === '0'" class="responsibility-item responsibility-item--warning">
+            <div
+              v-if="String(uinfo?.user_state) === '0'"
+              class="responsibility-item responsibility-item--warning"
+            >
               <strong>Account status alert</strong>
-              <span>Your account is currently disabled and may need review before normal operation resumes.</span>
+              <span>
+                Your account is currently disabled and may need review before normal operation
+                resumes.
+              </span>
             </div>
           </div>
         </section>
@@ -169,309 +216,309 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { ElMessage } from 'element-plus'
-import { useUserStore } from '../../store/modules/user'
-import axios from '../../utils/axios'
-import { formatDate } from '../../utils/dateFormat'
-import { toFormData } from '../../utils/form'
+  import { computed, onMounted, ref } from 'vue'
+  import { ElMessage } from 'element-plus'
+  import { useUserStore } from '../../store/modules/user'
+  import axios from '../../utils/axios'
+  import { formatDate } from '../../utils/dateFormat'
+  import { toFormData } from '../../utils/form'
 
-const userStore = useUserStore()
+  const userStore = useUserStore()
 
-const showNameInput = ref(false)
-const showPasswordInput = ref(false)
-const tableData = ref({})
+  const showNameInput = ref(false)
+  const showPasswordInput = ref(false)
+  const tableData = ref({})
 
-const uinfo = computed(() => userStore.uinfo || {})
+  const uinfo = computed(() => userStore.uinfo || {})
 
-const cancelNicknameEdit = () => {
-  showNameInput.value = false
-  getadmin()
-}
-
-const cancelPasswordEdit = () => {
-  showPasswordInput.value = false
-  tableData.value.newpassword = ''
-}
-
-const changeadminuser = async () => {
-  try {
-    const res = await axios.post('/admin/changeadminuser', toFormData(tableData.value))
-    if (res.data?.state?.type === 'SUCCESS') {
-      ElMessage.success('Operation successful')
-      await getadmin()
-      showNameInput.value = false
-      showPasswordInput.value = false
-      return
-    }
-    ElMessage.error(res.data?.state?.msg || 'Operation failed')
-  } catch {
-    ElMessage.error('Operation failed')
+  const cancelNicknameEdit = () => {
+    showNameInput.value = false
+    getadmin()
   }
-}
 
-const getadmin = async () => {
-  try {
-    const res = await axios.post('/admin/getadmin')
-    if (res.data?.state?.type === 'SUCCESS') {
-      tableData.value = { ...(res.data.data || {}), newpassword: '' }
-      return
-    }
-    ElMessage.error(res.data?.state?.msg || 'Failed to load profile')
-  } catch {
-    ElMessage.error('Failed to load profile')
+  const cancelPasswordEdit = () => {
+    showPasswordInput.value = false
+    tableData.value.newpassword = ''
   }
-}
 
-onMounted(() => {
-  getadmin()
-})
+  const changeadminuser = async () => {
+    try {
+      const res = await axios.post('/admin/changeadminuser', toFormData(tableData.value))
+      if (res.data?.state?.type === 'SUCCESS') {
+        ElMessage.success('Operation successful')
+        await getadmin()
+        showNameInput.value = false
+        showPasswordInput.value = false
+        return
+      }
+      ElMessage.error(res.data?.state?.msg || 'Operation failed')
+    } catch {
+      ElMessage.error('Operation failed')
+    }
+  }
+
+  const getadmin = async () => {
+    try {
+      const res = await axios.post('/admin/getadmin')
+      if (res.data?.state?.type === 'SUCCESS') {
+        tableData.value = { ...(res.data.data || {}), newpassword: '' }
+        return
+      }
+      ElMessage.error(res.data?.state?.msg || 'Failed to load profile')
+    } catch {
+      ElMessage.error('Failed to load profile')
+    }
+  }
+
+  onMounted(() => {
+    getadmin()
+  })
 </script>
 
 <style scoped>
-.top {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: calc(100% - 35px);
-  padding: 12px 16px;
-  background-color: #fff;
-}
-
-.profile-page {
-  position: relative;
-  width: 100%;
-}
-
-.profile-body {
-  margin-top: 40px;
-  padding: 24px;
-  background: #f8fbff;
-}
-
-.profile-hero {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 28px 32px;
-  border: 1px solid #dbe7ff;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
-  box-shadow: 0 20px 45px rgba(38, 99, 235, 0.08);
-}
-
-.profile-eyebrow {
-  margin: 0 0 8px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: #2663eb;
-}
-
-.profile-title {
-  margin: 0;
-  font-size: 34px;
-  line-height: 1.1;
-  color: #1f2a44;
-}
-
-.profile-copy {
-  max-width: 720px;
-  margin: 12px 0 0;
-  color: #667085;
-  line-height: 1.7;
-}
-
-.profile-badges {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.status-badge,
-.role-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 36px;
-  padding: 0 14px;
-  border-radius: 999px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.status-badge.is-enabled {
-  background: #ecfdf3;
-  color: #067647;
-}
-
-.status-badge.is-disabled {
-  background: #fef3f2;
-  color: #b42318;
-}
-
-.role-badge {
-  background: #eef4ff;
-  color: #2663eb;
-}
-
-.profile-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr);
-  gap: 18px;
-  margin-top: 22px;
-}
-
-.profile-card {
-  padding: 24px;
-  border: 1px solid #e3edff;
-  border-radius: 22px;
-  background: #fff;
-  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
-}
-
-.card-header h2 {
-  margin: 0;
-  font-size: 24px;
-  color: #1f2a44;
-}
-
-.card-header p {
-  margin: 8px 0 0;
-  color: #667085;
-}
-
-.info-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 18px;
-  margin-top: 20px;
-}
-
-.info-item {
-  padding: 18px;
-  border: 1px solid #edf2ff;
-  border-radius: 18px;
-  background: #f9fbff;
-}
-
-.info-item--wide {
-  grid-column: 1 / -1;
-}
-
-.info-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
-  color: #667085;
-}
-
-.info-value {
-  color: #1f2a44;
-}
-
-.inline-editor {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.inline-actions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
-}
-
-.permission-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  margin-top: 20px;
-}
-
-.permission-chip {
-  padding: 10px 14px;
-  border-radius: 999px;
-  background: #f2f4f7;
-  color: #98a2b3;
-  font-weight: 600;
-}
-
-.permission-chip.is-active {
-  background: #eef4ff;
-  color: #2663eb;
-}
-
-.permission-note {
-  margin-top: 18px;
-  color: #667085;
-  line-height: 1.7;
-}
-
-.responsibilities-card {
-  margin-top: 22px;
-}
-
-.responsibility-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 16px;
-  margin-top: 20px;
-}
-
-.responsibility-item {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 18px;
-  border: 1px solid #edf2ff;
-  border-radius: 18px;
-  background: #f9fbff;
-}
-
-.responsibility-item strong {
-  color: #1f2a44;
-}
-
-.responsibility-item span {
-  color: #667085;
-  line-height: 1.7;
-}
-
-.responsibility-item--warning {
-  border-color: #ffd7d2;
-  background: #fff7f6;
-}
-
-@media (max-width: 1200px) {
-  .profile-grid,
-  .responsibility-list,
-  .info-list {
-    grid-template-columns: 1fr;
+  .top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: calc(100% - 35px);
+    padding: 12px 16px;
+    background-color: #fff;
   }
-}
 
-@media (max-width: 768px) {
+  .profile-page {
+    position: relative;
+    width: 100%;
+  }
+
   .profile-body {
-    padding: 16px;
+    margin-top: 40px;
+    padding: 24px;
+    background: #f8fbff;
   }
 
   .profile-hero {
-    flex-direction: column;
-    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 24px;
+    padding: 28px 32px;
+    border: 1px solid #dbe7ff;
+    border-radius: 24px;
+    background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
+    box-shadow: 0 20px 45px rgba(38, 99, 235, 0.08);
+  }
+
+  .profile-eyebrow {
+    margin: 0 0 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #2663eb;
   }
 
   .profile-title {
-    font-size: 28px;
+    margin: 0;
+    font-size: 34px;
+    line-height: 1.1;
+    color: #1f2a44;
+  }
+
+  .profile-copy {
+    max-width: 720px;
+    margin: 12px 0 0;
+    color: #667085;
+    line-height: 1.7;
+  }
+
+  .profile-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .status-badge,
+  .role-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 36px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .status-badge.is-enabled {
+    background: #ecfdf3;
+    color: #067647;
+  }
+
+  .status-badge.is-disabled {
+    background: #fef3f2;
+    color: #b42318;
+  }
+
+  .role-badge {
+    background: #eef4ff;
+    color: #2663eb;
+  }
+
+  .profile-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.35fr) minmax(320px, 1fr);
+    gap: 18px;
+    margin-top: 22px;
   }
 
   .profile-card {
-    padding: 18px;
+    padding: 24px;
+    border: 1px solid #e3edff;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
   }
-}
+
+  .card-header h2 {
+    margin: 0;
+    font-size: 24px;
+    color: #1f2a44;
+  }
+
+  .card-header p {
+    margin: 8px 0 0;
+    color: #667085;
+  }
+
+  .info-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+  }
+
+  .info-item {
+    padding: 18px;
+    border: 1px solid #edf2ff;
+    border-radius: 18px;
+    background: #f9fbff;
+  }
+
+  .info-item--wide {
+    grid-column: 1 / -1;
+  }
+
+  .info-label {
+    display: block;
+    margin-bottom: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #667085;
+  }
+
+  .info-value {
+    color: #1f2a44;
+  }
+
+  .inline-editor {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .inline-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+
+  .permission-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .permission-chip {
+    padding: 10px 14px;
+    border-radius: 999px;
+    background: #f2f4f7;
+    color: #98a2b3;
+    font-weight: 600;
+  }
+
+  .permission-chip.is-active {
+    background: #eef4ff;
+    color: #2663eb;
+  }
+
+  .permission-note {
+    margin-top: 18px;
+    color: #667085;
+    line-height: 1.7;
+  }
+
+  .responsibilities-card {
+    margin-top: 22px;
+  }
+
+  .responsibility-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-top: 20px;
+  }
+
+  .responsibility-item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px;
+    border: 1px solid #edf2ff;
+    border-radius: 18px;
+    background: #f9fbff;
+  }
+
+  .responsibility-item strong {
+    color: #1f2a44;
+  }
+
+  .responsibility-item span {
+    color: #667085;
+    line-height: 1.7;
+  }
+
+  .responsibility-item--warning {
+    border-color: #ffd7d2;
+    background: #fff7f6;
+  }
+
+  @media (max-width: 1200px) {
+    .profile-grid,
+    .responsibility-list,
+    .info-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .profile-body {
+      padding: 16px;
+    }
+
+    .profile-hero {
+      flex-direction: column;
+      padding: 24px;
+    }
+
+    .profile-title {
+      font-size: 28px;
+    }
+
+    .profile-card {
+      padding: 18px;
+    }
+  }
 </style>

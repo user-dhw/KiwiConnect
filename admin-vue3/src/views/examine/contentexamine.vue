@@ -15,7 +15,18 @@
       </div>
 
       <div class="main">
-        <div class="search">
+        <section class="workspace-hero">
+          <div>
+            <p class="workspace-eyebrow">Review Workflow</p>
+            <h1 class="workspace-title">Content Review</h1>
+            <p class="workspace-copy">
+              Review submissions across Q&amp;A, activities, marketplace listings, and articles from one moderation workspace.
+            </p>
+          </div>
+        </section>
+
+        <section class="workspace-card">
+        <div class="search workspace-filters">
           <el-form
             :inline="true"
             :model="filterForm"
@@ -394,6 +405,7 @@
           @size-change="handleSizeChange"
           @current-change="handleCurrentChange"
         />
+        </section>
       </div>
     </el-main>
   </div>
@@ -582,8 +594,56 @@ onMounted(() => {
 	width: 100%;
 }
 .main {
-	margin-top: 40px;
-	padding: 20px;
-	background-color: #fff;
+  margin-top: 40px;
+  padding: 24px;
+  background-color: #f8fbff;
+}
+
+.workspace-hero,
+.workspace-card {
+  border: 1px solid #e3edff;
+  border-radius: 24px;
+  background: #fff;
+  box-shadow: 0 14px 34px rgba(15, 23, 42, 0.05);
+}
+
+.workspace-hero {
+  padding: 28px 32px;
+  background: linear-gradient(135deg, #ffffff 0%, #edf4ff 100%);
+}
+
+.workspace-eyebrow {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2663eb;
+}
+
+.workspace-title {
+  margin: 0;
+  font-size: 34px;
+  line-height: 1.1;
+  color: #1f2a44;
+}
+
+.workspace-copy {
+  max-width: 760px;
+  margin: 12px 0 0;
+  color: #667085;
+  line-height: 1.7;
+}
+
+.workspace-card {
+  margin-top: 22px;
+  padding: 24px;
+}
+
+.workspace-filters {
+  padding: 18px 20px 2px;
+  border: 1px solid #edf2ff;
+  border-radius: 20px;
+  background: #f9fbff;
 }
 </style>
