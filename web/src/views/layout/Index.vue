@@ -60,10 +60,16 @@
 									</button>
 								</li>
 								<li v-else class="user-menu-item">
-									<el-dropdown>
+									<el-dropdown
+										trigger="click"
+										placement="bottom-end"
+										popper-class="user-dropdown-popper"
+										@command="handleUserMenuCommand"
+									>
 										<button
 											type="button"
 											class="user-menu-trigger"
+											aria-label="Open account menu"
 										>
 											<img
 												v-if="unread === 0"
@@ -82,42 +88,39 @@
 													@error="handleAvatarError"
 												/>
 											</el-badge>
-											<span>{{ nickname }}</span>
+											<span class="user-menu-name">{{
+												nickname
+											}}</span>
 										</button>
 										<template #dropdown>
-											<el-dropdown-menu>
-												<el-dropdown-item>
-													<router-link to="/admin"
-														>Profile</router-link
-													>
+											<el-dropdown-menu
+												class="user-dropdown-menu"
+											>
+												<el-dropdown-item
+													command="account"
+												>
+													Account Center
 												</el-dropdown-item>
-												<el-dropdown-item>
-													<router-link
-														to="/admin/notice"
+												<el-dropdown-item
+													command="notifications"
+												>
+													<div
+														class="dropdown-item-content"
 													>
 														<span
-															v-if="unread === 0"
 															>Notifications</span
 														>
 														<el-badge
-															v-else
+															v-if="unread > 0"
 															:value="unread"
-															class="item"
-														>
-															<span
-																>Notifications</span
-															>
-														</el-badge>
-													</router-link>
+															class="dropdown-badge"
+														/>
+													</div>
 												</el-dropdown-item>
-												<el-dropdown-item>
-													<button
-														type="button"
-														class="dropdown-action"
-														@click="logout"
-													>
-														Sign Out
-													</button>
+												<el-dropdown-item
+													command="logout"
+												>
+													Sign Out
 												</el-dropdown-item>
 											</el-dropdown-menu>
 										</template>
@@ -226,6 +229,24 @@ const toggleMobileMenu = () => {
 
 const closeMobileMenu = () => {
 	mobileMenuOpen.value = false
+}
+
+const handleUserMenuCommand = command => {
+	closeMobileMenu()
+
+	if (command === 'account') {
+		router.push('/admin')
+		return
+	}
+
+	if (command === 'notifications') {
+		router.push('/admin/notice')
+		return
+	}
+
+	if (command === 'logout') {
+		logout()
+	}
 }
 
 const logout = () => {
@@ -419,13 +440,6 @@ onMounted(() => {
 	background: linear-gradient(135deg, #1d4fc2, #2663eb);
 }
 
-.dropdown-action {
-	width: 100%;
-	text-align: left;
-	color: inherit;
-	cursor: pointer;
-}
-
 .hero-badge {
 	display: inline-flex;
 	align-items: center;
@@ -470,7 +484,19 @@ onMounted(() => {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
+	min-width: 132px;
+	padding-right: 18px;
+	background: #ffffff;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	box-shadow: 0 12px 24px rgba(38, 99, 235, 0.1);
 	cursor: pointer;
+}
+
+.user-menu-name {
+	max-width: 118px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .header-avatar {
@@ -480,6 +506,45 @@ onMounted(() => {
 	object-fit: cover;
 	display: inline-block;
 	border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+:deep(.user-dropdown-popper) {
+	border-radius: 18px;
+	padding: 8px;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	box-shadow: 0 18px 42px rgba(38, 99, 235, 0.18);
+}
+
+:deep(.user-dropdown-menu) {
+	min-width: 196px;
+	padding: 0;
+}
+
+:deep(.user-dropdown-menu .el-dropdown-menu__item) {
+	min-height: 46px;
+	padding: 10px 14px;
+	border-radius: 12px;
+	font-size: 15px;
+	font-weight: 600;
+	color: #42506a;
+}
+
+:deep(.user-dropdown-menu .el-dropdown-menu__item:not(.is-disabled):hover) {
+	background: #edf3ff;
+	color: #2663eb;
+}
+
+.dropdown-item-content {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.dropdown-badge {
+	display: inline-flex;
+	align-items: center;
 }
 
 @media (max-width: 768px) {
@@ -602,6 +667,15 @@ onMounted(() => {
 
 	.nav-cta {
 		justify-content: center;
+	}
+
+	.user-menu-trigger {
+		min-width: 0;
+		padding-right: 14px;
+	}
+
+	.user-menu-name {
+		max-width: none;
 	}
 
 	.hero-badge {
