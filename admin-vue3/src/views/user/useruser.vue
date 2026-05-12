@@ -57,9 +57,16 @@
             </template>
           </el-table-column>
 
-          <el-table-column prop="activationdate" label="Activation time">
+          <el-table-column prop="activationdate" label="Access status" width="180">
             <template #default="scope">
-              {{ formatDate(scope.row.activationdate) }}
+              <span
+                :class="[
+                  'access-status',
+                  isUserBanned(scope.row.activationdate) ? 'is-banned' : 'is-active',
+                ]"
+              >
+                {{ formatAccessStatus(scope.row.activationdate) }}
+              </span>
             </template>
           </el-table-column>
           <el-table-column fixed="right" label="Actions" width="280">
@@ -270,6 +277,19 @@
     }
   }
 
+  const isUserBanned = activationdate => {
+    if (!activationdate) return false
+    const time = Number(activationdate)
+    return Number.isFinite(time) && time > Date.now()
+  }
+
+  const formatAccessStatus = activationdate => {
+    if (!activationdate) return 'Active'
+    return isUserBanned(activationdate)
+      ? `Banned until ${formatDate(activationdate)}`
+      : 'Active'
+  }
+
   const parseImageList = value => {
     if (Array.isArray(value)) return value
     if (!value) return []
@@ -424,5 +444,26 @@
     margin-top: 40px;
     padding: 20px;
     background-color: #fff;
+  }
+
+  .access-status {
+    display: inline-flex;
+    align-items: center;
+    min-height: 28px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .access-status.is-active {
+    color: #067647;
+    background: #ecfdf3;
+  }
+
+  .access-status.is-banned {
+    color: #b42318;
+    background: #fef3f2;
   }
 </style>
