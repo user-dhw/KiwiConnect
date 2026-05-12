@@ -128,7 +128,7 @@ const menus = [
 		permissionKey: 'issh',
 		children: [
 			{ index: '/contentexamine', title: 'Content Review' },
-			{ index: '/comment', title: 'Comment Review' },
+			{ index: '/comment', title: 'Comment Moderation' },
 		],
 	},
 	{

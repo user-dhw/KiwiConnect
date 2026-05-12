@@ -248,7 +248,7 @@ public sealed class WebService
         @"insert into comment
               (comment_id, user_id, content_id, comment_content, comment_createtime, comment_state, comment_istop, ispublic)
               values
-              (@CommentId, @UserId, @ContentId, @CommentContent, @CreateTime, 0, 0, 0)",
+              (@CommentId, @UserId, @ContentId, @CommentContent, @CreateTime, 0, 0, 1)",
         new
         {
           CommentId = Guid.NewGuid().ToString(),
@@ -283,7 +283,7 @@ public sealed class WebService
         @"insert into reply
               (reply_id, user_id, comment_id, reply_content, tousernickname, touserid, createtime, reply_state, reply_istop, ispublic)
               values
-              (@ReplyId, @UserId, @CommentId, @ReplyContent, @ToUserNickname, @ToUserId, @CreateTime, 0, 0, 0)",
+              (@ReplyId, @UserId, @CommentId, @ReplyContent, @ToUserNickname, @ToUserId, @CreateTime, 0, 0, 1)",
         new
         {
           ReplyId = Guid.NewGuid().ToString(),

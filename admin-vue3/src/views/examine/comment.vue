@@ -7,7 +7,7 @@
             Home
           </el-breadcrumb-item>
           <el-breadcrumb-item>Review Center</el-breadcrumb-item>
-          <el-breadcrumb-item>Comment Review</el-breadcrumb-item>
+          <el-breadcrumb-item>Comment Moderation</el-breadcrumb-item>
         </el-breadcrumb>
       </div>
 
@@ -15,48 +15,19 @@
         <div class="search">
           <el-form
             :inline="true"
-            :model="pagelistquery"
-            class="demo-form-inline"
+            class="demo-form-inline moderation-tools"
           >
             <el-form-item>
-              <el-input
-                v-model="pagelistquery.admin"
-                placeholder="Reviewer"
-              />
+              <span class="moderation-note">
+                Comments and replies are published immediately. Use this page to review and remove inappropriate content.
+              </span>
             </el-form-item>
-            <el-form-item>
-              <el-select
-                v-model="pagelistquery.state"
-                :teleported="false"
-                style="width: 180px"
-                placeholder="Status"
-              >
-                <el-option
-                  label="All"
-                  :value="''"
-                />
-                <el-option
-                  label="Pending"
-                  value="0"
-                />
-                <el-option
-                  label="Approved"
-                  value="1"
-                />
-
-                <el-option
-                  label="Rejected"
-                  value="-1"
-                />
-              </el-select>
-            </el-form-item>
-
             <el-form-item>
               <el-button
                 type="primary"
                 @click="getcommentlist"
               >
-                Search
+                Refresh
               </el-button>
             </el-form-item>
           </el-form>
@@ -98,25 +69,6 @@
                   prop="tousernickname"
                 />
                 <el-table-column
-                  label="Status"
-                  prop="comment_ispublic"
-                >
-                  <template #default="scope">
-                    <span
-                      v-if="scope.row.ispublic == 1"
-                      style="color: #6cbb7a"
-                    >Approved</span>
-                    <span
-                      v-if="scope.row.ispublic == 0"
-                      style="color: #409eff"
-                    >Pending</span>
-                    <span
-                      v-if="scope.row.ispublic == -1"
-                      style="color: #f60c6c"
-                    >Rejected</span>
-                  </template>
-                </el-table-column>
-                <el-table-column
                   label="Reply Content"
                   prop="desc"
                 >
@@ -141,81 +93,15 @@
                   </template>
                 </el-table-column>
                 <el-table-column
-                  label="Reviewer"
-                  prop="admin"
-                />
-
-                <el-table-column
                   fixed="right"
                   label="Actions"
-                  width="250"
+                  width="120"
                 >
                   <template #default="scope">
-                    <el-button
-                      v-if="scope.row.ispublic == 1"
-                      type="primary"
-                      link
-                      size="small"
-                      @click="
-                        changestate(
-                          'reply',
-                          -1,
-                          scope.row.reply_id,
-                        )
-                      "
-                    >
-                      Reject
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.ispublic == 0"
-                      type="primary"
-                      link
-                      size="small"
-                      @click="
-                        changestate(
-                          'reply',
-                          1,
-                          scope.row.reply_id,
-                        )
-                      "
-                    >
-                      Approve
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.ispublic == 0"
-                      type="primary"
-                      link
-                      size="small"
-                      @click="
-                        changestate(
-                          'reply',
-                          -1,
-                          scope.row.reply_id,
-                        )
-                      "
-                    >
-                      Reject
-                    </el-button>
-                    <el-button
-                      v-if="scope.row.ispublic == -1"
-                      type="primary"
-                      link
-                      size="small"
-                      @click="
-                        changestate(
-                          'reply',
-                          1,
-                          scope.row.reply_id,
-                        )
-                      "
-                    >
-                      Approve
-                    </el-button>
                     <el-button
                       type="danger"
                       link
                       size="small"
-                      :disabled="!isSuperAdmin"
                       @click="
                         del(scope.row.reply_id, 'reply')
                       "
@@ -242,25 +128,6 @@
             prop="nickname"
           />
           <el-table-column
-            label="Status"
-            prop="comment_ispublic"
-          >
-            <template #default="scope">
-              <span
-                v-if="scope.row.ispublic == 1"
-                style="color: #6cbb7a"
-              >Approved</span>
-              <span
-                v-if="scope.row.ispublic == 0"
-                style="color: #409eff"
-              >Pending</span>
-              <span
-                v-if="scope.row.ispublic == -1"
-                style="color: #f60c6c"
-              >Rejected</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             label="Comment Content"
             prop="desc"
           >
@@ -283,81 +150,15 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="Reviewer"
-            prop="admin"
-          />
-
-          <el-table-column
             fixed="right"
             label="Actions"
-            width="200"
+            width="120"
           >
             <template #default="scope">
-              <el-button
-                v-if="scope.row.ispublic == 1"
-                type="primary"
-                link
-                size="small"
-                @click="
-                  changestate(
-                    'comment',
-                    -1,
-                    scope.row.comment_id,
-                  )
-                "
-              >
-                Reject
-              </el-button>
-              <el-button
-                v-if="scope.row.ispublic == 0"
-                type="primary"
-                link
-                size="small"
-                @click="
-                  changestate(
-                    'comment',
-                    1,
-                    scope.row.comment_id,
-                  )
-                "
-              >
-                Approve
-              </el-button>
-              <el-button
-                v-if="scope.row.ispublic == 0"
-                type="primary"
-                link
-                size="small"
-                @click="
-                  changestate(
-                    'comment',
-                    -1,
-                    scope.row.comment_id,
-                  )
-                "
-              >
-                Reject
-              </el-button>
-              <el-button
-                v-if="scope.row.ispublic == -1"
-                type="primary"
-                link
-                size="small"
-                @click="
-                  changestate(
-                    'comment',
-                    1,
-                    scope.row.comment_id,
-                  )
-                "
-              >
-                Approve
-              </el-button>
               <el-button
                 type="danger"
                 link
                 size="small"
-                :disabled="!isSuperAdmin"
                 @click="del(scope.row.comment_id, 'comment')"
               >
                 Delete
@@ -395,15 +196,10 @@ const userStore = useUserStore()
 const loading = ref(false)
 const tableData = ref([])
 const pagelistquery = reactive({
-	admin: '',
-	state: '',
 	total: 0,
 	page: 1,
 	pagesize: 10,
 })
-
-const uinfo = computed(() => userStore.uinfo || {})
-const isSuperAdmin = computed(() => uinfo.value?.username === 'admin')
 
 const getreply = async () => {
 	if (!tableData.value.length) return
@@ -425,25 +221,6 @@ const getreply = async () => {
 	)
 
 	tableData.value = mergedRows
-}
-
-const changestate = async (type, state, id) => {
-	try {
-		const res = await axios.post(
-			'/admin/changecontentstate',
-			toFormData({ id, type, state }),
-		)
-
-		if (res.data?.state?.type === 'SUCCESS') {
-			ElMessage.success('Operation successful')
-			await getcommentlist()
-			return
-		}
-
-		ElMessage.error(res.data?.state?.msg || 'Operation failed')
-	} catch {
-		ElMessage.error('Operation failed')
-	}
 }
 
 const handleSizeChange = val => {
@@ -515,5 +292,20 @@ onMounted(() => {
 	margin-top: 40px;
 	padding: 20px;
 	background-color: #fff;
+}
+
+.moderation-tools {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 16px;
+	flex-wrap: wrap;
+}
+
+.moderation-note {
+	display: inline-block;
+	max-width: 720px;
+	color: #667085;
+	line-height: 1.6;
 }
 </style>
