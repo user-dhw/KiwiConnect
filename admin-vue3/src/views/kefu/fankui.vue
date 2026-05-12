@@ -10,92 +10,82 @@
       </div>
 
       <div class="main">
-        <section class="workspace-hero">
-          <div>
-            <p class="workspace-eyebrow">Feedback Workflow</p>
-            <h1 class="workspace-title">Feedback Center</h1>
-            <p class="workspace-copy">
-              Track platform feedback, flag important items, and keep support handling status clear for the team.
-            </p>
-          </div>
-        </section>
-
         <section class="workspace-card">
-        <div class="search workspace-filters">
-          <el-form :inline="true" :model="filterForm" class="demo-form-inline">
-            <el-form-item>
-              <el-select
-                v-model="filterForm.state"
-                :teleported="false"
-                style="width: 180px"
-                placeholder="Account Status"
-              >
-                <el-option label="All" value="all" />
-                <el-option label="Processed" value="1" />
-                <el-option label="Unprocessed" value="0" />
-                <el-option label="Flagged" value="2" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
+          <div class="search workspace-filters">
+            <el-form :inline="true" :model="filterForm" class="demo-form-inline">
+              <el-form-item>
+                <el-select
+                  v-model="filterForm.state"
+                  :teleported="false"
+                  style="width: 180px"
+                  placeholder="Account Status"
+                >
+                  <el-option label="All" value="all" />
+                  <el-option label="Processed" value="1" />
+                  <el-option label="Unprocessed" value="0" />
+                  <el-option label="Flagged" value="2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
 
-        <el-table
-          v-loading="loading"
-          :data="tableData"
-          border
-          style="width: 100%; min-height: 500px"
-          element-loading-text="Loading..."
-        >
-          <el-table-column prop="createtime" label="Created At">
-            <template #default="scope">
-              {{ formatDate(scope.row.fankui_createtime) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="fankui_user" label="Email" />
-          <el-table-column prop="fankui_content" label="Feedback Content" />
-          <el-table-column label="Status" prop="fankui_state">
-            <template #default="scope">
-              <span v-if="scope.row.fankui_state == 0" style="color: #409eff">Unprocessed</span>
-              <span v-if="scope.row.fankui_state == 1" style="color: #6cbb7a">Processed</span>
-              <span v-if="scope.row.fankui_state == 2" style="color: #f60c6c">Flagged</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="admin" label="Admin" />
-          <el-table-column prop="nickname" fixed="right" label="Actions" width="200">
-            <template #default="scope">
-              <el-button type="primary" link size="small" @click="changestate(scope.row, 2)">
-                Flag
-              </el-button>
-              <el-button type="primary" link size="small" @click="changestate(scope.row, 1)">
-                Processed
-              </el-button>
-              <el-button
-                type="danger"
-                link
-                size="small"
-                :disabled="scope.row.username == 'admin'"
-                @click="deletkefu(scope.row)"
-              >
-                Delete
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
+          <el-table
+            v-loading="loading"
+            :data="tableData"
+            border
+            style="width: 100%; min-height: 500px"
+            element-loading-text="Loading..."
+          >
+            <el-table-column prop="createtime" label="Created At">
+              <template #default="scope">
+                {{ formatDate(scope.row.fankui_createtime) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="fankui_user" label="Email" />
+            <el-table-column prop="fankui_content" label="Feedback Content" />
+            <el-table-column label="Status" prop="fankui_state">
+              <template #default="scope">
+                <span v-if="scope.row.fankui_state == 0" style="color: #409eff">Unprocessed</span>
+                <span v-if="scope.row.fankui_state == 1" style="color: #6cbb7a">Processed</span>
+                <span v-if="scope.row.fankui_state == 2" style="color: #f60c6c">Flagged</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="admin" label="Admin" />
+            <el-table-column prop="nickname" fixed="right" label="Actions" width="200">
+              <template #default="scope">
+                <el-button type="primary" link size="small" @click="changestate(scope.row, 2)">
+                  Flag
+                </el-button>
+                <el-button type="primary" link size="small" @click="changestate(scope.row, 1)">
+                  Processed
+                </el-button>
+                <el-button
+                  type="danger"
+                  link
+                  size="small"
+                  :disabled="scope.row.username == 'admin'"
+                  @click="deletkefu(scope.row)"
+                >
+                  Delete
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
 
-        <!-- Pagination -->
-        <el-pagination
-          :current-page="pagelistquery.page"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="pagelistquery.pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="pagelistquery.total"
-          style="margin-top: 20px"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          <!-- Pagination -->
+          <el-pagination
+            :current-page="pagelistquery.page"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pagelistquery.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pagelistquery.total"
+            style="margin-top: 20px"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </section>
       </div>
     </el-main>

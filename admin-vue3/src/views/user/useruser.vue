@@ -10,197 +10,187 @@
       </div>
 
       <div class="main">
-        <section class="workspace-hero">
-          <div>
-            <p class="workspace-eyebrow">User Operations</p>
-            <h1 class="workspace-title">Regular User Management</h1>
-            <p class="workspace-copy">
-              Review verification status, manage account access, and handle routine moderation actions for platform users.
-            </p>
-          </div>
-        </section>
-
         <section class="workspace-card">
-        <div class="search workspace-filters">
-          <el-form :inline="true" :model="filterForm" class="demo-form-inline">
-            <el-form-item>
-              <el-input v-model="filterForm.user" placeholder="Search account" />
-            </el-form-item>
-            <el-form-item>
-              <el-select
-                v-model="filterForm.realstate"
-                :teleported="false"
-                style="width: 200px"
-                placeholder="Real-name verification"
-              >
-                <el-option label="All" value="all" />
-                <el-option label="Not verified" value="1" />
-                <el-option label="Pending" value="2" />
-                <el-option label="Verified" value="3" />
-                <el-option label="Rejected" value="0" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
-
-        <el-table
-          v-loading="loading"
-          element-loading-text="Loading..."
-          :data="tableData"
-          border
-          style="width: 100%; min-height: 500px"
-        >
-          <el-table-column prop="username" label="Account" />
-          <el-table-column prop="nickname" label="Nickname" />
-          <el-table-column prop="realstate" label="Real-name verification">
-            <template #default="scope">
-              <el-button
-                type="primary"
-                link
-                :disabled="!canManageUsers"
-                @click="changerealstatedialog(scope.row)"
-              >
-                {{ userStateLabel(scope.row.realstate) }}
-              </el-button>
-            </template>
-          </el-table-column>
-
-          <el-table-column prop="activationdate" label="Access status" width="180">
-            <template #default="scope">
-              <span
-                :class="[
-                  'access-status',
-                  isUserBanned(scope.row.activationdate) ? 'is-banned' : 'is-active',
-                ]"
-              >
-                {{ formatAccessStatus(scope.row.activationdate) }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column fixed="right" label="Actions" width="280">
-            <template #default="scope">
-              <el-button
-                type="warning"
-                link
-                size="small"
-                :disabled="!canBanUsers"
-                @click="activationdate(scope.row)"
-              >
-                Ban/Unban
-              </el-button>
-              <el-button
-                type="danger"
-                link
-                size="small"
-                :disabled="!canManageUsers"
-                @click="deleteuser(scope.row)"
-              >
-                Delete
-              </el-button>
-              <el-button
-                type="primary"
-                link
-                size="small"
-                :disabled="scope.row.username === 'admin' || !canChangeUserPassword"
-                @click="changepw(scope.row)"
-              >
-                Change Password
-              </el-button>
-            </template>
-          </el-table-column>
-        </el-table>
-
-        <el-dialog v-model="dialogpw" title="Set new password" width="500px">
-          <el-form :model="changepassword">
-            <el-form-item label="Account" label-width="100px">
-              {{ changepassword.username }}
-            </el-form-item>
-            <el-form-item label="New password" label-width="100px">
-              <el-input v-model="changepassword.newpassword" autocomplete="off" />
-            </el-form-item>
-          </el-form>
-          <template #footer>
-            <div class="dialog-footer">
-              <el-button @click="dialogpw = false">Cancel</el-button>
-              <el-button type="primary" @click="change">Confirm</el-button>
-            </div>
-          </template>
-        </el-dialog>
-
-        <el-dialog v-model="dialogstudent" title="Real-name verification">
-          <div v-if="Number(changerealstateuser.realstate) === 1">
-            <img src="../../assets/img/noinfo.png" width="100%" alt="No info" />
-            <div style="width: 100%; text-align: center">
-              This user has not submitted verification details.
-            </div>
+          <div class="search workspace-filters">
+            <el-form :inline="true" :model="filterForm" class="demo-form-inline">
+              <el-form-item>
+                <el-input v-model="filterForm.user" placeholder="Search account" />
+              </el-form-item>
+              <el-form-item>
+                <el-select
+                  v-model="filterForm.realstate"
+                  :teleported="false"
+                  style="width: 200px"
+                  placeholder="Real-name verification"
+                >
+                  <el-option label="All" value="all" />
+                  <el-option label="Not verified" value="1" />
+                  <el-option label="Pending" value="2" />
+                  <el-option label="Verified" value="3" />
+                  <el-option label="Rejected" value="0" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
+              </el-form-item>
+            </el-form>
           </div>
-          <el-form v-else>
-            <el-form-item label="Student ID">
-              {{ changerealstateuser.studentid }}
-            </el-form-item>
-            <el-form-item label="Name">
-              {{ changerealstateuser.realname }}
-            </el-form-item>
-            <el-form-item label="Student card">
-              <img
-                v-for="(img, id) in changerealstateuser.studentcard"
-                :key="id"
-                :src="img.url"
-                style="width: 40%; margin: 20px"
-                alt="Student card"
-              />
-            </el-form-item>
-          </el-form>
-          <template #footer>
-            <div v-if="Number(changerealstateuser.realstate) === 1" class="dialog-footer">
-              <el-button @click="dialogstudent = false">Close</el-button>
-            </div>
-            <div v-else class="dialog-footer">
-              <el-button
-                v-if="Number(changerealstateuser.realstate) !== 3"
-                type="primary"
-                @click="changestate('realstate', 3, changerealstateuser.user_id)"
-              >
-                Approve
-              </el-button>
-              <el-button
-                type="danger"
-                @click="changestate('realstate', 0, changerealstateuser.user_id)"
-              >
-                Reject
-              </el-button>
-              <el-button @click="dialogstudent = false">Cancel</el-button>
-            </div>
-          </template>
-        </el-dialog>
 
-        <el-dialog v-model="activationttime.dialog" title="Ban duration (days)" width="500px">
-          <el-form :model="activationttime">
-            <el-form-item>
-              <el-input v-model="activationttime.time" />
-            </el-form-item>
-          </el-form>
-          <template #footer>
-            <div class="dialog-footer">
-              <el-button @click="activationttime.dialog = false">Cancel</el-button>
-              <el-button type="primary" @click="changeactivationdate">Confirm</el-button>
-            </div>
-          </template>
-        </el-dialog>
+          <el-table
+            v-loading="loading"
+            element-loading-text="Loading..."
+            :data="tableData"
+            border
+            style="width: 100%; min-height: 500px"
+          >
+            <el-table-column prop="username" label="Account" />
+            <el-table-column prop="nickname" label="Nickname" />
+            <el-table-column prop="realstate" label="Real-name verification">
+              <template #default="scope">
+                <el-button
+                  type="primary"
+                  link
+                  :disabled="!canManageUsers"
+                  @click="changerealstatedialog(scope.row)"
+                >
+                  {{ userStateLabel(scope.row.realstate) }}
+                </el-button>
+              </template>
+            </el-table-column>
 
-        <el-pagination
-          :current-page="pagelistquery.page"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="pagelistquery.pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="pagelistquery.total"
-          style="margin-top: 20px"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+            <el-table-column prop="activationdate" label="Access status" width="180">
+              <template #default="scope">
+                <span
+                  :class="[
+                    'access-status',
+                    isUserBanned(scope.row.activationdate) ? 'is-banned' : 'is-active',
+                  ]"
+                >
+                  {{ formatAccessStatus(scope.row.activationdate) }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column fixed="right" label="Actions" width="280">
+              <template #default="scope">
+                <el-button
+                  type="warning"
+                  link
+                  size="small"
+                  :disabled="!canBanUsers"
+                  @click="activationdate(scope.row)"
+                >
+                  Ban/Unban
+                </el-button>
+                <el-button
+                  type="danger"
+                  link
+                  size="small"
+                  :disabled="!canManageUsers"
+                  @click="deleteuser(scope.row)"
+                >
+                  Delete
+                </el-button>
+                <el-button
+                  type="primary"
+                  link
+                  size="small"
+                  :disabled="scope.row.username === 'admin' || !canChangeUserPassword"
+                  @click="changepw(scope.row)"
+                >
+                  Change Password
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+
+          <el-dialog v-model="dialogpw" title="Set new password" width="500px">
+            <el-form :model="changepassword">
+              <el-form-item label="Account" label-width="100px">
+                {{ changepassword.username }}
+              </el-form-item>
+              <el-form-item label="New password" label-width="100px">
+                <el-input v-model="changepassword.newpassword" autocomplete="off" />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <div class="dialog-footer">
+                <el-button @click="dialogpw = false">Cancel</el-button>
+                <el-button type="primary" @click="change">Confirm</el-button>
+              </div>
+            </template>
+          </el-dialog>
+
+          <el-dialog v-model="dialogstudent" title="Real-name verification">
+            <div v-if="Number(changerealstateuser.realstate) === 1">
+              <img src="../../assets/img/noinfo.png" width="100%" alt="No info" />
+              <div style="width: 100%; text-align: center">
+                This user has not submitted verification details.
+              </div>
+            </div>
+            <el-form v-else>
+              <el-form-item label="Student ID">
+                {{ changerealstateuser.studentid }}
+              </el-form-item>
+              <el-form-item label="Name">
+                {{ changerealstateuser.realname }}
+              </el-form-item>
+              <el-form-item label="Student card">
+                <img
+                  v-for="(img, id) in changerealstateuser.studentcard"
+                  :key="id"
+                  :src="img.url"
+                  style="width: 40%; margin: 20px"
+                  alt="Student card"
+                />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <div v-if="Number(changerealstateuser.realstate) === 1" class="dialog-footer">
+                <el-button @click="dialogstudent = false">Close</el-button>
+              </div>
+              <div v-else class="dialog-footer">
+                <el-button
+                  v-if="Number(changerealstateuser.realstate) !== 3"
+                  type="primary"
+                  @click="changestate('realstate', 3, changerealstateuser.user_id)"
+                >
+                  Approve
+                </el-button>
+                <el-button
+                  type="danger"
+                  @click="changestate('realstate', 0, changerealstateuser.user_id)"
+                >
+                  Reject
+                </el-button>
+                <el-button @click="dialogstudent = false">Cancel</el-button>
+              </div>
+            </template>
+          </el-dialog>
+
+          <el-dialog v-model="activationttime.dialog" title="Ban duration (days)" width="500px">
+            <el-form :model="activationttime">
+              <el-form-item>
+                <el-input v-model="activationttime.time" />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <div class="dialog-footer">
+                <el-button @click="activationttime.dialog = false">Cancel</el-button>
+                <el-button type="primary" @click="changeactivationdate">Confirm</el-button>
+              </div>
+            </template>
+          </el-dialog>
+
+          <el-pagination
+            :current-page="pagelistquery.page"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pagelistquery.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pagelistquery.total"
+            style="margin-top: 20px"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </section>
       </div>
     </el-main>
@@ -297,9 +287,7 @@
 
   const formatAccessStatus = activationdate => {
     if (!activationdate) return 'Active'
-    return isUserBanned(activationdate)
-      ? `Banned until ${formatDate(activationdate)}`
-      : 'Active'
+    return isUserBanned(activationdate) ? `Banned until ${formatDate(activationdate)}` : 'Active'
   }
 
   const parseImageList = value => {

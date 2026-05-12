@@ -10,140 +10,130 @@
       </div>
 
       <div class="main">
-        <section class="workspace-hero">
-          <div>
-            <p class="workspace-eyebrow">Risk Workflow</p>
-            <h1 class="workspace-title">Violation Reports</h1>
-            <p class="workspace-copy">
-              Investigate reports, review supporting evidence, and route user cases into moderation and account actions.
-            </p>
-          </div>
-        </section>
-
         <section class="workspace-card">
-        <div class="search workspace-filters">
-          <el-form :inline="true" :model="filterForm" class="demo-form-inline">
-            <el-form-item>
-              <el-select
-                v-model="filterForm.state"
-                :teleported="false"
-                style="width: 180px"
-                placeholder="Account Status"
-              >
-                <el-option label="All" value="all" />
-                <el-option label="Processed" value="1" />
-                <el-option label="Unprocessed" value="0" />
-                <el-option label="Flagged" value="2" />
-              </el-select>
-            </el-form-item>
-            <el-form-item>
-              <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
-            </el-form-item>
-          </el-form>
-        </div>
+          <div class="search workspace-filters">
+            <el-form :inline="true" :model="filterForm" class="demo-form-inline">
+              <el-form-item>
+                <el-select
+                  v-model="filterForm.state"
+                  :teleported="false"
+                  style="width: 180px"
+                  placeholder="Account Status"
+                >
+                  <el-option label="All" value="all" />
+                  <el-option label="Processed" value="1" />
+                  <el-option label="Unprocessed" value="0" />
+                  <el-option label="Flagged" value="2" />
+                </el-select>
+              </el-form-item>
+              <el-form-item>
+                <el-button type="primary" @click="applyFiltersAndSearch">Search</el-button>
+              </el-form-item>
+            </el-form>
+          </div>
 
-        <el-table
-          v-loading="loading"
-          :data="tableData"
-          border
-          style="width: 100%; min-height: 500px"
-          element-loading-text="Loading..."
-        >
-          <el-table-column prop="createtime" label="Created At">
-            <template #default="scope">
-              {{ formatDate(scope.row.jubao_createtime) }}
-            </template>
-          </el-table-column>
-          <el-table-column prop="jubao_user" label="Reported Account" />
-          <el-table-column prop="jubao_url" label="Violation Link">
-            <template #default="scope">
-              <a :href="scope.row.jubao_url" target="_blank">Open Link</a>
-            </template>
-          </el-table-column>
-          <el-table-column prop="jubao_content" label="Details">
-            <template #default="scope">
-              <el-popover placement="right" width="400" trigger="hover">
-                <span>
-                  <el-form status-icon label-width="100px">
-                    <el-form-item label="Report Content">
-                      {{ scope.row.jubao_content }}
-                    </el-form-item>
-                    <el-form-item label="Screenshots">
-                      <div>
-                        <img
-                          v-for="(img, id) in scope.row.jubao_img"
-                          :key="id"
-                          style="width: 250px; margin-top: 5px"
-                          :src="img.url"
-                          alt="report screenshot"
-                        />
-                      </div>
-                    </el-form-item>
-                    <el-form-item label="Result">{{ scope.row.result }}</el-form-item>
-                  </el-form>
-                </span>
-                <template #reference>
-                  <el-button type="primary" link>View Details</el-button>
-                </template>
-              </el-popover>
-            </template>
-          </el-table-column>
-          <el-table-column label="Status" prop="jubao_state">
-            <template #default="scope">
-              <span v-if="scope.row.jubao_state == 0" style="color: #409eff">Unprocessed</span>
-              <span v-if="scope.row.jubao_state == 1" style="color: #6cbb7a">Processed</span>
-              <span v-if="scope.row.jubao_state == 2" style="color: #f60c6c">Flagged</span>
-            </template>
-          </el-table-column>
-          <el-table-column prop="admin" label="Admin" />
-          <el-table-column prop="nickname" fixed="right" label="Actions" width="300">
-            <template #default="scope">
-              <el-button type="primary" link size="small" @click="touser(scope.row)">
-                Open User
-              </el-button>
-              <el-button type="primary" link size="small" @click="changestate(scope.row, 2)">
-                Flag
-              </el-button>
-              <el-button type="primary" link size="small" @click="jieguo(scope.row)">
-                Mark Processed
-              </el-button>
+          <el-table
+            v-loading="loading"
+            :data="tableData"
+            border
+            style="width: 100%; min-height: 500px"
+            element-loading-text="Loading..."
+          >
+            <el-table-column prop="createtime" label="Created At">
+              <template #default="scope">
+                {{ formatDate(scope.row.jubao_createtime) }}
+              </template>
+            </el-table-column>
+            <el-table-column prop="jubao_user" label="Reported Account" />
+            <el-table-column prop="jubao_url" label="Violation Link">
+              <template #default="scope">
+                <a :href="scope.row.jubao_url" target="_blank">Open Link</a>
+              </template>
+            </el-table-column>
+            <el-table-column prop="jubao_content" label="Details">
+              <template #default="scope">
+                <el-popover placement="right" width="400" trigger="hover">
+                  <span>
+                    <el-form status-icon label-width="100px">
+                      <el-form-item label="Report Content">
+                        {{ scope.row.jubao_content }}
+                      </el-form-item>
+                      <el-form-item label="Screenshots">
+                        <div>
+                          <img
+                            v-for="(img, id) in scope.row.jubao_img"
+                            :key="id"
+                            style="width: 250px; margin-top: 5px"
+                            :src="img.url"
+                            alt="report screenshot"
+                          />
+                        </div>
+                      </el-form-item>
+                      <el-form-item label="Result">{{ scope.row.result }}</el-form-item>
+                    </el-form>
+                  </span>
+                  <template #reference>
+                    <el-button type="primary" link>View Details</el-button>
+                  </template>
+                </el-popover>
+              </template>
+            </el-table-column>
+            <el-table-column label="Status" prop="jubao_state">
+              <template #default="scope">
+                <span v-if="scope.row.jubao_state == 0" style="color: #409eff">Unprocessed</span>
+                <span v-if="scope.row.jubao_state == 1" style="color: #6cbb7a">Processed</span>
+                <span v-if="scope.row.jubao_state == 2" style="color: #f60c6c">Flagged</span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="admin" label="Admin" />
+            <el-table-column prop="nickname" fixed="right" label="Actions" width="300">
+              <template #default="scope">
+                <el-button type="primary" link size="small" @click="touser(scope.row)">
+                  Open User
+                </el-button>
+                <el-button type="primary" link size="small" @click="changestate(scope.row, 2)">
+                  Flag
+                </el-button>
+                <el-button type="primary" link size="small" @click="jieguo(scope.row)">
+                  Mark Processed
+                </el-button>
 
-              <el-button
-                type="danger"
-                link
-                size="small"
-                :disabled="scope.row.username == 'admin'"
-                @click="deletkefu(scope.row)"
-              >
-                Delete
-              </el-button>
+                <el-button
+                  type="danger"
+                  link
+                  size="small"
+                  :disabled="scope.row.username == 'admin'"
+                  @click="deletkefu(scope.row)"
+                >
+                  Delete
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+          <el-dialog v-model="dialog" title="Processing Result" width="500px">
+            <el-form>
+              <el-form-item>
+                <el-input v-model="result" type="textarea" />
+              </el-form-item>
+            </el-form>
+            <template #footer>
+              <div class="dialog-footer">
+                <el-button @click="dialog = false">Cancel</el-button>
+                <el-button type="primary" @click="setjieguo">Confirm</el-button>
+              </div>
             </template>
-          </el-table-column>
-        </el-table>
-        <el-dialog v-model="dialog" title="Processing Result" width="500px">
-          <el-form>
-            <el-form-item>
-              <el-input v-model="result" type="textarea" />
-            </el-form-item>
-          </el-form>
-          <template #footer>
-            <div class="dialog-footer">
-              <el-button @click="dialog = false">Cancel</el-button>
-              <el-button type="primary" @click="setjieguo">Confirm</el-button>
-            </div>
-          </template>
-        </el-dialog>
-        <!-- Pagination -->
-        <el-pagination
-          :current-page="pagelistquery.page"
-          :page-sizes="[10, 20, 50, 100]"
-          :page-size="pagelistquery.pagesize"
-          layout="total, sizes, prev, pager, next, jumper"
-          :total="pagelistquery.total"
-          style="margin-top: 20px"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-        />
+          </el-dialog>
+          <!-- Pagination -->
+          <el-pagination
+            :current-page="pagelistquery.page"
+            :page-sizes="[10, 20, 50, 100]"
+            :page-size="pagelistquery.pagesize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="pagelistquery.total"
+            style="margin-top: 20px"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </section>
       </div>
     </el-main>
