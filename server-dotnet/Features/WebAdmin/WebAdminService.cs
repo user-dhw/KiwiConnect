@@ -550,6 +550,93 @@ public sealed class WebAdminService
     return ApiResponse.Success(list);
   }
 
+  public async Task<ApiResponse> SetAnnouncementAsync(string uid, SetAnnouncementRequest request)
+  {
+    using var conn = _connectionFactory.CreateConnection();
+
+    if (!string.Equals(request.Type, "activity", StringComparison.OrdinalIgnoreCase))
+    {
+      return ApiResponse.Forbidden("Only approved activities can publish announcements");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Content_Id))
+    {
+      return ApiResponse.Error("MISSING_CONTENT_ID", "Activity id is required");
+    }
+
+    if (string.IsNullOrWhiteSpace(request.Announcement_Name) || string.IsNullOrWhiteSpace(request.Announcement_Content))
+    {
+      return ApiResponse.Error("MISSING_ANNOUNCEMENT", "Announcement title and content are required");
+    }
+
+    var user = await conn.QueryFirstOrDefaultAsync<UserEntity>(
+      "select * from user where user_id=@Uid",
+      new { Uid = uid });
+
+    if (user is null)
+    {
+      return ApiResponse.Unauthorized();
+    }
+
+    if (user.Realstate != 3)
+    {
+      return ApiResponse.Forbidden("Only verified users can publish activity announcements");
+    }
+
+    var activity = await conn.QueryFirstOrDefaultAsync(
+      "select activity_id, user_id, ispublic, activity_title from activity where activity_id=@ActivityId",
+      new { ActivityId = request.Content_Id });
+
+    if (activity is null)
+    {
+      return ApiResponse.NotFound("Activity not found");
+    }
+
+    if (!string.Equals((string?)activity.user_id, uid, StringComparison.Ordinal))
+    {
+      return ApiResponse.Forbidden("You can only publish announcements for your own activities");
+    }
+
+    if (Convert.ToInt32(activity.ispublic) != 1)
+    {
+      return ApiResponse.Forbidden("Only approved activities can publish announcements");
+    }
+
+    var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - 8 * 60 * 60;
+    await conn.ExecuteAsync(
+      @"insert into announcement (announcement_id, announcement_name, announcement_content, announcement_type, content_id, announcement_createtime)
+        values (@AnnouncementId, @AnnouncementName, @AnnouncementContent, @AnnouncementType, @ContentId, @CreateTime)",
+      new
+      {
+        AnnouncementId = Guid.NewGuid().ToString(),
+        AnnouncementName = request.Announcement_Name,
+        AnnouncementContent = request.Announcement_Content,
+        AnnouncementType = request.Type,
+        ContentId = request.Content_Id,
+        CreateTime = now
+      });
+
+    var userList = await conn.QueryAsync(
+      "select user_id from joins where content_id=@ContentId",
+      new { ContentId = request.Content_Id });
+
+    foreach (var joinedUser in userList)
+    {
+      var userTo = (string)joinedUser.user_id;
+      await SetNoticeAsync(
+        conn,
+        uid,
+        userTo,
+        user.Nickname,
+        request.Content_Id,
+        string.IsNullOrWhiteSpace(request.Contentname) ? (string?)activity.activity_title ?? string.Empty : request.Contentname,
+        "Published a new activity notification",
+        "activitycontent");
+    }
+
+    return ApiResponse.Success();
+  }
+
   public async Task<ApiResponse> CreateFankuiAsync(CreateFankuiRequest request)
   {
     using var conn = _connectionFactory.CreateConnection();
@@ -615,6 +702,34 @@ public sealed class WebAdminService
     using var conn = _connectionFactory.CreateConnection();
     var item = await conn.QueryFirstOrDefaultAsync("select * from jubao where jubao_id=@Id", new { Id = id });
     return ApiResponse.FromNullable(item);
+  }
+
+  private static async Task SetNoticeAsync(
+    System.Data.IDbConnection conn,
+    string userFrom,
+    string userTo,
+    string nickname,
+    string contentId,
+    string contentName,
+    string action,
+    string router)
+  {
+    var now = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds() - 8 * 60 * 60;
+    await conn.ExecuteAsync(
+      @"insert into notice (notice_id, user_from, nickname, user_to, content_name, action, content_id, router, createtime, state)
+        values (@NoticeId, @UserFrom, @Nickname, @UserTo, @ContentName, @Action, @ContentId, @Router, @CreateTime, 0)",
+      new
+      {
+        NoticeId = Guid.NewGuid().ToString(),
+        UserFrom = userFrom,
+        Nickname = nickname,
+        UserTo = userTo,
+        ContentName = contentName,
+        Action = action,
+        ContentId = contentId,
+        Router = router,
+        CreateTime = now
+      });
   }
 
   private async Task<ApiResponse> GetOwnPagedListAsync(string uid, PagingRequest request, string tableName)

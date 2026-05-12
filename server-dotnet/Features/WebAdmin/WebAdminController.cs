@@ -279,6 +279,15 @@ public sealed class WebAdminController : ControllerBase
     return this.FromApiResponse(result);
   }
 
+  [HttpPost("/webadmin/setannouncement")]
+  [Authorize]
+  public async Task<IActionResult> SetAnnouncement([FromForm] SetAnnouncementRequest request)
+  {
+    var uid = User.FindFirstValue("uid") ?? string.Empty;
+    var result = await _service.SetAnnouncementAsync(uid, request);
+    return this.FromApiResponse(result);
+  }
+
   [HttpPost("/webadmin/createfankui")]
   [Authorize]
   public async Task<IActionResult> CreateFankui([FromForm] CreateFankuiRequest request)

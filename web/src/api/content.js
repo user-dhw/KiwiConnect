@@ -344,5 +344,5 @@ export function deleteJoin(id) {
 }
 
 export function setAnnouncement(data) {
-	return request.post('/admin/setannouncement', toFormData(data), formConfig)
+	return request.post('/webadmin/setannouncement', toFormData(data), formConfig)
 }

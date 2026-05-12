@@ -176,6 +176,15 @@ public sealed class GetWebJoinsListRequest
   public string Id { get; set; } = string.Empty;
 }
 
+public sealed class SetAnnouncementRequest
+{
+  public string Announcement_Name { get; set; } = string.Empty;
+  public string Announcement_Content { get; set; } = string.Empty;
+  public string Type { get; set; } = string.Empty;
+  public string Content_Id { get; set; } = string.Empty;
+  public string Contentname { get; set; } = string.Empty;
+}
+
 public sealed class CreateFankuiRequest
 {
   public string Fankui_Content { get; set; } = string.Empty;
