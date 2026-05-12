@@ -111,6 +111,23 @@
 										</p>
 									</div>
 
+									<div class="detail-summary-card">
+										<p v-if="content.oldstuff_lable" class="detail-summary-eyebrow">
+											{{ content.oldstuff_lable }}
+										</p>
+										<p v-if="listingLead" class="detail-summary-text">
+											{{ listingLead }}
+										</p>
+										<div class="detail-summary-tags">
+											<span v-if="content.oldstuff_price" class="detail-summary-tag">
+												¥{{ content.oldstuff_price }}
+											</span>
+											<span v-if="content.nickname" class="detail-summary-tag">
+												Sold by {{ content.nickname }}
+											</span>
+										</div>
+									</div>
+
 									<el-dialog
 										v-model="dialogFormVisible"
 										title="Purchase Intent"
@@ -181,6 +198,12 @@ const contentUserId = computed(() => store.state.contentuserid)
 const isUserVerified = computed(() => {
 	const userinfo = store.state.user?.userinfo || {}
 	return Number(userinfo.realstate) === 3
+})
+const listingLead = computed(() => {
+	const raw = String(content.value?.oldstuff_content || '')
+	const plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+	if (!plain) return ''
+	return plain.length > 180 ? `${plain.slice(0, 180)}...` : plain
 })
 
 const goBack = () => {
@@ -359,6 +382,49 @@ watch(
 .author-popover-body {
 	display: grid;
 	gap: 12px;
+}
+
+.detail-summary-card {
+	display: grid;
+	gap: 12px;
+	margin: 18px 0 0;
+	padding: 18px 22px;
+	border-radius: 20px;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	background: linear-gradient(180deg, #f9fbff 0%, #f3f7ff 100%);
+}
+
+.detail-summary-eyebrow {
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2663eb;
+}
+
+.detail-summary-text {
+	margin: 0;
+	font-size: 1.02rem;
+	line-height: 1.8;
+	color: #56637d;
+}
+
+.detail-summary-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.detail-summary-tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 7px 12px;
+	border-radius: 999px;
+	background: rgba(38, 99, 235, 0.1);
+	color: #2663eb;
+	font-size: 0.86rem;
+	font-weight: 700;
 }
 
 :deep(.author-popover) {

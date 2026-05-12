@@ -71,6 +71,27 @@
 								</span>
 							</div>
 
+							<div
+								v-if="helpLead || helpTags.length || content.help_lable"
+								class="detail-summary-card"
+							>
+								<p v-if="content.help_lable" class="detail-summary-eyebrow">
+									{{ content.help_lable }}
+								</p>
+								<p v-if="helpLead" class="detail-summary-text">
+									{{ helpLead }}
+								</p>
+								<div v-if="helpTags.length" class="detail-summary-tags">
+									<span
+										v-for="(tag, id) in helpTags"
+										:key="`summary-${tag}-${id}`"
+										class="detail-summary-tag"
+									>
+										{{ tag }}
+									</span>
+								</div>
+							</div>
+
 							<blockquote v-html="content.help_content"></blockquote>
 
 							<div class="tag-list">
@@ -127,6 +148,12 @@ const helpTags = computed(() => {
 		.split(',')
 		.map(item => item.trim())
 		.filter(Boolean)
+})
+const helpLead = computed(() => {
+	const raw = String(content.value?.help_content || '')
+	const plain = raw.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim()
+	if (!plain) return ''
+	return plain.length > 180 ? `${plain.slice(0, 180)}...` : plain
 })
 
 const formatDateTime = value => {
@@ -256,6 +283,49 @@ watch(
 	border-radius: 24px;
 	border: 1px solid rgba(38, 99, 235, 0.12);
 	box-shadow: 0 22px 54px rgba(38, 99, 235, 0.14);
+}
+
+.detail-summary-card {
+	display: grid;
+	gap: 12px;
+	margin: 0 0 18px;
+	padding: 18px 22px;
+	border-radius: 20px;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	background: linear-gradient(180deg, #f9fbff 0%, #f3f7ff 100%);
+}
+
+.detail-summary-eyebrow {
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2663eb;
+}
+
+.detail-summary-text {
+	margin: 0;
+	font-size: 1.02rem;
+	line-height: 1.8;
+	color: #56637d;
+}
+
+.detail-summary-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.detail-summary-tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 7px 12px;
+	border-radius: 999px;
+	background: rgba(38, 99, 235, 0.1);
+	color: #2663eb;
+	font-size: 0.86rem;
+	font-weight: 700;
 }
 
 @media (min-width: 900px) {

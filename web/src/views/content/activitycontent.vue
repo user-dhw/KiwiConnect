@@ -129,6 +129,26 @@
 								</p>
 							</div>
 
+							<div class="detail-summary-card">
+								<p v-if="content.activity_lable" class="detail-summary-eyebrow">
+									{{ content.activity_lable }}
+								</p>
+								<p class="detail-summary-text">
+									{{ activityLead }}
+								</p>
+								<div class="detail-summary-tags">
+									<span v-if="content.activity_type" class="detail-summary-tag">
+										{{ content.activity_type === '线上' ? 'Online Event' : 'Offline Event' }}
+									</span>
+									<span v-if="content.activity_locale" class="detail-summary-tag">
+										{{ content.activity_locale }}
+									</span>
+									<span v-if="content.activity_num" class="detail-summary-tag">
+										{{ content.activity_num }} spots
+									</span>
+								</div>
+							</div>
+
 							<h3 class="detail-section-title">Activity Description</h3>
 							<blockquote v-html="content.activity_content"></blockquote>
 						</article>
@@ -188,6 +208,12 @@ const contentUserId = computed(() => store.state.contentuserid)
 const isUserVerified = computed(() => {
 	const userinfo = store.state.user?.userinfo || {}
 	return Number(userinfo.realstate) === 3
+})
+const activityLead = computed(() => {
+	const start = formatDateTime(content.value?.activity_statetime)
+	const end = formatDateTime(content.value?.activity_endtime)
+	const organizer = content.value?.nickname || 'The organizer'
+	return `${organizer} scheduled this activity from ${start} to ${end}. Review the details below before deciding to join.`
 })
 
 const formatDateTime = value => {
@@ -380,6 +406,49 @@ onMounted(async () => {
 	border-radius: 24px;
 	border: 1px solid rgba(38, 99, 235, 0.12);
 	box-shadow: 0 22px 54px rgba(38, 99, 235, 0.14);
+}
+
+.detail-summary-card {
+	display: grid;
+	gap: 12px;
+	margin: 0 0 18px;
+	padding: 18px 22px;
+	border-radius: 20px;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	background: linear-gradient(180deg, #f9fbff 0%, #f3f7ff 100%);
+}
+
+.detail-summary-eyebrow {
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2663eb;
+}
+
+.detail-summary-text {
+	margin: 0;
+	font-size: 1.02rem;
+	line-height: 1.8;
+	color: #56637d;
+}
+
+.detail-summary-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.detail-summary-tag {
+	display: inline-flex;
+	align-items: center;
+	padding: 7px 12px;
+	border-radius: 999px;
+	background: rgba(38, 99, 235, 0.1);
+	color: #2663eb;
+	font-size: 0.86rem;
+	font-weight: 700;
 }
 
 @media (min-width: 900px) {

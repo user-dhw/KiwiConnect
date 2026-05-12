@@ -72,6 +72,18 @@
 								</span>
 							</div>
 
+							<div
+								v-if="content.article_introduction"
+								class="detail-summary-card"
+							>
+								<p v-if="content.article_lable" class="detail-summary-eyebrow">
+									{{ content.article_lable }}
+								</p>
+								<p class="detail-summary-text">
+									{{ content.article_introduction }}
+								</p>
+							</div>
+
 							<blockquote v-html="content.article_content"></blockquote>
 						</article>
 
@@ -228,6 +240,32 @@ watch(
 	border-radius: 24px;
 	border: 1px solid rgba(38, 99, 235, 0.12);
 	box-shadow: 0 22px 54px rgba(38, 99, 235, 0.14);
+}
+
+.detail-summary-card {
+	display: grid;
+	gap: 12px;
+	margin: 0 0 18px;
+	padding: 18px 22px;
+	border-radius: 20px;
+	border: 1px solid rgba(38, 99, 235, 0.1);
+	background: linear-gradient(180deg, #f9fbff 0%, #f3f7ff 100%);
+}
+
+.detail-summary-eyebrow {
+	margin: 0;
+	font-size: 0.78rem;
+	font-weight: 800;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: #2663eb;
+}
+
+.detail-summary-text {
+	margin: 0;
+	font-size: 1.04rem;
+	line-height: 1.8;
+	color: #56637d;
 }
 
 @media (min-width: 900px) {
